@@ -2,7 +2,7 @@
 
 - `.gitignore` - Ignores `build/`, `sources/upstream/`, macOS junk, Python caches.
 - `**/.gitkeep` - Keep the skeleton folders in git until they get content.
-- `Makefile` - All build and check targets (`check-tools`, `all`, `epub`, `pdf`, `book`, `covers`, `lint`, `lint-fix`, `compare`, `index`, `dpd-check`, `fetch-sources`, `epubcheck`, `test`, `clean`).
+- `Makefile` - All build and check targets (`check-tools`, `all`, `epub`, `pdf`, `book`, `covers`, `lint`, `lint-fix`, `compare`, `index`, `dpd-check`, `fetch-sources`, `epubcheck`, `test`, `clean`). Per-book text dependencies come from `build/deps/<book>.mk` (written by `assemble.py --deps`).
 - `scripts/check-tools.sh` - Checks tool presence and minimum versions, prints install hints.
 - `scripts/migrate-legacy.sh` - One-off legacy migration with verification and manifest.
 - `tests/test_migrate.sh` - Runs the migration into a temp dir; checks totals, re-run no-op and `--force`. Part of `make test`; skips without the legacy folder.
@@ -11,9 +11,9 @@
 - `scripts/chantlib/spec.py` - Reads the fenced rule blocks from `docs/style-spec.md`.
 - `scripts/chantlib/parse.py` - Chant-file parser (line kinds, units, rows, member rows).
 - `scripts/chantlib/text.py` - Shared normalisation helpers (NFC, ṃ→ṁ, Pāli-letter folding).
-- `scripts/chantlib/books.py` - Reads `books/*/metadata.txt` (YAML-subset reader, book options, folder → book); task 6 adds `load_book` validation and `book_files`.
+- `scripts/chantlib/books.py` - Reads `books/*/metadata.txt` (YAML-subset reader, book options, folder → book), `load_book` (validated `Book` with `Part`s), `book_files`.
 - `scripts/lint.py` - Lint and safe auto-fix.
-- `scripts/assemble.py` - Builds one pandoc-Markdown file per book.
+- `scripts/assemble.py` - Builds one pandoc-Markdown file per book, plus `<book>.meta.yaml` and a pandoc defaults file `<book>.pandoc.yaml`; `--deps` prints the book's make dependencies.
 - `scripts/compare.py` - Pāli check against sources.
 - `scripts/index.py` - Cross-file index, dupes, stats, rows, overlaps.
 - `scripts/align.py` - Rules-based bulk alignment with a change log.
@@ -24,12 +24,13 @@
 - `tests/` - `unittest` tests: `test_spec.py`, `test_parse.py`, `test_lint.py`, `test_assemble.py`, `test_compare.py`, `test_index.py`, `test_draft.py`, `test_simsapa.py`, `test_migrate.sh`.
 - `tests/fixtures/` - Small chant files: `good.md`, `good-vinaya.md`, `good-dn22.md` (from real texts) and `bad-*.md` (one rule broken each); later, recorded Simsapa JSON responses.
 - `tests/test_parse.py`, `tests/test_lint.py` - Parser, text helpers, lint checks, tag order, repeats, `--fix`.
+- `tests/test_assemble.py` - Assembles fixture books from a temp `books/`/`texts/` tree: div order, TOC span, parts, metadata, CHANGELOG/originals excluded; loads the 13 real books.
 - `texts/**` - Migrated chant files and changelogs (content; created by migration, never edited by this feature).
 - `sources/MIGRATION-MANIFEST.tsv` - Written by the migration script.
 - `sources/UPSTREAM.txt` - Upstream repos, pinned commits, Chanting Guide locations.
 - `sources/reference-pali-supplement.md`, `sources/suttacentral/*.json`, `sources/originals/**` - Reference texts for `compare`.
-- `books/<book>/metadata.txt`, `books/<book>/about.md` - Per-book metadata and About text (13 books). `books/10_mahasatipatthanasutta/metadata.txt` was started in task 5 with only `texts` and `options`, so that lint has the book 10 options.
-- `templates/epub.css` - EPUB styling (adapted from legacy `style.css`).
+- `books/<book>/metadata.txt`, `books/<book>/about.md` - Per-book metadata and About text (13 books). `title`/`subtitle` are as displayed (FR-27); `pali-title-first` only says which of them is Pāli. About sub-headings are `{.unnumbered .unlisted}`.
+- `templates/epub.css` - EPUB styling (adapted from legacy `style.css`): embedded Crimson/Noto Sans/Noto Sans Math, `instruction`/`gloss` classes, tags in small Noto Sans.
 - `templates/pandoc/book.typst` - Pandoc typst template.
 - `templates/pandoc/chant.lua` - Lua filter: classed divs → typst function calls.
 - `templates/typst/style.typ` - Fonts, sizes, page setup (adapted from `pali-exercises`).
@@ -41,6 +42,7 @@
 - `docs/quality-process.md` - Checking routine.
 - `docs/legacy-migration.md` - Migration sources, manifest columns, version-conflict evidence, affected-file list, legacy history, tools not migrated.
 - `docs/drafting-workflow.md` - Workflow for adding a text.
+- `docs/book-build.md` - Book pipeline: metadata keys, About, assembled div format, EPUB build, epubcheck, dependencies.
 - `docs/simsapa-localhost-api-search-endpoints.md` - Existing; Simsapa API reference.
 - `.claude/skills/pali-word-analysis/SKILL.md` - Local skill for grammar labels and word tables.
 - `README.md` - Existing one-liner; to be extended.
@@ -188,15 +190,15 @@ The assembled Markdown follows legacy `preprocess()`, with these divs: `unit`, `
 **Depends on:** 5.0 (parser), 2.0 (fonts, css).
 
 - [ ] 6.0 Book metadata and EPUB build (FR-26–FR-30, FR-32 EPUB part)
-  - [ ] 6.1 Create `books/<id>/metadata.txt` for the 13 books (book 10's file already exists with `texts` and `options`; extend it), with the FR-27 titles, `pali-title-first: true` for 04a and 05, the `sources` and `rights` text from FR-26, and empty `author`/`publisher`. For 09, list the five parts with their headings from `BACKUP/_tools/chant_pipeline.py` `BOOKS`: Requisites, Rains and Kaṭhina, Other Procedures, Offences, Uposatha. For 10, add `options` from the legacy DN 22 spec's `options` block.
-  - [ ] 6.2 Create `books/<id>/about.md` for the 13 books. For 01–08, use the legacy `ABOUT` template with `{what}`, `{drafting}` and `{review}` filled in as `build()` did. For 10, use `BACKUP/_tools/dn22/about-dn22.md`. For 09, use `ABOUT_VINAYA` from `BACKUP/_tools/chant_pipeline.py` (line ~591). Leave `{today}` as a placeholder.
-  - [ ] 6.3 Write `scripts/chantlib/books.py`: `load_book(id)`, which parses the metadata with a small YAML-subset reader (keys, strings, booleans, lists, list of mappings) and validates the required keys; `list_books()`; `book_files(book)`, which gives the ordered `NN_*.md` paths and never returns `CHANGELOG.md` or `00_original_*`. Wire book options into `lint.py`.
-  - [ ] 6.4 Write `scripts/assemble.py BOOK [--out build/tmp]`. Steps: read the metadata, insert `about.md` with `{today}` replaced, emit part headings for 09, run each file through the parser, and emit pandoc Markdown with the classed divs. Write `build/tmp/<book>.md` and `build/tmp/<book>.meta.yaml` (metadata with the computed title/subtitle order and the cover path; **keys with empty values dropped**, because pandoc would otherwise write empty `dc:creator`/`dc:publisher` elements). Warn on lint ERROR/STRAY (FR-25).
-  - [ ] 6.5 Adapt `templates/epub.css`: `@font-face` for Crimson and Noto Sans; Noto Sans Math listed last in the table-cell font stack; the legacy class styles; `.toc-en` hidden in headings; keep the legacy `code { font-family: inherit; font-size: 1em; background: none; }`, so the backticked words and tags are not shown in monospace.
-  - [ ] 6.6 Add Makefile rules: `build/epub/%.epub` depends on `books/%/*`, the book's texts, `templates/epub.css`, `fonts/**`, `scripts/**` and the cover PNG (until task 7, build without a cover if the PNG is missing). It runs `assemble.py` and then `pandoc -f markdown+fenced_divs --metadata-file build/tmp/<book>.meta.yaml --toc --toc-depth=1 --split-level=1 --css templates/epub.css --epub-embed-font=… [--epub-cover-image=…] -o $@`, then `epubcheck $@`; on a fatal or error, delete `$@` and fail (PRD FR-30a). Add `make epub`, `make book BOOK=…` (EPUB part) and `make epubcheck` (re-validates every `build/epub/*.epub`).
-  - [ ] 6.7 Write `tests/test_assemble.py`: assemble a fixture book (a test `books/` folder passed by env var or argument), and check the div order, the TOC span and that `CHANGELOG.md` is excluded.
-  - [ ] 6.8 Run `make epub`; all 13 EPUBs build. Unzip one and check the OPF metadata (title, language, rights, empty creator/publisher). Run `make epubcheck`: 0 fatals and 0 errors on all 13; list any warnings. Open one in an e-reader and ask the maintainer to check `↳`, tables and the TOC.
-  - [ ] 6.9 Commit: "Book metadata and EPUB build".
+  - [x] 6.1 Create `books/<id>/metadata.txt` for the 13 books (book 10's file already exists with `texts` and `options`; extend it), with the FR-27 titles, `pali-title-first: true` for 04a and 05, the `sources` and `rights` text from FR-26, and empty `author`/`publisher`. For 09, list the five parts with their headings from `BACKUP/_tools/chant_pipeline.py` `BOOKS`: Requisites, Rains and Kaṭhina, Other Procedures, Offences, Uposatha. For 10, add `options` from the legacy DN 22 spec's `options` block.
+  - [x] 6.2 Create `books/<id>/about.md` for the 13 books. For 01–08, use the legacy `ABOUT` template with `{what}`, `{drafting}` and `{review}` filled in as `build()` did. For 10, use `BACKUP/_tools/dn22/about-dn22.md`. For 09, use `ABOUT_VINAYA` from `BACKUP/_tools/chant_pipeline.py` (line ~591). Leave `{today}` as a placeholder.
+  - [x] 6.3 Write `scripts/chantlib/books.py`: `load_book(id)`, which parses the metadata with a small YAML-subset reader (keys, strings, booleans, lists, list of mappings) and validates the required keys; `list_books()`; `book_files(book)`, which gives the ordered `NN_*.md` paths and never returns `CHANGELOG.md` or `00_original_*`. Wire book options into `lint.py`.
+  - [x] 6.4 Write `scripts/assemble.py BOOK [--out build/tmp]`. Steps: read the metadata, insert `about.md` with `{today}` replaced, emit part headings for 09, run each file through the parser, and emit pandoc Markdown with the classed divs. Write `build/tmp/<book>.md` and `build/tmp/<book>.meta.yaml` (metadata with the computed title/subtitle order and the cover path; **keys with empty values dropped**, because pandoc would otherwise write empty `dc:creator`/`dc:publisher` elements). Warn on lint ERROR/STRAY (FR-25).
+  - [x] 6.5 Adapt `templates/epub.css`: `@font-face` for Crimson and Noto Sans; Noto Sans Math listed last in the table-cell font stack; the legacy class styles; `.toc-en` hidden in headings; keep the legacy `code { font-family: inherit; font-size: 1em; background: none; }`, so the backticked words and tags are not shown in monospace.
+  - [x] 6.6 Add Makefile rules: `build/epub/%.epub` depends on `books/%/*`, the book's texts, `templates/epub.css`, `fonts/**`, `scripts/**` and the cover PNG (until task 7, build without a cover if the PNG is missing). It runs `assemble.py` and then `pandoc -f markdown+fenced_divs --metadata-file build/tmp/<book>.meta.yaml --toc --toc-depth=1 --split-level=1 --css templates/epub.css --epub-embed-font=… [--epub-cover-image=…] -o $@`, then `epubcheck $@`; on a fatal or error, delete `$@` and fail (PRD FR-30a). Add `make epub`, `make book BOOK=…` (EPUB part) and `make epubcheck` (re-validates every `build/epub/*.epub`). The local `epubcheck` wrapper passes only its first argument, so the rules call it with the file alone (no `-q`).
+  - [x] 6.7 Write `tests/test_assemble.py`: assemble a fixture book (a test `books/` folder passed by env var or argument), and check the div order, the TOC span and that `CHANGELOG.md` is excluded.
+  - [x] 6.8 Run `make epub`; all 13 EPUBs build. Unzip one and check the OPF metadata (title, language, rights, empty creator/publisher). Run `make epubcheck`: 0 fatals and 0 errors on all 13; list any warnings. Open one in an e-reader and ask the maintainer to check `↳`, tables and the TOC. Result: 13/13 built; epubcheck 0 fatals / 0 errors / 0 warnings on all 13. OPF: typed main title + subtitle, `en-GB`, `dc:rights`, `dc:source`, no `dc:creator`/`dc:publisher`. Book 10 opened in calibre's `ebook-viewer` for the maintainer's check.
+  - [x] 6.9 Commit: "Book metadata and EPUB build".
 
 ### 7.0 Typst PDF build and generated covers
 

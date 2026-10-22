@@ -8,10 +8,17 @@ nested mapping (`options:` with indented `key: value` lines).
 """
 
 import json
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional
 
 ROOT = Path(__file__).resolve().parents[2]
 BOOKS_DIR = ROOT / "books"
+TEXTS_DIR = ROOT / "texts"
+
+# Keys every metadata.txt must have (docs/book-build.md).
+REQUIRED = ("title", "subtitle", "lang", "pali-title-first", "texts",
+            "sources", "rights", "cover-image", "about", "author", "publisher")
 
 # Book options (docs/style-spec.md §12.2) and their values when not set.
 DEFAULT_OPTIONS = {
@@ -92,6 +99,77 @@ def read_metadata(text, name="metadata.txt"):
 def load_metadata(book, books_dir=BOOKS_DIR):
     path = Path(books_dir) / book / "metadata.txt"
     return read_metadata(path.read_text(encoding="utf-8"), str(path))
+
+
+@dataclass
+class Part:
+    folder: str
+    heading: Optional[str]      # part heading (books in parts), else None
+
+
+@dataclass
+class Book:
+    id: str
+    dir: Path
+    meta: dict
+    parts: list                 # Part, in book order
+
+    @property
+    def options(self):
+        options = dict(DEFAULT_OPTIONS)
+        options.update(self.meta.get("options") or {})
+        return options
+
+
+def load_book(book, books_dir=BOOKS_DIR):
+    """Read and validate books/<book>/metadata.txt; returns a Book."""
+    d = Path(books_dir) / book
+    meta = load_metadata(book, books_dir)
+    where = d / "metadata.txt"
+    missing = [k for k in REQUIRED if k not in meta]
+    if missing:
+        raise MetadataError(f"{where}: missing keys: {', '.join(missing)}")
+    for k in ("title", "lang", "rights", "about"):
+        if not isinstance(meta[k], str) or not meta[k]:
+            raise MetadataError(f"{where}: '{k}' must be a non-empty string")
+    if not isinstance(meta["pali-title-first"], bool):
+        raise MetadataError(f"{where}: 'pali-title-first' must be true or false")
+    if not isinstance(meta["sources"], list) or not meta["sources"]:
+        raise MetadataError(f"{where}: 'sources' must be a list")
+    if not isinstance(meta["texts"], list) or not meta["texts"]:
+        raise MetadataError(f"{where}: 'texts' must be a list")
+    parts = []
+    for t in meta["texts"]:
+        if isinstance(t, dict):
+            if "folder" not in t or "heading" not in t:
+                raise MetadataError(f"{where}: a part needs 'folder' and 'heading'")
+            parts.append(Part(t["folder"], t["heading"]))
+        else:
+            parts.append(Part(t, None))
+    if len({p.heading is None for p in parts}) > 1:
+        raise MetadataError(f"{where}: give every text a heading, or none")
+    unknown = set(meta.get("options") or {}) - set(DEFAULT_OPTIONS)
+    if unknown:
+        raise MetadataError(f"{where}: unknown options: {', '.join(sorted(unknown))}")
+    return Book(book, d, meta, parts)
+
+
+def folder_files(folder, texts_dir=TEXTS_DIR):
+    """The text files of one texts/ folder, in name order.
+
+    Only `NN_name.md` files count, so CHANGELOG.md is never included (and
+    `00_original_*` files, which belong in sources/originals/, are skipped
+    even if one is left in a text folder).
+    """
+    return sorted(
+        p for p in (Path(texts_dir) / folder).glob("[0-9][0-9]_*.md")
+        if not p.name.startswith("00_original_")
+    )
+
+
+def book_files(book, texts_dir=TEXTS_DIR):
+    """[(Part, [paths])] for a Book, in book order."""
+    return [(part, folder_files(part.folder, texts_dir)) for part in book.parts]
 
 
 def list_books(books_dir=BOOKS_DIR):
