@@ -30,8 +30,11 @@ test:
 	$(PYTHON) -m unittest discover -s tests
 	tests/test_migrate.sh
 
+fetch-sources:
+	@scripts/fetch-sources.sh
+
 clean:
 	rm -rf build
 
-all epub pdf book covers lint lint-fix compare index dpd-check fetch-sources epubcheck:
+all epub pdf book covers lint lint-fix compare index dpd-check epubcheck:
 	@echo "make $@: not implemented yet"

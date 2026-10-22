@@ -1,0 +1,38 @@
+# Upstream sources used for checks. Never built into the books.
+#
+# One block per source, blocks separated by a blank line, `key: value` lines.
+# `type: git` sources are cloned by scripts/fetch-sources.sh (make
+# fetch-sources) into sources/upstream/<name>/, checked out at `commit`.
+# `fetch-sources.sh --update` moves `commit` to the head of `branch`.
+# `type: location-only` sources are recorded here and never downloaded.
+
+name: bhikkhu-manual
+type: git
+title: Bhikkhu Manual, Reference Edition (Amaravati Publications, 2020)
+url: https://github.com/bhikkhu-manual/bhikkhu-manual
+branch: master
+commit: 31f14bebcba765b9d3f2a4e1352ab68d86fe5557
+paths: manuscript/markdown/ (chants/*.md, vinaya/)
+licence: CC BY-NC-ND 4.0
+use: reference for `make compare` on 01–09
+
+name: community-chanting-book
+type: git
+title: Community Chanting Book, English edition (Amaravati Publications, 2021)
+url: https://github.com/profound-labs/community-chanting-book
+branch: main
+commit: c56a10058f6850a6a80c4c3893235309aa03bcc8
+paths: chapters/english/markdown-vol1/, chapters/english/markdown-vol2/, chapters/english/markdown-satipatthana/
+licence: CC BY-NC-ND 4.0
+use: recorded for later use; not used by any check yet
+
+name: chanting-guide-thanissaro
+type: location-only
+title: A Chanting Guide, Ṭhānissaro Bhikkhu (Dhammayut Order in the USA, 4th ed. 2017)
+url: https://www.dhammatalks.org/books/ChantingGuide/
+epub: https://www.dhammatalks.org/Archive/Writings/Ebooks/ChantingGuide210709.epub
+index: https://www.dhammatalks.org/ebook_index.html
+legacy-copy: $BACKUP/_tools/refs/ChantingGuide_Thanissaro.md (see docs/legacy-migration.md)
+local-copy: sources/upstream/chanting-guide-thanissaro.md (optional, not committed)
+licence: CC BY-NC 4.0
+use: source of the legacy chants not in BM; `compare` skips these chants when the local copy is absent
