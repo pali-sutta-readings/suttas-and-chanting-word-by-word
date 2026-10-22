@@ -244,7 +244,7 @@ FR-23. The Makefile must provide at least:
 
 | Target | Does |
 | :--- | :--- |
-| `make check-tools` | Checks that pandoc, typst, python3, make and curl are installed (and their minimum versions), and whether Simsapa answers. Prints install hints for anything missing. |
+| `make check-tools` | Checks that pandoc, typst, python3, make, curl, git and epubcheck are installed (and their minimum versions), and whether Simsapa answers. Prints install hints for anything missing. |
 | `make all` | `epub` + `pdf` for all books |
 | `make epub` / `make pdf` | All books in one format |
 | `make book BOOK=01_morning_chanting` | One book, both formats |
@@ -254,6 +254,7 @@ FR-23. The Makefile must provide at least:
 | `make dpd-check` | `simsapa.py check` on all texts (needs Simsapa running) |
 | `make fetch-sources` | Clones/updates `sources/upstream/` at the pinned commits (FR-12a) |
 | `make covers` | Renders all covers (PDF page and EPUB PNG) |
+| `make epubcheck` | Validates every EPUB in `build/epub/` with `epubcheck` (FR-30a) |
 | `make clean` | Removes `build/` |
 
 FR-24. Outputs go to `build/epub/<book>.epub` and `build/pdf/<book>.pdf`. Makefile dependencies must cause a book to rebuild when its texts, metadata, about, templates or fonts change.
@@ -295,6 +296,8 @@ FR-28. Each `about.md` must be created from the legacy About text: the `ABOUT` t
 FR-29. `scripts/assemble.py <book>` must read the book's metadata, concatenate its texts (`NN_*.md` in name order, never `CHANGELOG.md`), and write one pandoc-Markdown file to `build/tmp/<book>.md`. Each element is wrapped in a classed fenced div, as in the legacy `preprocess()`: `pali` (with `lang="pi"`), `literal`, `faithful`, `unit`, `repeat`, `citation`, `rubric`, `subtitle`, and for 09/10 `instruction`, `variant`, `gloss`. The English title is added to the table-of-contents entry (`.toc-en` span), as before.
 
 FR-30. EPUB: `pandoc build/tmp/<book>.md --metadata-file build/tmp/<book>.meta.yaml -o build/epub/<book>.epub` (the `meta.yaml` is written by `assemble.py` from `metadata.txt`, with the title order applied and empty keys dropped) with `--toc --toc-depth=1 --split-level=1`, `templates/epub.css`, the embedded fonts, and `--epub-cover-image` set to the generated cover PNG (or the override).
+
+FR-30a. **EPUB validation.** Every generated EPUB must be validated with `epubcheck`. The EPUB build rule runs `epubcheck` on each file right after pandoc writes it; any fatal or error fails the rule and removes the invalid EPUB, so that Make does not treat it as up to date. Warnings are printed but do not fail the build. `make epubcheck` re-validates all built EPUBs.
 
 FR-31. PDF: pandoc converts the same assembled Markdown to typst (`-t typst`) with a template in `templates/pandoc/`, plus a Lua filter that maps the classed divs to typst functions defined in `templates/typst/`. Then `typst compile --font-path fonts/ --ignore-system-fonts` writes the PDF. Pandoc's own typst output was checked: it drops div classes (each div becomes a plain `#block[…]`), turns `lang="pi"` into `#set text(lang: "pi")`, wraps tables in `#figure(align(center)[#table(…)])` with a `table.header`, and writes the backticked word and tag cells as typst raw text, which prints in a monospace font. So the Lua filter must (a) map classes to functions, (b) unwrap tables from `figure` into the word-table function, and (c) turn `Code` inlines into styled text (word: bold serif; tags: small sans). The legacy EPUB CSS handled (c) with `code { font-family: inherit; … }`; keep that in `epub.css`.
 
@@ -346,7 +349,7 @@ FR-38. `CLAUDE.md` must:
 
 FR-39. `README.md` must extend the current one-line file with: project description, folder overview, required tools with check and install commands for Arch Linux (`pacman`), macOS (`brew`) and Debian/Ubuntu (`apt`; pandoc from its GitHub release `.deb` where the distro package is older than 3.1.2, e.g. Debian 12 ships 2.17; typst from its release binary or `cargo install --locked typst-cli`), how to install and start Simsapa and enable its API, `make` usage (including `make fetch-sources` before `make compare`), the upstream source repos from FR-12a, licence summary, and a pointer to `CLAUDE.md` and `docs/`.
 
-FR-40. Required tools to document: `pandoc` (≥ 3.1.2, needed for the typst writer; 3.8.3 is installed here), `typst` (≥ 0.13; 0.15.1 installed here), `python3` (≥ 3.11), `make`, `curl`, `git`; optional `jq`; the Simsapa app with its localhost API (for `dpd-check`, `lookup` and `gloss` only; builds do not need it).
+FR-40. Required tools to document: `pandoc` (≥ 3.1.2, needed for the typst writer; 3.8.3 is installed here), `typst` (≥ 0.13; 0.15.1 installed here), `python3` (≥ 3.11), `make`, `curl`, `git`, `epubcheck` (validates the EPUBs, FR-30a; needs Java; 5.1.0 installed here); optional `jq`; the Simsapa app with its localhost API (for `dpd-check`, `lookup` and `gloss` only; builds do not need it).
 
 ## 5. Non-Goals (Out of Scope)
 
@@ -387,7 +390,7 @@ FR-40. Required tools to document: `pandoc` (≥ 3.1.2, needed for the typst wri
 1. `scripts/migrate-legacy.sh` runs cleanly on a fresh checkout. Its manifest lists 209 texts + 17 changelogs in `texts/` and the 6 `00_original_*` files in `sources/originals/`. Its verification step reports 130/130 identical (S22 vs BACKUP) and all-identical for 07c–10.
 2. `make all` builds 13 EPUBs and 13 PDFs, each with its generated cover, without errors on this machine.
 3. `make lint` on the migrated texts reports the same result as the legacy final state. Running the legacy linter on a scratch copy of `BACKUP` (2026-10-22) gave 0 ERROR and 0 STRAY, with 4 WARN for 01–08 (main spec), 18 WARN for 09a–09e (Vinaya spec) and 0 WARN for 10 (DN 22 spec). The new lint should reproduce these counts, or explain any difference.
-4. `epubcheck` (if installed) passes on every EPUB, or any remaining warnings are listed.
+4. `epubcheck` reports 0 fatals and 0 errors on every EPUB (FR-30a); any remaining warnings are listed.
 5. Each EPUB's metadata (title, subtitle, language, rights, sources) matches its `metadata.txt`.
 6. Spot comparison of three PDFs (01, 07a, 10) against the legacy PDFs shows the same content in the same order, with no missing glyphs (`↳`, √, ṁ, ṭ, ḷ).
 7. `make dpd-check` runs against Simsapa on all migrated texts. Every flag it raises (word not found, root or construction mismatch, compound members) is either explained or listed for review.

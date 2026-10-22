@@ -2,7 +2,7 @@
 
 - `.gitignore` - Ignores `build/`, `sources/upstream/`, macOS junk, Python caches.
 - `**/.gitkeep` - Keep the skeleton folders in git until they get content.
-- `Makefile` - All build and check targets (`check-tools`, `all`, `epub`, `pdf`, `book`, `covers`, `lint`, `lint-fix`, `compare`, `index`, `dpd-check`, `fetch-sources`, `test`, `clean`).
+- `Makefile` - All build and check targets (`check-tools`, `all`, `epub`, `pdf`, `book`, `covers`, `lint`, `lint-fix`, `compare`, `index`, `dpd-check`, `fetch-sources`, `epubcheck`, `test`, `clean`).
 - `scripts/check-tools.sh` - Checks tool presence and minimum versions, prints install hints.
 - `scripts/migrate-legacy.sh` - One-off legacy migration with verification and manifest.
 - `scripts/fetch-sources.sh` - Clones/updates upstream source repos at pinned commits.
@@ -69,16 +69,16 @@ Update the file after completing each sub-task, not just after completing an ent
 
 ### 1.0 Repo skeleton and tool check
 
-**Specs.** Layout as in PRD FR-1. Minimum versions (FR-40): pandoc ≥ 3.1.2, typst ≥ 0.13, python3 ≥ 3.11, make, curl, git; optional jq, epubcheck. Simsapa is reported as "available / not running", never as an error. Python tools use the standard library only.
+**Specs.** Layout as in PRD FR-1. Minimum versions (FR-40): pandoc ≥ 3.1.2, typst ≥ 0.13, python3 ≥ 3.11, make, curl, git, epubcheck (required, because every EPUB is validated, PRD FR-30a); optional jq. Simsapa is reported as "available / not running", never as an error. Python tools use the standard library only.
 **Depends on:** nothing.
 
-- [ ] 1.0 Repo skeleton and tool check (FR-1, FR-15, FR-23, FR-40)
+- [x] 1.0 Repo skeleton and tool check (FR-1, FR-15, FR-23, FR-40)
   - [x] 1.1 Create the directories `texts/`, `books/`, `sources/`, `templates/epub/`, `templates/pandoc/`, `templates/typst/`, `fonts/`, `scripts/chantlib/`, `tests/fixtures/`, `docs/`, `.claude/skills/pali-word-analysis/` (add a `.gitkeep` where a folder would otherwise be empty in git). `templates/epub/` was not created: the PRD (FR-1) and task 2.5 put the stylesheet at `templates/epub.css`, so the folder would stay empty.
   - [x] 1.2 Write `.gitignore`: `build/`, `sources/upstream/`, `.DS_Store`, `._*`, `__pycache__/`, `*.pyc`.
   - [x] 1.3 Write `scripts/check-tools.sh`: for each tool, check that it is on `PATH`, parse its version, compare with the minimum, and print `OK`, `TOO OLD` or `MISSING` with an install hint:
-    - Arch: `pacman -S pandoc-cli typst python make curl git`;
-    - macOS: `brew install pandoc typst python make`;
-    - Debian/Ubuntu: `apt install python3 make curl git`, pandoc from its GitHub release `.deb` (Debian 12's 2.17 is too old), typst from its GitHub release or `cargo install --locked typst-cli`. Probe Simsapa with `curl -s --max-time 2 localhost:$PORT/health`. Exit non-zero only if a required tool is missing or too old.
+    - Arch: `pacman -S pandoc-cli typst python make curl git`, epubcheck from the AUR (`yay -S epubcheck`) or its GitHub release jar;
+    - macOS: `brew install pandoc typst python make epubcheck`;
+    - Debian/Ubuntu: `apt install python3 make curl git epubcheck`, pandoc from its GitHub release `.deb` (Debian 12's 2.17 is too old), typst from its GitHub release or `cargo install --locked typst-cli`. Probe Simsapa with `curl -s --max-time 2 localhost:$PORT/health`. Exit non-zero only if a required tool is missing or too old.
   - [x] 1.4 Write the `Makefile` skeleton: `.PHONY` targets, `PYTHON ?= python3`, `BOOKS := $(notdir $(wildcard books/*))`, `check-tools`, `test` (`$(PYTHON) -m unittest discover -s tests`), `clean`; placeholder targets for the rest that print "not implemented yet".
   - [x] 1.5 Create `scripts/chantlib/__init__.py`, plus a trivial `tests/test_smoke.py` that imports `chantlib`, so `make test` runs.
   - [x] 1.6 Run `make check-tools` and `make test`; both pass on this machine.
@@ -191,9 +191,9 @@ The assembled Markdown follows legacy `preprocess()`, with these divs: `unit`, `
   - [ ] 6.3 Write `scripts/chantlib/books.py`: `load_book(id)`, which parses the metadata with a small YAML-subset reader (keys, strings, booleans, lists, list of mappings) and validates the required keys; `list_books()`; `book_files(book)`, which gives the ordered `NN_*.md` paths and never returns `CHANGELOG.md` or `00_original_*`. Wire book options into `lint.py`.
   - [ ] 6.4 Write `scripts/assemble.py BOOK [--out build/tmp]`. Steps: read the metadata, insert `about.md` with `{today}` replaced, emit part headings for 09, run each file through the parser, and emit pandoc Markdown with the classed divs. Write `build/tmp/<book>.md` and `build/tmp/<book>.meta.yaml` (metadata with the computed title/subtitle order and the cover path; **keys with empty values dropped**, because pandoc would otherwise write empty `dc:creator`/`dc:publisher` elements). Warn on lint ERROR/STRAY (FR-25).
   - [ ] 6.5 Adapt `templates/epub.css`: `@font-face` for Crimson and Noto Sans; Noto Sans Math listed last in the table-cell font stack; the legacy class styles; `.toc-en` hidden in headings; keep the legacy `code { font-family: inherit; font-size: 1em; background: none; }`, so the backticked words and tags are not shown in monospace.
-  - [ ] 6.6 Add Makefile rules: `build/epub/%.epub` depends on `books/%/*`, the book's texts, `templates/epub.css`, `fonts/**`, `scripts/**` and the cover PNG (until task 7, build without a cover if the PNG is missing). It runs `assemble.py` and then `pandoc -f markdown+fenced_divs --metadata-file build/tmp/<book>.meta.yaml --toc --toc-depth=1 --split-level=1 --css templates/epub.css --epub-embed-font=… [--epub-cover-image=…] -o $@`. Add `make epub` and `make book BOOK=…` (EPUB part).
+  - [ ] 6.6 Add Makefile rules: `build/epub/%.epub` depends on `books/%/*`, the book's texts, `templates/epub.css`, `fonts/**`, `scripts/**` and the cover PNG (until task 7, build without a cover if the PNG is missing). It runs `assemble.py` and then `pandoc -f markdown+fenced_divs --metadata-file build/tmp/<book>.meta.yaml --toc --toc-depth=1 --split-level=1 --css templates/epub.css --epub-embed-font=… [--epub-cover-image=…] -o $@`, then `epubcheck $@`; on a fatal or error, delete `$@` and fail (PRD FR-30a). Add `make epub`, `make book BOOK=…` (EPUB part) and `make epubcheck` (re-validates every `build/epub/*.epub`).
   - [ ] 6.7 Write `tests/test_assemble.py`: assemble a fixture book (a test `books/` folder passed by env var or argument), and check the div order, the TOC span and that `CHANGELOG.md` is excluded.
-  - [ ] 6.8 Run `make epub`; all 13 EPUBs build. Unzip one and check the OPF metadata (title, language, rights, empty creator/publisher). Run `epubcheck` if installed. Open one in an e-reader and ask the maintainer to check `↳`, tables and the TOC.
+  - [ ] 6.8 Run `make epub`; all 13 EPUBs build. Unzip one and check the OPF metadata (title, language, rights, empty creator/publisher). Run `make epubcheck`: 0 fatals and 0 errors on all 13; list any warnings. Open one in an e-reader and ask the maintainer to check `↳`, tables and the TOC.
   - [ ] 6.9 Commit: "Book metadata and EPUB build".
 
 ### 7.0 Typst PDF build and generated covers

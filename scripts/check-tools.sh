@@ -76,7 +76,7 @@ hint_for() {
         curl) hint curl "sudo pacman -S curl" "brew install curl" "sudo apt install curl" ;;
         git) hint git "sudo pacman -S git" "brew install git" "sudo apt install git" ;;
         jq) hint jq "sudo pacman -S jq" "brew install jq" "sudo apt install jq" ;;
-        epubcheck) hint epubcheck "yay -S epubcheck (AUR), or the jar from https://github.com/w3c/epubcheck/releases" \
+        epubcheck) hint epubcheck "yay -S epubcheck (AUR; needs Java), or the jar from https://github.com/w3c/epubcheck/releases" \
             "brew install epubcheck" "sudo apt install epubcheck" ;;
     esac
 }
@@ -123,11 +123,11 @@ check python3 yes "$MIN_PYTHON" python3 --version
 check make yes "" make --version
 check curl yes "" curl --version
 check git yes "" git --version
+check epubcheck yes "" epubcheck --version
 
 echo
 echo "Optional tools:"
 check jq no "" jq --version
-check epubcheck no "" epubcheck --version
 
 echo
 echo "Simsapa API (needed only for dpd-check, lookup and gloss):"

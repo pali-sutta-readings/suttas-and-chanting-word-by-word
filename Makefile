@@ -5,7 +5,7 @@ PYTHON ?= python3
 BOOKS := $(notdir $(wildcard books/*))
 
 .PHONY: help check-tools test clean all epub pdf book covers \
-	lint lint-fix compare index dpd-check fetch-sources
+	lint lint-fix compare index dpd-check fetch-sources epubcheck
 
 help:
 	@echo "Targets:"
@@ -15,6 +15,7 @@ help:
 	@echo "  epub / pdf     all books in one format"
 	@echo "  book BOOK=id   one book, both formats"
 	@echo "  covers         render all covers"
+	@echo "  epubcheck      validate all built EPUBs with epubcheck"
 	@echo "  lint           lint all texts (lint-fix applies safe fixes)"
 	@echo "  compare        check Pāli lines against sources/"
 	@echo "  index          cross-file consistency report"
@@ -31,5 +32,5 @@ test:
 clean:
 	rm -rf build
 
-all epub pdf book covers lint lint-fix compare index dpd-check fetch-sources:
+all epub pdf book covers lint lint-fix compare index dpd-check fetch-sources epubcheck:
 	@echo "make $@: not implemented yet"
