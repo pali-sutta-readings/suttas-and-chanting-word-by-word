@@ -115,7 +115,7 @@ Update the file after completing each sub-task, not just after completing an ent
 **Specs.** PRD FR-12a. Two git repos: `https://github.com/bhikkhu-manual/bhikkhu-manual` (branch `master`, use `manuscript/markdown/`), `https://github.com/profound-labs/community-chanting-book` (branch `main`, use `chapters/english/markdown-*`). The Chanting Guide is recorded only: `https://www.dhammatalks.org/books/ChantingGuide/`, EPUB `https://www.dhammatalks.org/Archive/Writings/Ebooks/ChantingGuide210709.epub`, index `https://www.dhammatalks.org/ebook_index.html`, legacy copy `$BACKUP/_tools/refs/ChantingGuide_Thanissaro.md`. Optional local copy path: `sources/upstream/chanting-guide-thanissaro.md`.
 **Depends on:** 1.0.
 
-- [ ] 3.0 Upstream sources (FR-12a)
+- [x] 3.0 Upstream sources (FR-12a)
   - [x] 3.1 Write `sources/UPSTREAM.txt` in a simple `key: value` block format, one block per source: `name`, `url`, `branch`, `commit` (git repos), `paths` (folders used), `licence`, `use`. Give the Chanting Guide block `type: location-only` and the URLs above.
   - [x] 3.2 Write `scripts/fetch-sources.sh`. For each git block: if `sources/upstream/<name>` is missing, `git clone --filter=blob:none`; then `git fetch` and `git checkout <commit>`. `--update` instead checks out the branch head and rewrites the `commit:` line in `UPSTREAM.txt`. Skip `location-only` blocks, printing their URLs.
   - [x] 3.3 Run `scripts/fetch-sources.sh --update` once to pin the current commits, then run it again without `--update` to confirm it is a no-op.
