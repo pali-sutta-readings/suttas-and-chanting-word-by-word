@@ -90,7 +90,7 @@ Update the file after completing each sub-task, not just after completing an ent
 **Specs.** PRD 4.2 and 4.3. Copy byte for byte. Do not trust timestamps. Expected counts: 130 texts for 01–08 from `S22` (identical to `BACKUP`), 79 texts for 09a–10 from `FINAL`, 17 changelogs (01–08 from `BACKUP`, 09a–10 from `FINAL`), 6 originals to `sources/originals/`. Manifest columns: `dest`, `snapshot`, `source`, `sha256`, `differs_from_final`, `changed_lines_vs_final`. Expected: 48 texts + 9 changelogs with `differs_from_final=yes`.
 **Depends on:** 1.0.
 
-- [ ] 2.0 Legacy migration (FR-2–FR-14)
+- [x] 2.0 Legacy migration (FR-2–FR-14)
   - [x] 2.1 Write `scripts/migrate-legacy.sh` (bash, `set -euo pipefail`) with argument parsing: positional `LEGACY_DIR` (default as in Notes), `--dest DIR` (default: the repo root, found from the script's own path; used by the test), `--force`, `--dry-run`, `--help`. Resolve `FINAL`, `S22`, `BACKUP`, `EXERCISES`; fail clearly if any is missing.
   - [x] 2.2 Implement a `copy_file src dest snapshot` function that skips `._*`, `.DS_Store`, `__pycache__`, `*.pyc`. If `dest` exists and differs from `src`, refuse without `--force` (collect such files and exit non-zero at the end). Otherwise copy with `cp -p`, compute SHA-256 and the FINAL-comparison fields, and append a manifest row.
   - [x] 2.3 Implement the verification step (FR-8), run before any copy: every `S22/0[1-8]*/[0-9]*.md` must be `cmp`-identical to `BACKUP/<same>` (expect 130/130); every file in `FINAL/{07c,08,09*,10}_*/` must be identical to `BACKUP/<same>`. On a mismatch, list it and exit non-zero.
