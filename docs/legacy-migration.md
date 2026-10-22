@@ -181,3 +181,30 @@ The legacy pipeline (`_tools/chant_pipeline.py` and `_tools/helpers/`) is refere
 - **`cp`, `gitc`**: wrappers for the legacy agent sandbox, which could not delete files or run git normally. Not needed.
 - **`chant_pipeline.py dpd`, `q.py`, `ec.py`** and the local `dpd.db`: replaced by `scripts/simsapa.py`, which uses the Simsapa app's localhost API.
 - **WeasyPrint PDF build**: replaced by typst.
+
+## Lint baseline
+
+`make lint` on the migrated texts (2026-10-22) gives **0 ERROR, 0 STRAY, 23 WARN** over 209 files.
+
+The legacy linter (`BACKUP/_tools/chant_pipeline.py lint`, run on a scratch copy of `BACKUP` with each of its three specs) gives 0 ERROR, 0 STRAY and 22 WARN: 4 for 01–08, 18 for 09a–09e and 0 for 10. `scripts/lint.py` reports the same 22 WARNs, on the same lines, with the same messages. Each was left on purpose and is explained in the folder's changelog:
+
+| File:line | WARN | Why it is kept |
+| :--- | :--- | :--- |
+| 06/01:55 | compound `vipāka` needs member rows | stem form of one member of the canonical compound *nevavipākanavipākadhammadhammā*, written apart; S11 note in `texts/06_funeral_chants/CHANGELOG.md` |
+| 07a/02:913, 1236 | repeat of lines 792, 1112 written out in full | *Aniccā bhante* and *ajjhattā vā bahiddhā vā …* for *saṅkhārā* (masc pl) repeat the lines for *vedanā* (fem sg), so they keep their own tables (style spec §8, query 56) |
+| 07b/03:818 | repeat of line 750 written out in full | *okkamane pubbaṅgamā …*: masc nom pl, then fem nom sg agreeing with *janatā* (query 56) |
+| 09c/10:245–311 (5), 09c/11:245–367 (8) | compound `veramaṇī` needs member rows | first member of *veramaṇī-sikkhāpadaṁ*, which BM writes apart (style spec §12.1, "written apart") |
+| 09c/11:537, 538 | compounds `uposatha`, `sīla` need member rows | members of *uposatha-sīla-vasena*, written apart by BM |
+| 09e/02:42 | compound `pārisuddhi` needs member rows | written apart by BM; compound with *uposathaṁ* |
+| 09d/01:223 | BM-style citation *Vin.IV.122* | kept by decision V15 |
+| 09e/01:22 | BM-style citation *Vin.I.120-129* | kept by decision V16 |
+
+`scripts/lint.py` also has checks the legacy linter did not have: canonical tag order (style spec §5), the two trailing spaces after Literal, Faithful and Variant lines (§1, §12.1), letters outside the Pāli alphabet in Pāli lines and row words (§10), and non-breaking spaces (§10). The book 10 options (§12.2) come from `books/10_mahasatipatthanasutta/metadata.txt` instead of a separate spec.
+
+### Open lint findings
+
+The new checks found one problem. It is listed here; the text is not changed in this migration.
+
+| File:line | WARN | Note |
+| :--- | :--- | :--- |
+| `texts/09e_vinaya_notes_uposatha/05_sick_parisuddhi.md:67` | variant line does not end with two spaces | The cue *Āyasmā bhante uttaro bhikkhu* → *Uttaro bhante bhikkhu* (decision V18) lacks the two trailing spaces that §12.1 asks for. A blank line follows it, so the built book is not affected. The fix is to add the two spaces and log it in the changelog. |

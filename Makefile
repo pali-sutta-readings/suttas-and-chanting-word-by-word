@@ -3,6 +3,7 @@
 PYTHON ?= python3
 
 BOOKS := $(notdir $(wildcard books/*))
+TEXTS := $(wildcard texts/*/[0-9]*.md)
 
 .PHONY: help check-tools test clean all epub pdf book covers \
 	lint lint-fix compare index dpd-check fetch-sources epubcheck
@@ -33,8 +34,14 @@ test:
 fetch-sources:
 	@scripts/fetch-sources.sh
 
+lint:
+	@$(PYTHON) scripts/lint.py $(TEXTS)
+
+lint-fix:
+	@$(PYTHON) scripts/lint.py --fix $(TEXTS)
+
 clean:
 	rm -rf build
 
-all epub pdf book covers lint lint-fix compare index dpd-check epubcheck:
+all epub pdf book covers compare index dpd-check epubcheck:
 	@echo "make $@: not implemented yet"

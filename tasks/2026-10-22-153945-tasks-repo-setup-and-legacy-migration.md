@@ -11,7 +11,7 @@
 - `scripts/chantlib/spec.py` - Reads the fenced rule blocks from `docs/style-spec.md`.
 - `scripts/chantlib/parse.py` - Chant-file parser (line kinds, units, rows, member rows).
 - `scripts/chantlib/text.py` - Shared normalisation helpers (NFC, ṃ→ṁ, Pāli-letter folding).
-- `scripts/chantlib/books.py` - Reads `books/*/metadata.txt`.
+- `scripts/chantlib/books.py` - Reads `books/*/metadata.txt` (YAML-subset reader, book options, folder → book); task 6 adds `load_book` validation and `book_files`.
 - `scripts/lint.py` - Lint and safe auto-fix.
 - `scripts/assemble.py` - Builds one pandoc-Markdown file per book.
 - `scripts/compare.py` - Pāli check against sources.
@@ -22,12 +22,13 @@
 - `scripts/simsapa_fmt.py` - Copied formatter for ad-hoc `curl` queries.
 - `tests/test_smoke.py` - Checks that `chantlib` imports, so `make test` runs from the start.
 - `tests/` - `unittest` tests: `test_spec.py`, `test_parse.py`, `test_lint.py`, `test_assemble.py`, `test_compare.py`, `test_index.py`, `test_draft.py`, `test_simsapa.py`, `test_migrate.sh`.
-- `tests/fixtures/` - Small chant files (good and broken), recorded Simsapa JSON responses.
+- `tests/fixtures/` - Small chant files: `good.md`, `good-vinaya.md`, `good-dn22.md` (from real texts) and `bad-*.md` (one rule broken each); later, recorded Simsapa JSON responses.
+- `tests/test_parse.py`, `tests/test_lint.py` - Parser, text helpers, lint checks, tag order, repeats, `--fix`.
 - `texts/**` - Migrated chant files and changelogs (content; created by migration, never edited by this feature).
 - `sources/MIGRATION-MANIFEST.tsv` - Written by the migration script.
 - `sources/UPSTREAM.txt` - Upstream repos, pinned commits, Chanting Guide locations.
 - `sources/reference-pali-supplement.md`, `sources/suttacentral/*.json`, `sources/originals/**` - Reference texts for `compare`.
-- `books/<book>/metadata.txt`, `books/<book>/about.md` - Per-book metadata and About text (13 books).
+- `books/<book>/metadata.txt`, `books/<book>/about.md` - Per-book metadata and About text (13 books). `books/10_mahasatipatthanasutta/metadata.txt` was started in task 5 with only `texts` and `options`, so that lint has the book 10 options.
 - `templates/epub.css` - EPUB styling (adapted from legacy `style.css`).
 - `templates/pandoc/book.typst` - Pandoc typst template.
 - `templates/pandoc/chant.lua` - Lua filter: classed divs → typst function calls.
@@ -160,15 +161,15 @@ Lint severities are ERROR, STRAY and WARN, as in the legacy script. Output: `pat
 **Depends on:** 2.0 (texts), 4.0 (spec blocks).
 
 - [ ] 5.0 Shared parser and lint (FR-16, success metric 3)
-  - [ ] 5.1 Write `scripts/chantlib/text.py`: `nfc()`, `fold_niggahita()` (ṃ→ṁ), `pali_letters_only()` (lower case, keep Pāli letters and spaces, drop punctuation and `'`), `norm_line()` for comparisons.
-  - [ ] 5.2 Write `scripts/chantlib/parse.py`: `classify(lines)`, then `parse_file(path)` returning a `ChantFile` with `title`, `subtitle`, `units[]` (each with `pali`, `literal`, `faithful`, `rows[]`, `members` per row, `repeat`, `variants[]`, `citation`, line numbers) and `stray[]`. Add `split_row()` and `split_tags()`.
-  - [ ] 5.3 Add `tests/fixtures/good.md`, `good-vinaya.md` and `good-dn22.md` (small hand-made examples copied from real texts), and `bad-*.md` cases (unknown tag, wrong tag order, missing coverage, `comp` row without members, English stray line, ṃ, `---`, missing two trailing spaces). Write `tests/test_parse.py`.
-  - [ ] 5.4 Write `scripts/lint.py`: CLI `lint.py [--fix] [--book BOOK] PATHS…`. Load the spec via `chantlib.spec`, and book options via `chantlib.books` (a stub returning defaults until task 6). Implement the checks: layout, allowed tags and canonical order, coverage, `comp` members, repeat note and repeats (within a file, or across files when the book option is set), rubrics, English stopwords in Pāli/headings, characters (NFC, ṁ, alphabet, no tabs/NBSP/tone marks), Vinaya instruction-line length (> 45 words → WARN), and variant cue checks.
-  - [ ] 5.5 Implement `--fix` for the safe fixes only. Write in place, and print one "safe fixes applied" line per changed file.
-  - [ ] 5.6 Write `tests/test_lint.py`: each bad fixture gives the expected severity; good fixtures are clean; `--fix` on a temp copy gives the expected text.
-  - [ ] 5.7 Add `make lint` (all `texts/*/[0-9]*.md`) and `make lint-fix`.
-  - [ ] 5.8 Run `make lint` on the migrated texts. The target is the legacy baseline from Notes: 0 ERROR / 0 STRAY, with 4 / 18 / 0 WARN for 01–08 / 09 / 10. Compare the WARN messages with the legacy linter's output (run it on a scratch copy of `BACKUP` with each spec). Differences are most likely lint bugs, so fix the lint code. Only if a real text problem is found, list it in `docs/legacy-migration.md` under "Open lint findings" without editing the text. Do **not** run `lint-fix` on `texts/` in this feature.
-  - [ ] 5.9 Commit: "Chant parser and lint".
+  - [x] 5.1 Write `scripts/chantlib/text.py`: `nfc()`, `fold_niggahita()` (ṃ→ṁ), `pali_letters_only()` (lower case, keep Pāli letters and spaces, drop punctuation and `'`), `norm_line()` for comparisons.
+  - [x] 5.2 Write `scripts/chantlib/parse.py`: `classify(lines)`, then `parse_file(path)` returning a `ChantFile` with `title`, `subtitle`, `units[]` (each with `pali`, `literal`, `faithful`, `rows[]`, `members` per row, `repeat`, `variants[]`, `citation`, line numbers) and `stray[]`. Add `split_row()` and `split_tags()`.
+  - [x] 5.3 Add `tests/fixtures/good.md`, `good-vinaya.md` and `good-dn22.md` (small hand-made examples copied from real texts), and `bad-*.md` cases (unknown tag, wrong tag order, missing coverage, `comp` row without members, English stray line, ṃ, `---`, missing two trailing spaces). Write `tests/test_parse.py`.
+  - [x] 5.4 Write `scripts/lint.py`: CLI `lint.py [--fix] [--book BOOK] PATHS…`. Load the spec via `chantlib.spec`, and book options via `chantlib.books` (a stub returning defaults until task 6). Implement the checks: layout, allowed tags and canonical order, coverage, `comp` members, repeat note and repeats (within a file, or across files when the book option is set), rubrics, English stopwords in Pāli/headings, characters (NFC, ṁ, alphabet, no tabs/NBSP/tone marks), Vinaya instruction-line length (> 45 words → WARN), and variant cue checks.
+  - [x] 5.5 Implement `--fix` for the safe fixes only. Write in place, and print one "safe fixes applied" line per changed file.
+  - [x] 5.6 Write `tests/test_lint.py`: each bad fixture gives the expected severity; good fixtures are clean; `--fix` on a temp copy gives the expected text.
+  - [x] 5.7 Add `make lint` (all `texts/*/[0-9]*.md`) and `make lint-fix`.
+  - [x] 5.8 Run `make lint` on the migrated texts. The target is the legacy baseline from Notes: 0 ERROR / 0 STRAY, with 4 / 18 / 0 WARN for 01–08 / 09 / 10. Compare the WARN messages with the legacy linter's output (run it on a scratch copy of `BACKUP` with each spec). Differences are most likely lint bugs, so fix the lint code. Only if a real text problem is found, list it in `docs/legacy-migration.md` under "Open lint findings" without editing the text. Do **not** run `lint-fix` on `texts/` in this feature. Result: 0 ERROR / 0 STRAY / 23 WARN. The 22 legacy WARNs are reproduced exactly (same lines and messages); the 23rd comes from a new check (variant cue without two trailing spaces, 09e/05:67) and is listed under "Open lint findings" in `docs/legacy-migration.md`.
+  - [x] 5.9 Commit: "Chant parser and lint".
 
 ### 6.0 Book metadata and EPUB build
 
@@ -187,7 +188,7 @@ The assembled Markdown follows legacy `preprocess()`, with these divs: `unit`, `
 **Depends on:** 5.0 (parser), 2.0 (fonts, css).
 
 - [ ] 6.0 Book metadata and EPUB build (FR-26–FR-30, FR-32 EPUB part)
-  - [ ] 6.1 Create `books/<id>/metadata.txt` for the 13 books, with the FR-27 titles, `pali-title-first: true` for 04a and 05, the `sources` and `rights` text from FR-26, and empty `author`/`publisher`. For 09, list the five parts with their headings from `BACKUP/_tools/chant_pipeline.py` `BOOKS`: Requisites, Rains and Kaṭhina, Other Procedures, Offences, Uposatha. For 10, add `options` from the legacy DN 22 spec's `options` block.
+  - [ ] 6.1 Create `books/<id>/metadata.txt` for the 13 books (book 10's file already exists with `texts` and `options`; extend it), with the FR-27 titles, `pali-title-first: true` for 04a and 05, the `sources` and `rights` text from FR-26, and empty `author`/`publisher`. For 09, list the five parts with their headings from `BACKUP/_tools/chant_pipeline.py` `BOOKS`: Requisites, Rains and Kaṭhina, Other Procedures, Offences, Uposatha. For 10, add `options` from the legacy DN 22 spec's `options` block.
   - [ ] 6.2 Create `books/<id>/about.md` for the 13 books. For 01–08, use the legacy `ABOUT` template with `{what}`, `{drafting}` and `{review}` filled in as `build()` did. For 10, use `BACKUP/_tools/dn22/about-dn22.md`. For 09, use `ABOUT_VINAYA` from `BACKUP/_tools/chant_pipeline.py` (line ~591). Leave `{today}` as a placeholder.
   - [ ] 6.3 Write `scripts/chantlib/books.py`: `load_book(id)`, which parses the metadata with a small YAML-subset reader (keys, strings, booleans, lists, list of mappings) and validates the required keys; `list_books()`; `book_files(book)`, which gives the ordered `NN_*.md` paths and never returns `CHANGELOG.md` or `00_original_*`. Wire book options into `lint.py`.
   - [ ] 6.4 Write `scripts/assemble.py BOOK [--out build/tmp]`. Steps: read the metadata, insert `about.md` with `{today}` replaced, emit part headings for 09, run each file through the parser, and emit pandoc Markdown with the classed divs. Write `build/tmp/<book>.md` and `build/tmp/<book>.meta.yaml` (metadata with the computed title/subtitle order and the cover path; **keys with empty values dropped**, because pandoc would otherwise write empty `dc:creator`/`dc:publisher` elements). Warn on lint ERROR/STRAY (FR-25).

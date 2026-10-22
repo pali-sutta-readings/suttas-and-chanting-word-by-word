@@ -1,0 +1,7 @@
+texts:
+  - 10_Mahasatipatthanasutta
+options:
+  heading-gloss: true
+  heading-numbers: true
+  repeat-across-files: true
+  dpd-variant-rows: true
