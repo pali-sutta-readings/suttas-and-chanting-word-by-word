@@ -160,7 +160,7 @@ It groups the lines into units: a Pāli line, its renderings, and its table or r
 Lint severities are ERROR, STRAY and WARN, as in the legacy script. Output: `path:line: SEVERITY message`, and the exit code is 1 if any ERROR or STRAY. Safe fixes (`--fix`): remove `---` lines, apply the synonym map (`cmpd/compound/in cmpd/in compound→comp`, `inst/ins→instr`, `ppp→pp`, `ppr→prp`, `indcl→ind`), NFC, `ṃ→ṁ` in Pāli.
 **Depends on:** 2.0 (texts), 4.0 (spec blocks).
 
-- [ ] 5.0 Shared parser and lint (FR-16, success metric 3)
+- [x] 5.0 Shared parser and lint (FR-16, success metric 3)
   - [x] 5.1 Write `scripts/chantlib/text.py`: `nfc()`, `fold_niggahita()` (ṃ→ṁ), `pali_letters_only()` (lower case, keep Pāli letters and spaces, drop punctuation and `'`), `norm_line()` for comparisons.
   - [x] 5.2 Write `scripts/chantlib/parse.py`: `classify(lines)`, then `parse_file(path)` returning a `ChantFile` with `title`, `subtitle`, `units[]` (each with `pali`, `literal`, `faithful`, `rows[]`, `members` per row, `repeat`, `variants[]`, `citation`, line numbers) and `stray[]`. Add `split_row()` and `split_tags()`.
   - [x] 5.3 Add `tests/fixtures/good.md`, `good-vinaya.md` and `good-dn22.md` (small hand-made examples copied from real texts), and `bad-*.md` cases (unknown tag, wrong tag order, missing coverage, `comp` row without members, English stray line, ṃ, `---`, missing two trailing spaces). Write `tests/test_parse.py`.
