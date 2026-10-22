@@ -128,11 +128,11 @@ Update the file after completing each sub-task, not just after completing an ent
 **Depends on:** 2.0 (for references to files in `texts/`).
 
 - [ ] 4.0 Editorial docs (FR-34–FR-36)
-  - [ ] 4.1 Write `docs/style-spec.md` with the 12 sections listed in FR-34. Re-state the rules in plain words, and keep every example and every dated exception. Where the main, DN 22 and Vinaya specs differ, put the general rule in the main section and the differences in §12 (book-specific rules).
-  - [ ] 4.2 Copy the four machine-readable blocks verbatim from `BACKUP/_tools/style-spec.md` into the right sections. Add a note at the top that `scripts/lint.py` reads them and that they must only be edited here.
-  - [ ] 4.3 Remove legacy-environment content that no longer applies (`_tools/cp`, `gitc`, the Mac folder, cloud builds, WeasyPrint, Gentium). Replace references to the local `dpd.db` with "DPD via Simsapa".
-  - [ ] 4.4 Write `docs/decisions.md`: a table (date, ID, decision, source file) of every maintainer decision found in the specs, PRDs, checkpoints and changelogs. This includes queries 1–60 where they are recorded, D1–D17 and V1–V19.
-  - [ ] 4.5 Write `docs/quality-process.md` (FR-36):
+  - [x] 4.1 Write `docs/style-spec.md` with the 12 sections listed in FR-34. Re-state the rules in plain words, and keep every example and every dated exception. Where the main, DN 22 and Vinaya specs differ, put the general rule in the main section and the differences in §12 (book-specific rules).
+  - [x] 4.2 Copy the four machine-readable blocks verbatim from `BACKUP/_tools/style-spec.md` into the right sections. Add a note at the top that `scripts/lint.py` reads them and that they must only be edited here.
+  - [x] 4.3 Remove legacy-environment content that no longer applies (`_tools/cp`, `gitc`, the Mac folder, cloud builds, WeasyPrint, Gentium). Replace references to the local `dpd.db` with "DPD via Simsapa".
+  - [x] 4.4 Write `docs/decisions.md`: a table (date, ID, decision, source file) of every maintainer decision found in the specs, PRDs, checkpoints and changelogs. This includes queries 1–60 where they are recorded, D1–D17 and V1–V19.
+  - [x] 4.5 Write `docs/quality-process.md` (FR-36):
     - lint to 0 ERROR / 0 STRAY, with each WARN explained;
     - `compare`;
     - `simsapa.py check`;
@@ -140,8 +140,8 @@ Update the file after completing each sub-task, not just after completing an ent
     - an independent 10-unit spot check by a separate agent;
     - `index` consistency;
     - a changelog entry ("Was / Now / Why / Reference").
-  - [ ] 4.6 Write `scripts/chantlib/spec.py`: `load_spec(path)` returns a dict of block name → list of lines (or text for `repeat-note`). Add `tests/test_spec.py`, which loads `docs/style-spec.md` and checks that the tag list has 47 tokens (the legacy count; adjust if the count in the file differs) and that the other three blocks are present and non-empty.
-  - [ ] 4.7 Commit: "Editorial docs: style spec, decisions, quality process".
+  - [x] 4.6 Write `scripts/chantlib/spec.py`: `load_spec(path)` returns a dict of block name → list of lines (or text for `repeat-note`). Add `tests/test_spec.py`, which loads `docs/style-spec.md` and checks that the tag list has 47 tokens (the legacy count; adjust if the count in the file differs) and that the other three blocks are present and non-empty.
+  - [x] 4.7 Commit: "Editorial docs: style spec, decisions, quality process".
 
 ### 5.0 Shared parser and lint
 
