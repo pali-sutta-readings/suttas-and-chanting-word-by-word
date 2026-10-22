@@ -1,0 +1,6 @@
+build/
+sources/upstream/
+.DS_Store
+._*
+__pycache__/
+*.pyc

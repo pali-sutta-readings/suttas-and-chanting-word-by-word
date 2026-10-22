@@ -1,6 +1,7 @@
 ## Relevant Files
 
 - `.gitignore` - Ignores `build/`, `sources/upstream/`, macOS junk, Python caches.
+- `**/.gitkeep` - Keep the skeleton folders in git until they get content.
 - `Makefile` - All build and check targets (`check-tools`, `all`, `epub`, `pdf`, `book`, `covers`, `lint`, `lint-fix`, `compare`, `index`, `dpd-check`, `fetch-sources`, `test`, `clean`).
 - `scripts/check-tools.sh` - Checks tool presence and minimum versions, prints install hints.
 - `scripts/migrate-legacy.sh` - One-off legacy migration with verification and manifest.
@@ -18,6 +19,7 @@
 - `scripts/draft.py` - Compact draft format ↔ chant file.
 - `scripts/simsapa.py` - Simsapa API client (lookup, check, gloss).
 - `scripts/simsapa_fmt.py` - Copied formatter for ad-hoc `curl` queries.
+- `tests/test_smoke.py` - Checks that `chantlib` imports, so `make test` runs from the start.
 - `tests/` - `unittest` tests: `test_spec.py`, `test_parse.py`, `test_lint.py`, `test_assemble.py`, `test_compare.py`, `test_index.py`, `test_draft.py`, `test_simsapa.py`, `test_migrate.sh`.
 - `tests/fixtures/` - Small chant files (good and broken), recorded Simsapa JSON responses.
 - `texts/**` - Migrated chant files and changelogs (content; created by migration, never edited by this feature).
@@ -51,6 +53,7 @@
 - In Makefile prerequisites, use `$(wildcard scripts/*.py scripts/chantlib/*.py)`; Make does not expand `**`.
 - Never edit files under `texts/` in this feature. If lint or compare finds problems in a text, report them; don't fix them.
 - Commit on `main` after each top-level task.
+- Simsapa answering on 2026-10-22 during task 1 reported `app_version` 1.0.0-alpha.8, not the 1.1.0-alpha.1 noted in PRD FR-17a; re-check the response fields when recording fixtures in task 9.
 - Simsapa must be running on port 4848 (or `$SIMSAPA_DIR/api-port.txt`) for task 9 and `make dpd-check`; nothing else needs it.
 
 ## Instructions for Completing Tasks
@@ -70,16 +73,16 @@ Update the file after completing each sub-task, not just after completing an ent
 **Depends on:** nothing.
 
 - [ ] 1.0 Repo skeleton and tool check (FR-1, FR-15, FR-23, FR-40)
-  - [ ] 1.1 Create the directories `texts/`, `books/`, `sources/`, `templates/epub/`, `templates/pandoc/`, `templates/typst/`, `fonts/`, `scripts/chantlib/`, `tests/fixtures/`, `docs/`, `.claude/skills/pali-word-analysis/` (add a `.gitkeep` where a folder would otherwise be empty in git).
-  - [ ] 1.2 Write `.gitignore`: `build/`, `sources/upstream/`, `.DS_Store`, `._*`, `__pycache__/`, `*.pyc`.
-  - [ ] 1.3 Write `scripts/check-tools.sh`: for each tool, check that it is on `PATH`, parse its version, compare with the minimum, and print `OK`, `TOO OLD` or `MISSING` with an install hint:
+  - [x] 1.1 Create the directories `texts/`, `books/`, `sources/`, `templates/epub/`, `templates/pandoc/`, `templates/typst/`, `fonts/`, `scripts/chantlib/`, `tests/fixtures/`, `docs/`, `.claude/skills/pali-word-analysis/` (add a `.gitkeep` where a folder would otherwise be empty in git). `templates/epub/` was not created: the PRD (FR-1) and task 2.5 put the stylesheet at `templates/epub.css`, so the folder would stay empty.
+  - [x] 1.2 Write `.gitignore`: `build/`, `sources/upstream/`, `.DS_Store`, `._*`, `__pycache__/`, `*.pyc`.
+  - [x] 1.3 Write `scripts/check-tools.sh`: for each tool, check that it is on `PATH`, parse its version, compare with the minimum, and print `OK`, `TOO OLD` or `MISSING` with an install hint:
     - Arch: `pacman -S pandoc-cli typst python make curl git`;
     - macOS: `brew install pandoc typst python make`;
     - Debian/Ubuntu: `apt install python3 make curl git`, pandoc from its GitHub release `.deb` (Debian 12's 2.17 is too old), typst from its GitHub release or `cargo install --locked typst-cli`. Probe Simsapa with `curl -s --max-time 2 localhost:$PORT/health`. Exit non-zero only if a required tool is missing or too old.
-  - [ ] 1.4 Write the `Makefile` skeleton: `.PHONY` targets, `PYTHON ?= python3`, `BOOKS := $(notdir $(wildcard books/*))`, `check-tools`, `test` (`$(PYTHON) -m unittest discover -s tests`), `clean`; placeholder targets for the rest that print "not implemented yet".
-  - [ ] 1.5 Create `scripts/chantlib/__init__.py`, plus a trivial `tests/test_smoke.py` that imports `chantlib`, so `make test` runs.
-  - [ ] 1.6 Run `make check-tools` and `make test`; both pass on this machine.
-  - [ ] 1.7 Commit: "Repo skeleton, Makefile, tool check".
+  - [x] 1.4 Write the `Makefile` skeleton: `.PHONY` targets, `PYTHON ?= python3`, `BOOKS := $(notdir $(wildcard books/*))`, `check-tools`, `test` (`$(PYTHON) -m unittest discover -s tests`), `clean`; placeholder targets for the rest that print "not implemented yet".
+  - [x] 1.5 Create `scripts/chantlib/__init__.py`, plus a trivial `tests/test_smoke.py` that imports `chantlib`, so `make test` runs.
+  - [x] 1.6 Run `make check-tools` and `make test`; both pass on this machine.
+  - [x] 1.7 Commit: "Repo skeleton, Makefile, tool check".
 
 ### 2.0 Legacy migration
 
