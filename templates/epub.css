@@ -1,0 +1,68 @@
+/* style.css: chant books (EPUB and A5 PDF). Based on the original style.css. */
+
+body {
+  font-family: "Gentium Plus", Georgia, serif;
+  line-height: 1.5;
+  hyphens: auto;
+}
+
+h1 { font-size: 1.6em; margin: 0 0 0.2em; line-height: 1.25; }
+h2 { font-size: 1.2em; margin: 1.2em 0 0.4em; }
+h3 { font-size: 1.05em; margin: 1em 0 0.4em; font-style: italic; }
+
+.subtitle p { font-style: italic; margin: 0 0 1.5em; font-size: 1.1em; }
+.hgloss p { font-style: italic; margin: -0.4em 0 1.2em; }   /* 10_: English gloss under a ### heading */
+
+.unit { margin: 0 0 1.4em; }
+.pali p { font-weight: bold; font-size: 1.12em; margin: 0 0 0.3em; }
+.literal p, .faithful p { margin: 0; }
+.repeat p { font-style: italic; font-size: 0.9em; margin: 0.3em 0 0; }
+.citation p { text-align: right; font-style: italic; font-size: 0.9em; margin: -0.6em 0 1.4em; }
+.rubric p { font-style: italic; margin: 0.4em 0; }
+/* Vinaya book (spec §10): instruction lines and variant cues */
+.instr p { font-style: italic; margin: 0.8em 0 0.5em; padding-left: 0.8em; border-left: 2px solid #bbb; }
+.variant p { margin: 0.9em 0 0; font-size: 0.95em; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.6em 0 0;
+  font-size: 0.9em;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 4px 6px;
+  text-align: left;
+  vertical-align: top;
+}
+th { background: #f2f2f2; }
+td:first-child { width: 28%; }
+h1 .toc-en, h2 .toc-en { display: none; }
+nav#TOC .toc-en { display: inline; }
+code { font-family: inherit; font-size: 1em; background: none; }
+
+/* Pandoc title block and table of contents */
+header#title-block-header { margin-bottom: 2em; }
+p.subtitle { font-style: italic; font-size: 1.2em; }
+nav#TOC ul { list-style: none; padding-left: 0; }
+
+/* ---------- A5 print (WeasyPrint only; EPUB readers ignore @page) ---------- */
+@page {
+  size: A5;
+  margin: 16mm 14mm 18mm 14mm;
+  @bottom-center { content: counter(page); font-family: "Gentium Plus", serif; font-size: 9pt; }
+}
+@page :first { @bottom-center { content: none; } }
+
+@media print {
+  body { font-size: 10.5pt; }
+  header#title-block-header { page-break-after: always; text-align: center; padding-top: 30%; }
+  nav#TOC { page-break-after: always; }
+  nav#TOC a { color: black; text-decoration: none; }
+  nav#TOC a::after { content: leader('.') target-counter(attr(href), page); }
+  h1 { page-break-before: always; }
+  .pali, .literal, .faithful, h1, h2, h3, .subtitle, .instr, .variant { page-break-after: avoid; }
+  tr { page-break-inside: avoid; }
+  table { page-break-before: avoid; }
+  a { color: black; text-decoration: none; }
+}

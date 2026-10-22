@@ -5,6 +5,7 @@
 - `Makefile` - All build and check targets (`check-tools`, `all`, `epub`, `pdf`, `book`, `covers`, `lint`, `lint-fix`, `compare`, `index`, `dpd-check`, `fetch-sources`, `epubcheck`, `test`, `clean`).
 - `scripts/check-tools.sh` - Checks tool presence and minimum versions, prints install hints.
 - `scripts/migrate-legacy.sh` - One-off legacy migration with verification and manifest.
+- `tests/test_migrate.sh` - Runs the migration into a temp dir; checks totals, re-run no-op and `--force`. Part of `make test`; skips without the legacy folder.
 - `scripts/fetch-sources.sh` - Clones/updates upstream source repos at pinned commits.
 - `scripts/chantlib/__init__.py` - Shared package for the Python tools.
 - `scripts/chantlib/spec.py` - Reads the fenced rule blocks from `docs/style-spec.md`.
@@ -33,11 +34,11 @@
 - `templates/typst/style.typ` - Fonts, sizes, page setup (adapted from `pali-exercises`).
 - `templates/typst/book.typ` - Typst functions for units, tables, headers, TOC.
 - `templates/typst/cover.typ` - Generated cover.
-- `fonts/Crimson/`, `fonts/Noto_Sans/`, `fonts/Noto_Sans_Math/` - Fonts with licence files.
+- `fonts/Crimson/`, `fonts/Noto_Sans/`, `fonts/Noto_Sans_Math/` - Fonts with licence files (`Crimson/OFL.txt` and `Noto_Sans_Math/OFL.txt` added from upstream; sources in `docs/legacy-migration.md`).
 - `docs/style-spec.md` - Editorial rules with machine-readable blocks.
 - `docs/decisions.md` - Dated maintainer decisions.
 - `docs/quality-process.md` - Checking routine.
-- `docs/legacy-migration.md` - Migration evidence and affected-file list.
+- `docs/legacy-migration.md` - Migration sources, manifest columns, version-conflict evidence, affected-file list, legacy history, tools not migrated.
 - `docs/drafting-workflow.md` - Workflow for adding a text.
 - `docs/simsapa-localhost-api-search-endpoints.md` - Existing; Simsapa API reference.
 - `.claude/skills/pali-word-analysis/SKILL.md` - Local skill for grammar labels and word tables.
@@ -90,16 +91,16 @@ Update the file after completing each sub-task, not just after completing an ent
 **Depends on:** 1.0.
 
 - [ ] 2.0 Legacy migration (FR-2–FR-14)
-  - [ ] 2.1 Write `scripts/migrate-legacy.sh` (bash, `set -euo pipefail`) with argument parsing: positional `LEGACY_DIR` (default as in Notes), `--dest DIR` (default: the repo root, found from the script's own path; used by the test), `--force`, `--dry-run`, `--help`. Resolve `FINAL`, `S22`, `BACKUP`, `EXERCISES`; fail clearly if any is missing.
-  - [ ] 2.2 Implement a `copy_file src dest snapshot` function that skips `._*`, `.DS_Store`, `__pycache__`, `*.pyc`. If `dest` exists and differs from `src`, refuse without `--force` (collect such files and exit non-zero at the end). Otherwise copy with `cp -p`, compute SHA-256 and the FINAL-comparison fields, and append a manifest row.
-  - [ ] 2.3 Implement the verification step (FR-8), run before any copy: every `S22/0[1-8]*/[0-9]*.md` must be `cmp`-identical to `BACKUP/<same>` (expect 130/130); every file in `FINAL/{07c,08,09*,10}_*/` must be identical to `BACKUP/<same>`. On a mismatch, list it and exit non-zero.
-  - [ ] 2.4 Implement the copy plan from FR-7. Texts `NN_*.md` for 01–08 come from `S22`, and changelogs for 01–08 from `BACKUP`. Texts and changelogs for 09a–10 come from `FINAL` into `texts/<folder>/`. `00_original_*` files go from `FINAL` to `sources/originals/<folder>/`. Copy from `BACKUP/_tools/refs/`: `reference-pali-supplement.md` → `sources/`, `dn22_root-pli-ms.json` and `dn22_variant-pli-ms.json` → `sources/suttacentral/`. **Skip** `Bhikkhu-Manual-Reference.md` and `ChantingGuide_Thanissaro.md`.
-  - [ ] 2.5 Copy non-content assets: `BACKUP/_tools/style.css` → `templates/epub.css`; `EXERCISES/fonts/Crimson/` and `EXERCISES/fonts/Noto_Sans/` → `fonts/`; `NotoSansMath-Regular.ttf` from `/usr/share/fonts/noto/` (or `$NOTO_MATH` if set) → `fonts/Noto_Sans_Math/`; `EXERCISES/exercises/style.typ` → `templates/typst/style.typ`; `EXERCISES/scripts/simsapa_fmt.py` → `scripts/simsapa_fmt.py`. Crimson has **no** licence file in `EXERCISES` (verified). Add `fonts/Crimson/OFL.txt` from the upstream Crimson repository (github.com/skosch/Crimson) in this sub-task, and record its source in the summary. Fetch the OFL text for Noto Sans Math, or copy `fonts/Noto_Sans/OFL.txt`, which is the same licence.
-  - [ ] 2.6 Write `sources/MIGRATION-MANIFEST.tsv` (header row, sorted by `dest`). For each text, compute `changed_lines_vs_final` as the count of `>` lines in `diff FINAL/<f> <chosen source>` (0 when identical).
-  - [ ] 2.7 Print the summary (FR-11): counts per folder, skipped files, the list of files with `differs_from_final=yes`, and expected-vs-actual totals (209 / 17 / 6). Exit non-zero if the totals don't match.
-  - [ ] 2.8 Write `tests/test_migrate.sh`: run the script with `--dest` set to a temporary directory and check the totals, the 48+9 `differs_from_final` rows, that a second run is a no-op, and that a modified destination makes it refuse without `--force`. Hook it into `make test`.
-  - [ ] 2.9 Run the script for real in the repo. Check the summary against the expected numbers.
-  - [ ] 2.10 Write `docs/legacy-migration.md` (FR-13, FR-14, FR-37):
+  - [x] 2.1 Write `scripts/migrate-legacy.sh` (bash, `set -euo pipefail`) with argument parsing: positional `LEGACY_DIR` (default as in Notes), `--dest DIR` (default: the repo root, found from the script's own path; used by the test), `--force`, `--dry-run`, `--help`. Resolve `FINAL`, `S22`, `BACKUP`, `EXERCISES`; fail clearly if any is missing.
+  - [x] 2.2 Implement a `copy_file src dest snapshot` function that skips `._*`, `.DS_Store`, `__pycache__`, `*.pyc`. If `dest` exists and differs from `src`, refuse without `--force` (collect such files and exit non-zero at the end). Otherwise copy with `cp -p`, compute SHA-256 and the FINAL-comparison fields, and append a manifest row.
+  - [x] 2.3 Implement the verification step (FR-8), run before any copy: every `S22/0[1-8]*/[0-9]*.md` must be `cmp`-identical to `BACKUP/<same>` (expect 130/130); every file in `FINAL/{07c,08,09*,10}_*/` must be identical to `BACKUP/<same>`. On a mismatch, list it and exit non-zero.
+  - [x] 2.4 Implement the copy plan from FR-7. Texts `NN_*.md` for 01–08 come from `S22`, and changelogs for 01–08 from `BACKUP`. Texts and changelogs for 09a–10 come from `FINAL` into `texts/<folder>/`. `00_original_*` files go from `FINAL` to `sources/originals/<folder>/`. Copy from `BACKUP/_tools/refs/`: `reference-pali-supplement.md` → `sources/`, `dn22_root-pli-ms.json` and `dn22_variant-pli-ms.json` → `sources/suttacentral/`. **Skip** `Bhikkhu-Manual-Reference.md` and `ChantingGuide_Thanissaro.md`.
+  - [x] 2.5 Copy non-content assets: `BACKUP/_tools/style.css` → `templates/epub.css`; `EXERCISES/fonts/Crimson/` and `EXERCISES/fonts/Noto_Sans/` → `fonts/`; `NotoSansMath-Regular.ttf` from `/usr/share/fonts/noto/` (or `$NOTO_MATH` if set) → `fonts/Noto_Sans_Math/`; `EXERCISES/exercises/style.typ` → `templates/typst/style.typ`; `EXERCISES/scripts/simsapa_fmt.py` → `scripts/simsapa_fmt.py`. Crimson has **no** licence file in `EXERCISES` (verified). Add `fonts/Crimson/OFL.txt` from the upstream Crimson repository (github.com/skosch/Crimson) in this sub-task, and record its source in the summary. Fetch the OFL text for Noto Sans Math, or copy `fonts/Noto_Sans/OFL.txt`, which is the same licence.
+  - [x] 2.6 Write `sources/MIGRATION-MANIFEST.tsv` (header row, sorted by `dest`). For each text, compute `changed_lines_vs_final` as the count of `>` lines in `diff FINAL/<f> <chosen source>` (0 when identical).
+  - [x] 2.7 Print the summary (FR-11): counts per folder, skipped files, the list of files with `differs_from_final=yes`, and expected-vs-actual totals (209 / 17 / 6). Exit non-zero if the totals don't match.
+  - [x] 2.8 Write `tests/test_migrate.sh`: run the script with `--dest` set to a temporary directory and check the totals, the 48+9 `differs_from_final` rows, that a second run is a no-op, and that a modified destination makes it refuse without `--force`. Hook it into `make test`.
+  - [x] 2.9 Run the script for real in the repo. Check the summary against the expected numbers.
+  - [x] 2.10 Write `docs/legacy-migration.md` (FR-13, FR-14, FR-37):
     - the finding and its 6 evidence points (copy from PRD 4.3);
     - the affected-file table, generated from the manifest;
     - the reproduce commands;
@@ -107,7 +108,7 @@ Update the file after completing each sub-task, not just after completing an ent
     - a short history of the legacy project (sessions S0–S22; the DN 22 and Vinaya sub-projects with their sessions S0–S8);
     - the tools that were not migrated, and why;
     - a note that the reference BM text was an EPUB→Markdown conversion, now replaced by upstream.
-  - [ ] 2.11 Commit: "Import legacy texts (S22 versions for 01–08) with migration manifest".
+  - [x] 2.11 Commit: "Import legacy texts (S22 versions for 01–08) with migration manifest".
 
 ### 3.0 Upstream sources
 

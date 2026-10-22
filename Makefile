@@ -28,6 +28,7 @@ check-tools:
 
 test:
 	$(PYTHON) -m unittest discover -s tests
+	tests/test_migrate.sh
 
 clean:
 	rm -rf build
