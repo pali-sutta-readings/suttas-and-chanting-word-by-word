@@ -127,7 +127,7 @@ Update the file after completing each sub-task, not just after completing an ent
 **Specs.** PRD FR-34–FR-36. Sources to read in place: `BACKUP/_tools/style-spec.md` (main), `BACKUP/_tools/dn22/style-spec.md` (§10 and `options` block), `BACKUP/_tools/vinaya/style-spec.md` (§10), `BACKUP/_tools/dn22/prd-dn22.md`, `BACKUP/_tools/vinaya/prd-vinaya.md`, both `checkpoint.md` and `operators-guide.md`, and the changelogs. The machine-readable fenced blocks must keep their info strings and contents exactly: ```` ```tags ````, ```` ```rubrics ````, ```` ```english-stopwords ````, ```` ```repeat-note ````. Book options (heading-gloss, heading-numbers, repeat-across-files, dpd-variant-rows) move to `books/<book>/metadata.txt` (task 6), not into the spec.
 **Depends on:** 2.0 (for references to files in `texts/`).
 
-- [ ] 4.0 Editorial docs (FR-34–FR-36)
+- [x] 4.0 Editorial docs (FR-34–FR-36)
   - [x] 4.1 Write `docs/style-spec.md` with the 12 sections listed in FR-34. Re-state the rules in plain words, and keep every example and every dated exception. Where the main, DN 22 and Vinaya specs differ, put the general rule in the main section and the differences in §12 (book-specific rules).
   - [x] 4.2 Copy the four machine-readable blocks verbatim from `BACKUP/_tools/style-spec.md` into the right sections. Add a note at the top that `scripts/lint.py` reads them and that they must only be edited here.
   - [x] 4.3 Remove legacy-environment content that no longer applies (`_tools/cp`, `gitc`, the Mac folder, cloud builds, WeasyPrint, Gentium). Replace references to the local `dpd.db` with "DPD via Simsapa".
