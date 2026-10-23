@@ -18,6 +18,7 @@
 | **`bhaṇāmase`** | `(1st pl pres mid imperat)` let us recite, let us say; **[√bhaṇ + a + mase]** |
 
 *(Men chant)*
+
 **Jarā-dhammomhi jaraṁ anatīto**
 
 **Literal:** Ageing-natured I am, ageing not gone beyond  

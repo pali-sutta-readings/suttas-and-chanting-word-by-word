@@ -38,8 +38,8 @@ To choose the map syntax, two wider throwaway surveys were also run: every 01–
 
 | Source | Key | Passage |
 | :--- | :--- | :--- |
-| `bm`, `original` | `anchor` | from the heading that carries `<a id="anchor">` up to the next heading that carries any anchor |
-| `bm`, `original` | `anchor..end` | from `anchor` up to (not including) the heading with anchor `end`; `..END` runs to the end of the file |
+| `bm`, `ccb`, `original` | `anchor` | from the heading that carries `<a id="anchor">` up to the next heading that carries any anchor |
+| `bm`, `ccb`, `original` | `anchor..end` | from `anchor` up to (not including) the heading with anchor `end`; `..END` runs to the end of the file |
 | `sc` | `dn22:3.1..dn22:3.7` | the segments from the first to the last id, inclusive; title (`:0.n`) and heading (`.0`) segments skipped |
 | `supplement` | `id..id` | the `[id] text` lines from the first to the last id, inclusive |
 | `chanting-guide` | as `bm`, if a local copy exists | skipped with a report line otherwise |

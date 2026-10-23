@@ -33,7 +33,7 @@ books/03_reflections/texts/15_reflection_on_impermanence.md	bm	sources/upstream/
 books/03_reflections/texts/16_the_guardian_meditations.md	bm	sources/upstream/bhikkhu-manual/manuscript/markdown/chants/reflections.md	guardian	diff	
 books/03_reflections/texts/17_yan_dani_me_katam_punnam.md	bm	sources/upstream/bhikkhu-manual/manuscript/markdown/chants/reflections.md	yan-dani	diff	
 books/03_reflections/texts/18_dhamma_garav_adi_gatha.md	chanting-guide	sources/upstream/chanting-guide-thanissaro.md	Dhamma-gārav’ādi Gāthā..Paṭicca Samuppāda	contain	longer than BM's version (04b/06); separate chants (2026-10-01)
-books/03_reflections/texts/19_the_teaching_on_the_noble_eightfold_path.md	chanting-guide	sources/upstream/chanting-guide-thanissaro.md	Magga-vibhaṅga Sutta..Aṭṭh’aṅgika-magga Gāthā	contain	
+books/03_reflections/texts/19_the_teaching_on_the_noble_eightfold_path.md	ccb	sources/upstream/community-chanting-book/chapters/english/markdown-vol1/reflections-and-recollections.md	the-teaching-on-the-noble-eightfold-path	diff	the CCB edition (maintainer, 2026-10-23)
 books/03_reflections/texts/20_mettanisamsa_sutta.md	supplement	sources/reference-pali-supplement.md	an11.15:1.1..an11.15:2.4	diff	
 books/03_reflections/texts/21_mulaka_sutta.md	supplement	sources/reference-pali-supplement.md	an10.58:1.1..an10.58:3.6	contain	the chanted extract of AN 10.58 (questions and answers)
 books/04a_parittas/texts/01_invitation_for_paritta_chanting.md	bm	sources/upstream/bhikkhu-manual/manuscript/markdown/chants/parittas.md	invitation	diff	

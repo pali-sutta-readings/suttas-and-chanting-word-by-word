@@ -44,7 +44,7 @@ A *unit* is one Pāli line with its Literal and Faithful lines and its word tabl
 
 | Rule | Detail |
 | :--- | :--- |
-| Source | The *Bhikkhu Manual* text, with BM's spelling, sandhi and hyphenation. If the chant is not in BM, use Ṭhānissaro Bhikkhu's *Chanting Guide*. If it is in neither, use `sources/reference-pali-supplement.md` (SuttaCentral). Book 10 uses SuttaCentral only (§12.2); the Vinaya formulae use BM only (§12.1). Sources and their locations: `sources/UPSTREAM.txt`. |
+| Source | The *Bhikkhu Manual* text, with BM's spelling, sandhi and hyphenation. If the chant is not in BM, use the *Community Chanting Book* (Amaravati); if it is not there either, Ṭhānissaro Bhikkhu's *Chanting Guide* (2026-10-23). If it is in none of these, use `sources/reference-pali-supplement.md` (SuttaCentral). Book 10 uses SuttaCentral only (§12.2); the Vinaya formulae use BM only (§12.1). Sources and their locations: `sources/UPSTREAM.txt`. |
 | Niggahīta | Always **ṁ** (U+1E41). Never ṃ, ŋ or m with a combining dot. |
 | Apostrophe | ASCII `'` for elision (*sabb'ītiyo*). The build turns it into a typographic apostrophe. |
 | Leader brackets | Removed. BM's *[Yo so] bhagavā* becomes *Yo so bhagavā*. The words stay; only the brackets go. |

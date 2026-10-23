@@ -422,17 +422,18 @@
 | ↳ **`sammā`** | `(ind comp)` rightly, perfectly; **[sammā]** |
 | ↳ **`ājīvo`** | `(masc nom sg)` livelihood; **[ā + √jīv + a]** |
 
-**Idha bhikkhave ariyo sāvako micchā-ājīvaṁ pahāya sammā-ājīvena jīvitaṁ kappeti**
+**Idha bhikkhave ariya-sāvako micchā-ājīvaṁ pahāya sammā-ājīvena jīvitaṁ kappeti**
 
-**Literal:** Here, bhikkhus, a-noble disciple wrong-livelihood having-abandoned, by-right-livelihood life maintains:  
+**Literal:** Here, bhikkhus, a-noble-disciple wrong-livelihood having-abandoned, by-right-livelihood life maintains:  
 **Faithful:** Here, bhikkhus, a noble disciple, having abandoned wrong livelihood, makes his living by right livelihood:  
 
 | Word | Analysis & Meaning |
 | :--- | :--- |
 | **`idha`** | `(ind)` here, in this case; **[ima + dha]** |
 | **`bhikkhave`** | `(masc voc pl)` bhikkhus, monks; **[√bhikkh + u + ave]** |
-| **`ariyo`** | `(adj masc nom sg)` noble; **[ariya, no root in DPD]** |
-| **`sāvako`** | `(masc nom sg)` disciple; **[√su > sāv + aka]** |
+| **`ariya-sāvako`** | `(masc nom sg comp)` noble disciple; **[ariya + sāvaka]** |
+| ↳ **`ariya`** | `(adj comp)` noble; **[ariya, no root in DPD]** |
+| ↳ **`sāvako`** | `(masc nom sg)` disciple; **[√su > sāv + aka]** |
 | **`micchā-ājīvaṁ`** | `(masc acc sg comp)` wrong livelihood; **[micchā + ājīva]** |
 | ↳ **`micchā`** | `(ind comp)` wrongly; **[micchā]** |
 | ↳ **`ājīvaṁ`** | `(masc acc sg)` livelihood; **[ā + √jīv + a]** |

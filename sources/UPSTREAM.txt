@@ -11,7 +11,7 @@ type: git
 title: Bhikkhu Manual, Reference Edition (Amaravati Publications, 2020)
 url: https://github.com/bhikkhu-manual/bhikkhu-manual
 branch: master
-commit: 31f14bebcba765b9d3f2a4e1352ab68d86fe5557
+commit: af7acaf47146b9e2a76314817da9fe7aa72fd1b3
 paths: manuscript/markdown/ (chants/*.md, vinaya/)
 licence: CC BY-NC-ND 4.0
 use: reference for `make compare` on 01–09
@@ -21,10 +21,10 @@ type: git
 title: Community Chanting Book, English edition (Amaravati Publications, 2021)
 url: https://github.com/profound-labs/community-chanting-book
 branch: main
-commit: c56a10058f6850a6a80c4c3893235309aa03bcc8
+commit: 55d625dc81d25483d760877ce4c2f304caa8bcc4
 paths: chapters/english/markdown-vol1/, chapters/english/markdown-vol2/, chapters/english/markdown-satipatthana/
 licence: CC BY-NC-ND 4.0
-use: recorded for later use; not used by any check yet
+use: reference for `make compare` on 03/19 (source `ccb`)
 
 name: chanting-guide-thanissaro
 type: location-only

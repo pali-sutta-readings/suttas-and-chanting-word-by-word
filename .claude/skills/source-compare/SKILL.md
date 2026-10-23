@@ -35,6 +35,7 @@ For SuttaCentral texts not in `sources/`, use the Simsapa sutta routes (`docs/si
 | source | file | key | mode |
 | :--- | :--- | :--- | :--- |
 | `bm` | `sources/upstream/bhikkhu-manual/manuscript/markdown/chants/<file>.md` | `anchor`, `anchor..end` or `anchor..END` | `diff` |
+| `ccb` | `sources/upstream/community-chanting-book/chapters/english/markdown-vol1/<file>.md` (also `-vol2`, `-satipatthana`); same markup as BM | as `bm` | `diff` |
 | `original` | `sources/originals/09x_…/00_original_….md` (BM's Vinaya pages, frozen) | as `bm` | `contain` |
 | `sc` | `sources/suttacentral/<sutta>_root-pli-ms.json` | `seg..seg`, inclusive | `diff` |
 | `supplement` | `sources/reference-pali-supplement.md` | `id..id`, inclusive | `diff` |

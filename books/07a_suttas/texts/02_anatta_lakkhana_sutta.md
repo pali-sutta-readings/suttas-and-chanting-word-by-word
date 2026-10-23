@@ -117,6 +117,7 @@
 | **`taṁ`** | `(dem pron masc acc sg)` that; **[ta]** |
 | **`suttantaṁ`** | `(masc acc sg)` discourse; **[sutta + anta]** |
 | **`bhaṇāmase`** | `(1st pl pres mid imperat)` let us recite, let us chant; **[√bhaṇ + a + mase]** |
+
 **Evaṁ me sutaṁ**
 
 **Literal:** Thus by me heard.  
@@ -1431,6 +1432,7 @@
 | **`nāparaṁ`** | `(sandhi)` [*na* (ind) + *aparaṁ* (adj nt nom sg)] nothing further; **[na; apa + ra]** |
 | **`itthattāyā'ti`** | `(nt dat sg)` [*itthattāya* + *iti* (ind), closing the passage] for this state of being, for existence here; **[ima + ttha + tta]** |
 | **`pajānātī'ti`** | `(3rd sg pres act indic)` [*pajānāti* + *iti* (ind), closing the passage; *-i* lengthened] understands, knows clearly; **[pa + √ñā > jānā + ti]** |
+
 **Idam-avoca bhagavā.**
 
 **Literal:** This said the Blessed One.  

@@ -21,7 +21,7 @@
 - `scripts/simsapa_fmt.py` - Copied formatter for ad-hoc `curl` queries.
 - `tests/test_smoke.py` - Checks that `chantlib` imports, so `make test` runs from the start.
 - `tests/` - `unittest` tests: `test_spec.py`, `test_parse.py`, `test_lint.py`, `test_assemble.py`, `test_compare.py`, `test_index.py`, `test_align.py`, `test_draft.py`, `test_simsapa.py`.
-- `tests/fixtures/compare/` - BM-style Markdown (Contents, anchors, divs, link line, italic table cells, an anchor off a heading), SC JSON and supplement snippets, small texts and `map.tsv`.
+- `tests/fixtures/compare/` - BM-style Markdown (Contents, anchors, divs, link line, italic table cells, an anchor off a heading), a CCB-style page with tone marks, SC JSON and supplement snippets, small texts and `map.tsv`.
 - `tests/fixtures/index/` - Two small texts in two folders with etymology and tag conflicts.
 - `tests/fixtures/` - Small chant files: `good.md`, `good-vinaya.md`, `good-dn22.md` (from real texts) and `bad-*.md` (one rule broken each); later, recorded Simsapa JSON responses.
 - `tests/test_parse.py`, `tests/test_lint.py` - Parser, text helpers, lint checks, tag order, repeats, `--fix`.
@@ -240,7 +240,7 @@ The cover reads `sys.inputs` (`title`, `subtitle`, `series`, `accent`). The PDF 
 
 **Specs.** PRD FR-12b, FR-16, FR-16a, FR-16b, FR-20b. Scripts gather context and fail loudly; agents, following the skills, do the matching and the judgment.
 
-`compare.py` has two subcommands, driven by `sources/ref-map.tsv` (columns: `text`, `source`, `file`, `key`, `mode`, `note`; `source` is `bm`, `supplement`, `sc`, `original`, `chanting-guide` or `none`; `mode` is `diff` (default) or `contain`). Key syntax and the reasons for it are in `docs/script-or-skill.md` (spike 1):
+`compare.py` has two subcommands, driven by `sources/ref-map.tsv` (columns: `text`, `source`, `file`, `key`, `mode`, `note`; `source` is `bm`, `ccb`, `supplement`, `sc`, `original`, `chanting-guide` or `none`; `mode` is `diff` (default) or `contain`). Key syntax and the reasons for it are in `docs/script-or-skill.md` (spike 1):
 - `extract FILE` prints the normalised Pāli stream of one of our texts (Pāli lines only; variant cues, `(×3)` and rubrics excluded; `text.norm_line`). `extract --ref ENTRY` prints the stream of one mapped reference passage:
   - BM upstream Markdown and `sources/originals/` (BM pages): key `anchor` (from the heading carrying `<a id="anchor">` to the next heading carrying any anchor) or `anchor..end` (up to, not including, the heading with anchor `end`; `..END` for the end of the file). Structural rules only: drop `<div class="english">`/`<div class="instr">` blocks, headings, the `**Contents**` list, HTML tags, wholly italic lines and lines with a Markdown link to `http(s)`; decode HTML entities; remove the blockquote `>`, the line-end `\` and the `[…]` leader brackets (keep their words);
   - `reference-pali-supplement.md`: `id..id` (`[id] text` lines, inclusive);
@@ -263,7 +263,7 @@ No English-detection, stopword, quote or chant-location heuristics are ported fr
 `draft.py build DRAFT OUT.md` / `extract FILE.md` uses the compact format: `T|` title, `E|` English title, `U|` rubric, `H|` heading, `P|` Pāli (`P!` force full table, `P~` force repeat note), `L|` literal, `F|` faithful, `R|` row, `M|` member row, `C|` citation, `S|` instruction, `V|` variant, `I|` copy a settled unit. Read `BACKUP/_tools/helpers/b.py` and `md2c.py` for the exact syntax. `I|` changes from line numbers to `I|<text path>|<Pāli line>`: the unit whose Pāli line has the same normalised key is copied; `build` fails if the key is not found or is found twice.
 **Depends on:** 5.0, 3.0.
 
-- [ ] 8.0 Consistency and authoring tools (FR-12b, FR-16, FR-16a, FR-16b, FR-20b)
+- [x] 8.0 Consistency and authoring tools (FR-12b, FR-16, FR-16a, FR-16b, FR-20b)
   - [x] 8.1 **Spike: script or skill for compare, index, align and draft** (FR-16b). Throwaway code in the scratchpad, not in `scripts/`. Sample: `01_morning_chanting` (all), `07a_suttas/01_dhammacakkappavattana_sutta` (BM sub-headings such as *Bhummānaṁ devānaṁ*), one Vinaya part with substitution lists (`books/09_vinaya_formulae/01_vinaya_notes_requisites`), and one book-10 section (SC JSON).
     - **Mapping:** for each sample text, find its BM anchor (or SC range) by hand. Count how many map 1:1 to an anchor, how many need a sub-heading or line span, and how many span several anchors or share one. Decide the `key` syntax for `ref-map.tsv` from this.
     - **Extractor:** write a minimal structural extractor (anchor section, drop Contents/anchors/"(English)", strip `\` and `[…]`) and diff the sample against it. Run the legacy `chant_pipeline.py compare` (on a scratch copy, with the BM upstream file as `--ref`) on the same sample. For each approach, count real differences, false differences, and silent mislocations.

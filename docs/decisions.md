@@ -47,6 +47,9 @@ The maintainer's dated decisions, collected from the legacy project's specs, PRD
 | 2026-10-11 | 58 | *MN 6:2.1* is added to the 08/03 citation; BM's references are kept. | `books/08_patimokkha_chants/texts/CHANGELOG.md` |
 | 2026-10-11 | 59 | 08/05: the fifth precept keeps DPD's reading in the Faithful line, with the commentarial reading in the row note. | `books/08_patimokkha_chants/texts/CHANGELOG.md` |
 | 2026-10-11 | 60 | The English titles of 08/02, 08/03 and 08/05 are accepted. | `books/08_patimokkha_chants/texts/CHANGELOG.md` |
+| 2026-10-23 | — | Source priority: *Bhikkhu Manual*, then the *Community Chanting Book*, then the *Chanting Guide*, then SuttaCentral (book 10 and the Vinaya formulae unchanged). 03/19 (query 18) is compared with the CCB. | `docs/style-spec.md` §2 |
+| 2026-10-23 | — | 03/19:425 *ariyo sāvako* is the compound *ariya-sāvako*. | `books/03_reflections/texts/CHANGELOG.md` |
+| 2026-10-23 | — | Blank lines and final newlines missing in 03/02–11, 07a/02 and 07a/03 are added, so that every text gives itself back through `draft.py extract`. | `books/03_reflections/texts/CHANGELOG.md`, `books/07a_suttas/texts/CHANGELOG.md` |
 
 ## Vinaya formulae (09a–09e)
 

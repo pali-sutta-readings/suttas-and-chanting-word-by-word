@@ -17,6 +17,7 @@
 | ↳ **`paccavekkhaṇa`** | `(nt comp)` reviewing, reflection; **[pati + ava + √ikkh + aṇa]** |
 | ↳ **`pāṭhaṁ`** | `(masc acc sg)` passage, text for recitation; **[√paṭh > pāṭh + a]** |
 | **`bhaṇāmase`** | `(1st pl pres mid imperat)` let us recite, let us say; **[√bhaṇ + a + mase]** |
+
 **Yathā paccayaṁ pavattamānaṁ dhātu-mattam-ev'etaṁ**
 
 **Literal:** According to condition occurring, mere element just this [is]  

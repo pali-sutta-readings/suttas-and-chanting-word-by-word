@@ -16,6 +16,7 @@
 | ↳ **`sutta`** | `(nt comp)` discourse; **[√siv > suv + ta]** |
 | ↳ **`pāṭhaṁ`** | `(masc acc sg)` passage, text for recitation; **[√paṭh > pāṭh + a]** |
 | **`bhaṇāmase`** | `(1st pl pres mid imperat)` let us recite, let us say; **[√bhaṇ + a + mase]** |
+
 **Atthi bhikkhave ajātaṁ abhūtaṁ akataṁ asaṅkhataṁ**
 
 **Literal:** There is, bhikkhus, [an] unborn, unbecome, unmade, unconditioned  

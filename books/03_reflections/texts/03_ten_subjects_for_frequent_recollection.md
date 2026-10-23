@@ -17,6 +17,7 @@
 | ↳ **`paccavekkhaṇa`** | `(nt comp)` reviewing, reflection; **[pati + ava + √ikkh + aṇa]** |
 | ↳ **`pāṭhaṁ`** | `(masc acc sg)` passage, text for recitation; **[√paṭh > pāṭh + a]** |
 | **`bhaṇāmase`** | `(1st pl pres mid imperat)` let us recite, let us say; **[√bhaṇ + a + mase]** |
+
 **Dasa ime bhikkhave dhammā pabbajitena abhiṇhaṁ paccavekkhitabbā, katame dasa**
 
 **Literal:** Ten these, bhikkhus, things by [one] gone forth often should be reflected upon; which ten?  

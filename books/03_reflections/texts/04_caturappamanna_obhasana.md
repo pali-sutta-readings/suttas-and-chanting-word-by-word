@@ -16,6 +16,7 @@
 | ↳ **`appamaññā`** | `(fem comp)` immeasurable [state of mind]; **[na > a + pa + √mā + aṇa + yā]** |
 | ↳ **`obhāsanaṁ`** | `(nt acc sg)` illuminating, radiating; **[ava + √bhās + ana]** |
 | **`karomase`** | `(1st pl pres mid imperat)` let us do, let us make; **[√kar + o + mase]** |
+
 **Mettā-sahagatena cetasā ekaṁ disaṁ pharitvā viharati**
 
 **Literal:** With loving-kindness-imbued mind one direction having pervaded [one] dwells  

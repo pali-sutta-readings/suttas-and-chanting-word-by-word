@@ -1,5 +1,22 @@
 # Changelog: 07a_suttas
 
+## 2026-10-23 — layout fixes (no change to the wording)
+
+Blank lines and final newlines added where the layout differed from the style spec, so that `scripts/draft.py extract` gives each file back; found by the round-trip check (docs/legacy-migration.md, "Layout findings"). Maintainer's decision, 2026-10-23. Lint and compare results unchanged.
+
+### 02_anatta_lakkhana_sutta.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 120 | no blank line before *Evaṁ me sutaṁ* | blank line | style spec §1 layout | maintainer, 2026-10-23 |
+| 1435 | no blank line before *Idam-avoca bhagavā.* | blank line | style spec §1 layout | maintainer, 2026-10-23 |
+
+### 03_aditta_pariyaya_sutta.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 120 | no blank line before *Evaṁ me sutaṁ* | blank line | style spec §1 layout | maintainer, 2026-10-23 |
+| 1000 | no blank line before *Idam-avoca bhagavā.* | blank line | style spec §1 layout | maintainer, 2026-10-23 |
+| 1026 | no blank line before *Imasmiñca pana veyyākaraṇasmiṁ …* | blank line | style spec §1 layout | maintainer, 2026-10-23 |
+
 ## 2026-10-11 — session S22 (final: whole-tree index alignment)
 
 Whole-tree `index` (01–08): etymologies aligned to DPD constructions (*bhagavant*, future stems, *appamāda*, *bahiddhā*, *cetas*), and Triple Gem quality adjectives tagged `adj` as DPD classes them. Draft sources in `_tools/drafts/` changed to match.

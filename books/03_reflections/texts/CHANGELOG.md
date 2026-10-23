@@ -1,5 +1,78 @@
 # Changelog: 03_reflections
 
+## 2026-10-23 — 19: *ariya-sāvako*
+
+The compound *ariya-sāvako* had been written as two words. The Community Chanting Book and SuttaCentral (SN 45.8) both have *ariyasāvako*; found by `make compare` against the CCB. Lint unchanged; compare: the item is gone.
+
+### 19_the_teaching_on_the_noble_eightfold_path.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 425 | *Idha bhikkhave ariyo sāvako micchā-ājīvaṁ …* | *Idha bhikkhave ariya-sāvako micchā-ājīvaṁ …* | compound, as in the source | CCB; SN 45.8; maintainer, 2026-10-23 |
+| 427 | Literal *a-noble disciple* | *a-noble-disciple* | follows the compound | spec §3 |
+| 434–435 | rows *ariyo* (adj masc nom sg), *sāvako* (masc nom sg) | *ariya-sāvako* (masc nom sg comp) with ↳ *ariya*, ↳ *sāvako* | follows the compound | spec §4 (compounds); 07a/02, 07a/03 rows for *ariyasāvako* |
+
+## 2026-10-23 — layout fixes (no change to the wording)
+
+Blank lines and final newlines added where the layout differed from the style spec, so that `scripts/draft.py extract` gives each file back; found by the round-trip check (docs/legacy-migration.md, "Layout findings"). Maintainer's decision, 2026-10-23. Lint and compare results unchanged.
+
+### 02_five_subjects_for_frequent_recollection.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 21 | no blank line before *Jarā-dhammomhi jaraṁ anatīto* | blank line | style spec §1 layout | maintainer, 2026-10-23 |
+| 230 | no newline at the end of the file | final newline | style spec §1 layout | maintainer, 2026-10-23 |
+
+### 03_ten_subjects_for_frequent_recollection.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 20 | no blank line before *Dasa ime bhikkhave dhammā pabbajitena …* | blank line | style spec §1 layout | maintainer, 2026-10-23 |
+| 270 | no newline at the end of the file | final newline | style spec §1 layout | maintainer, 2026-10-23 |
+
+### 04_caturappamanna_obhasana.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 19 | no blank line before *Mettā-sahagatena cetasā ekaṁ disaṁ …* | blank line | style spec §1 layout | maintainer, 2026-10-23 |
+| 284 | no newline at the end of the file | final newline | style spec §1 layout | maintainer, 2026-10-23 |
+
+### 05_recollection_after_using_the_requisites.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 19 | no blank line before *Ajja mayā apaccavekkhitvā yaṁ cīvaraṁ …* | blank line | style spec §1 layout | maintainer, 2026-10-23 |
+| 294 | no newline at the end of the file | final newline | style spec §1 layout | maintainer, 2026-10-23 |
+
+### 06_reflection_on_the_off_putting_qualities_of_the_requisites.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 20 | no blank line before *Yathā paccayaṁ pavattamānaṁ …* | blank line | style spec §1 layout | maintainer, 2026-10-23 |
+| 263 | no newline at the end of the file | final newline | style spec §1 layout | maintainer, 2026-10-23 |
+
+### 07_mettapharana.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 18 | no blank line before *Ahaṁ sukhito homi niddukkho homi, avero …* | blank line | style spec §1 layout | maintainer, 2026-10-23 |
+| 134 | no newline at the end of the file | final newline | style spec §1 layout | maintainer, 2026-10-23 |
+
+### 08_reflection_on_the_unconditioned.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 19 | no blank line before *Atthi bhikkhave ajātaṁ abhūtaṁ akataṁ …* | blank line | style spec §1 layout | maintainer, 2026-10-23 |
+| 98 | no newline at the end of the file | final newline | style spec §1 layout | maintainer, 2026-10-23 |
+
+### 09_reflection_on_the_thirty_two_parts.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 178 | no newline at the end of the file | final newline | style spec §1 layout | maintainer, 2026-10-23 |
+
+### 10_sabba_patti_dana_gatha.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 20 | no blank line before *Puññass'idāni katassa* | blank line | style spec §1 layout | maintainer, 2026-10-23 |
+| 273 | no newline at the end of the file | final newline | style spec §1 layout | maintainer, 2026-10-23 |
+
+### 11_uddissanadhitthana_gatha.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 288 | no newline at the end of the file | final newline | style spec §1 layout | maintainer, 2026-10-23 |
+
 ## 2026-10-11 — session S22 (final: whole-tree index alignment)
 
 Whole-tree `index` (01–08): etymologies aligned to DPD constructions (*bhagavant*, future stems, *appamāda*, *bahiddhā*, *cetas*), and Triple Gem quality adjectives tagged `adj` as DPD classes them. Draft sources in `_tools/drafts/` changed to match.

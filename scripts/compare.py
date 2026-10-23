@@ -12,7 +12,8 @@ script never guesses it. The key syntax, the two modes and the structural
 rules are described in docs/script-or-skill.md (spike 1) and
 docs/quality-process.md §2:
 
-    bm, original    anchor | anchor..end | anchor..END
+    bm, ccb,        anchor | anchor..end | anchor..END
+    original
     sc              segment..segment          (inclusive)
     supplement      segment..segment          (inclusive)
     chanting-guide  heading | heading..end heading  (contain mode only)
@@ -45,7 +46,7 @@ from chantlib.text import norm_line
 ROOT = Path(__file__).resolve().parents[1]
 MAP = ROOT / "sources" / "ref-map.tsv"
 COLUMNS = ("text", "source", "file", "key", "mode", "note")
-SOURCES = ("bm", "original", "sc", "supplement", "chanting-guide", "none")
+SOURCES = ("bm", "ccb", "original", "sc", "supplement", "chanting-guide", "none")
 MODES = ("diff", "contain")
 CONTEXT = 40
 
@@ -256,7 +257,7 @@ def ref_lines(e, root=ROOT):
         if e.source == "chanting-guide":
             raise Skipped(f"no local copy at {e.file}")
         raise MapError(f"{e.where()}: file {e.file} not found")
-    if e.source in ("bm", "original"):
+    if e.source in ("bm", "ccb", "original"):
         sec = bm_passage(path.read_text(encoding="utf-8").splitlines(), e.key, e.where())
         return raw_text(sec) if e.mode == "contain" else bm_clean(sec)
     if e.source == "chanting-guide":

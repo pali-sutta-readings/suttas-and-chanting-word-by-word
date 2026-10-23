@@ -17,6 +17,7 @@
 | ↳ **`dāna`** | `(nt comp)` giving; **[√dā + ana]** |
 | ↳ **`gāthāyo`** | `(fem acc pl)` verses; **[√gā + thā]** |
 | **`bhaṇāmase`** | `(1st pl pres mid imperat)` let us recite, let us say; **[√bhaṇ + a + mase]** |
+
 **Puññass'idāni katassa**
 
 **Literal:** Of [the] merit now done  

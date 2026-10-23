@@ -225,7 +225,7 @@ The new checks found one problem. It is listed here; the text is not changed in 
 
 ## Compare review
 
-The first full run of `make compare` (2026-10-23), over `sources/ref-map.tsv` at the BM commit pinned in `sources/UPSTREAM.txt`, with the legacy Chanting Guide conversion as the optional local copy `sources/upstream/chanting-guide-thanissaro.md`. Every reported item was classified with the `source-compare` skill against the text's CHANGELOG, `docs/decisions.md` and the style spec. No text was changed. The method and what it needed are in `docs/script-or-skill.md`.
+The first full run of `make compare` (2026-10-23), over `sources/ref-map.tsv` at the BM commit pinned in `sources/UPSTREAM.txt`, with the legacy Chanting Guide conversion as the optional local copy `sources/upstream/chanting-guide-thanissaro.md`. Every reported item was classified with the `source-compare` skill against the text's CHANGELOG, `docs/decisions.md` and the style spec. No text was changed by the review. The method and what it needed are in `docs/script-or-skill.md`.
 
 **Result.** 209 texts: 104 identical (`diff` mode), 49 with every Pāli line found (`contain` mode), 56 with reported items. No map errors.
 
@@ -248,32 +248,33 @@ The first full run of `make compare` (2026-10-23), over `sources/ref-map.tsv` at
 | 03/21 | the chanted extract of AN 10.58 (map `contain` mode) | map note |
 | 04a/09a | the numbered verses only; BM has no anchor after verse 6 (map `contain` mode) | CHANGELOG (04a) |
 
-**Omission review** of the `contain` passages (the 60 Vinaya texts, 04a/02, 04a/09a, 03/18, 03/21 and the five Chanting Guide texts): every Pāli formula of the source passage is in the text, as a unit or as a variant, apart from the frame and English that the texts leave out by design. The one exception is 03/19, below.
+**Omission review** of the `contain` passages (the 60 Vinaya texts, 04a/02, 04a/09a, 03/18, 03/21 and the four Chanting Guide texts): every Pāli formula of the source passage is in the text, as a unit or as a variant, apart from the frame and English that the texts leave out by design.
 
 ### Reference artefacts
 
 | Texts | Artefact |
 | :--- | :--- |
 | 03/20, 07a/12, 07b/01–06 | SuttaCentral's sutta numbers (*Pañcamaṁ*, *Sattamaṁ* …) and vagga summaries (*uddāna*) at the end of the segment range; not chanted |
+| 07a/01:436 | BM misprint *pañcupādānakkhandā*; ours, *pañcupādānakkhandhā*, is correct (*khandha* is spelt with *dh*; maintainer, 2026-10-23). Fixed upstream in BM `af7acaf`, now pinned, so no longer reported |
 | 04a/22 | a LaTeX `\relax` in BM's Markdown (*devatā-gatā\\\relax*) |
 | 04a/27 | BM's footnote text (*If chanting for oneself, change tumhe to amhe …*) and its footnote mark |
 | 03/18 | the Chanting Guide conversion splits *Tesaṁ sampanna-sīlānaṁ* across an underline (*Tesaṁ <u>sīlānaṁ sampanna-</u>*) |
-| BM, anumodanā, paritta and pāṭimokkha chants | the 10 *See a word-by-word analysis* link lines of BM commit `0872fa5`; dropped by the extractor, so not reported |
+| BM, anumodanā, paritta and pāṭimokkha chants | the 10 *See a word-by-word analysis* link lines of BM commit `0872fa5`, and one more in `c50e80e` (parittas); dropped by the extractor, so not reported |
 
 ### Unexplained (for the maintainer)
 
+03/19's source is the Community Chanting Book (*The Teaching on the Noble Eightfold Path*, vol. 1, *Reflections & Recollections*; maintainer, 2026-10-23); it was first mapped to the Chanting Guide's *Magga-vibhaṅga Sutta*, which it does not follow, and is now compared with the CCB in `diff` mode. Two items followed: *ariyo sāvako* (line 425) is corrected to *ariya-sāvako* (maintainer, CHANGELOG 03), and the CCB misprint *pāṭham* was fixed upstream (CCB `55d625d`, now pinned). 03/19 is now identical.
+
 | Text:line | Ours | Source | Note |
 | :--- | :--- | :--- | :--- |
-| 07a/01:436 | *pañcupādānakkhandhā* | BM *pañcupādānakkhandā* | almost certainly a BM misprint fixed without a changelog row |
 | 07c/04:60 | *Yāvakīvañca, bhikkhave, bhikkhū satisambojjhaṅgaṁ …* | SC (supplement) *bhikkhu* | SC's singular looks like a slip (the plural verb *bhāvessanti*); not logged |
-| 03/19 (15 lines) | the chant begins *Handa mayaṁ …*, *Ayam-eva ariyo aṭṭhaṅgiko maggo*, *seyyathīdaṁ*; *vīriyaṁ*; the four jhāna formulae in one line each | the Chanting Guide's *Magga-vibhaṅga Sutta* (SN 45.8) has the sutta frame (*Evam-me sutaṁ …*), *Katamo ca bhikkhave ariyo aṭṭhaṅgiko maggo?*, *viriyaṁ*, and differs in division | the text's source is not recorded in its CHANGELOG and is not the Chanting Guide; mapped there for now. Which recension is it? |
 
 ### Layout findings
 
-`scripts/draft.py extract` gives a file back byte for byte only if it follows the layout of style spec §1. 197 of the 209 texts do. The other 12 differ only in blank lines, which neither lint nor the build depends on. They are listed here; the texts are not changed in this migration.
+`scripts/draft.py extract` gives a file back byte for byte only if it follows the layout of style spec §1. 197 of the 209 texts do. The other 12 differed only in blank lines and final newlines, which lint does not check. On the maintainer's decision (2026-10-23) they were added, with a changelog entry in 03 and 07a; all 209 texts now give themselves back.
 
 | Texts | Difference |
 | :--- | :--- |
 | 03/02:21 | no blank line between the rubric *(Men chant)* and the Pāli line after it |
-| 03/03, 03/04, 03/05, 03/06, 03/07, 03/08, 03/10 (after the leader line's table); 07a/02:119, 07a/03:119 (before *Evaṁ me sutaṁ*) | no blank line between the last table row and the next Pāli line |
-| 03/09, 03/11 | no newline at the end of the file |
+| 03/03, 03/04, 03/05, 03/06, 03/07, 03/08, 03/10 (after the leader line's table); 07a/02:119, 07a/03:119 (before *Evaṁ me sutaṁ*); 07a/02:1434, 07a/03:999, 07a/03:1025 (before *Idam-avoca bhagavā* and *Imasmiñca pana …*) | no blank line between the last table row and the next Pāli line |
+| 03/02–03/11 | no newline at the end of the file |

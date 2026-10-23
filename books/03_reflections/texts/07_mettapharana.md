@@ -15,6 +15,7 @@
 | ↳ **`mettā`** | `(fem comp)` loving-kindness; **[√mitt > mett + ā]** |
 | ↳ **`pharaṇaṁ`** | `(nt acc sg)` pervading, suffusing; **[√phar + aṇa]** |
 | **`karomase`** | `(1st pl pres mid imperat)` let us do, let us make; **[√kar + o + mase]** |
+
 **Ahaṁ sukhito homi niddukkho homi, avero homi, abyāpajjho homi, anīgho homi, sukhī attānaṁ pariharāmi**
 
 **Literal:** I happy am, free from suffering am, free from hostility am, free from ill will am, untroubled am, happily myself I look after  

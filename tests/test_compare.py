@@ -58,6 +58,14 @@ class TestBM(unittest.TestCase):
         status, lines = compare.compare_entry(entry("homage.md"), FIXTURES)
         self.assertEqual((status, lines), ("identical", []))
 
+    def test_ccb_tone_marks_do_not_count(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            m = Path(tmp) / "map.tsv"
+            m.write_text("text\tsource\tfile\tkey\tmode\tnote\nhomage.md\tccb\tccb.md\thomage\tdiff\t\n", encoding="utf-8")
+            e = compare.read_map(m)[0]
+        self.assertNotIn("Dhammaṁ saraṇaṁ gacchāmi", compare.ref_lines(e, FIXTURES))
+        self.assertEqual(compare.compare_entry(e, FIXTURES), ("identical", []))
+
     def test_difference_gives_line_and_context(self):
         status, lines = compare.compare_entry(entry("homage.md", **{"homage.md": "homage"}), FIXTURES)
         self.assertEqual(status, "1 difference")
