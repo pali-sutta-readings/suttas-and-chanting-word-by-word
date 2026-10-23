@@ -74,7 +74,10 @@ sources/                  reference texts used for checks (never built into book
   reference-pali-supplement.md
   suttacentral/dn22_root-pli-ms.json, dn22_variant-pli-ms.json
   originals/09a…09e, 10/  the 00_original_* files, unchanged
+  ref-map.tsv             which reference passage each text is compared with (FR-12b)
   MIGRATION-MANIFEST.tsv  written by the migration script
+checks/
+  dpd-review.tsv          reviewed DPD-check candidates, so re-runs show only new ones (FR-19)
 templates/
   epub.css                adapted from legacy style.css
   typst/                  style.typ, book.typ, cover.typ (adapted from EXERCISES)
@@ -83,7 +86,11 @@ fonts/                    Crimson, Noto Sans, Noto Sans Math (fallback for ↳, 
 scripts/                  Python tools (see 4.4), migrate-legacy.sh, fetch-sources.sh
 docs/                     style spec, decisions, workflows, Simsapa API doc
 tasks/                    PRDs and task lists
-.claude/skills/pali-word-analysis/SKILL.md   local skill for grammar labels (FR-20a)
+.claude/skills/           local skills (FR-16a, FR-20a, FR-20b)
+  pali-word-analysis/SKILL.md   grammar labels and word rows
+  source-compare/SKILL.md       locate reference passages, classify Pāli differences
+  dpd-review/SKILL.md           review DPD-check candidates and index conflicts
+  draft-new-text/SKILL.md       end-to-end workflow for adding a text
 build/                    output (git-ignored)
 ```
 
@@ -138,7 +145,12 @@ FR-12a. **Upstream sources.** `sources/UPSTREAM.txt` records the source reposito
 
 Only the two git repos are cloned. The Chanting Guide is recorded in `UPSTREAM.txt` as locations only. When `compare.py` meets a chant whose source is the Chanting Guide and finds no local copy at `sources/upstream/chanting-guide-thanissaro.md`, it skips that chant and lists it in its report rather than failing.
 
-FR-12b. `compare.py` must read BM's upstream Markdown and strip its markup before normalising. The chant files (e.g. `chants/morning-chanting.md`) hold several chants per file: a `**Contents**` list of links, then `## Title<a id="…"></a>` sections, with Pāli and "(English)" sections alternating, lines ending in `\`, and leader words in `[…]`. The reader drops the contents list, the anchors and the "(English)" sections, and removes the line-end `\` and the leader brackets. The first run on 01–09 must be reviewed: any difference that comes from the old EPUB conversion rather than from the texts is noted in `docs/legacy-migration.md`. Text files are not changed.
+FR-12b. **Compare: explicit mapping, simple extraction, LLM review** (revised 2026-10-23, see FR-16a). The legacy `compare` guessed which lines of a reference were English (stopword ratio, italic-span guesses, upper-case lines) and searched for where each chant starts in the reference by its first 15–40 letters. Both guesses go wrong silently when the reference markup or our texts change. So:
+   - `sources/ref-map.tsv` names, for each text, its reference passage: source (`bm`, `supplement`, `sc`, `original`, `chanting-guide`), file, and a stable key (a BM `<a id>` anchor, optionally with a sub-heading or line span; an SC segment range; a supplement segment-id range; an original file). The `source-compare` skill (FR-20b) writes and maintains it; scripts never guess it.
+   - `compare.py extract` prints a normalised Pāli stream: of our file (Pāli lines only; variant cues, `(×3)` and rubrics excluded), or of one mapped reference passage. For BM upstream Markdown it applies only these structural rules: take the section under the anchor, drop the `**Contents**` list, the anchors and the "(English)" sections, remove the line-end `\` and the `[…]` leader brackets. It does not guess which lines are English. If an anchor or segment is missing (for example after `fetch-sources.sh --update`), it stops with an error naming the map entry, rather than comparing against the wrong passage.
+   - `compare.py diff` compares the two streams for each map entry and prints the differences with 40 characters of context. `make compare` runs it over the whole map as a **report**; differences are expected (filled `…pe…` elisions, logged misprint fixes) and never fail the build. Texts missing from the map are listed.
+   - Mixed Pāli/English passages that the structural rules cannot clean (e.g. BM Vinaya pages with quoted Pāli, italic English, italic placeholders and substitution lists) are cleaned by the skill, which reads the passage and the extractor output, not by more heuristics in the script.
+   - Classifying each difference (expected, reference artefact, or unexplained) is done with the `source-compare` skill, which checks it against the file's CHANGELOG and `docs/decisions.md`. The first full review of 01–10 records reference artefacts and unexplained differences in `docs/legacy-migration.md`. Text files are not changed.
 
 ### 4.3 Version conflict record (evidence for FR-7)
 
@@ -182,18 +194,28 @@ FR-16. The new scripts must be **newly written** for this repo. The legacy `chan
 | Legacy tool | What it did | Treatment |
 | :--- | :--- | :--- |
 | `chant_pipeline.py lint [--fix]` | Checks file layout, allowed tags, tag order, word coverage of the Pāli line, compound member rows, rubrics, stray English, NFC, niggahīta ṁ, repeat notes; safe auto-fixes | **Rewrite** as `scripts/lint.py`. Keep the mechanism of reading the rule lists (`tags`, `rubrics`, `english-stopwords`, `repeat-note`, and per-book `options`) from fenced blocks in `docs/style-spec.md`, so rules and checks never drift. |
-| `chant_pipeline.py compare --ref` + `nc.py` | Compares the Pāli lines with the source text (BM, Chanting Guide, SC JSON, or Vinaya originals) after normalisation | **Rewrite** as `scripts/compare.py`; reference files from `sources/`. |
-| `chant_pipeline.py index` + `xidx.py` | Cross-file index: same word with different etymology or tags | **Rewrite** as `scripts/index.py` (one tool, optional folder filter). |
+| `chant_pipeline.py compare --ref` + `nc.py` | Compares the Pāli lines with the source text (BM, Chanting Guide, SC JSON, or Vinaya originals) after normalisation | **Rewrite** as `scripts/compare.py extract|diff`, driven by `sources/ref-map.tsv` (FR-12b). The legacy English-detection and chant-location heuristics are **not** ported; locating passages and classifying differences is `source-compare` skill work. |
+| `chant_pipeline.py index` + `xidx.py` | Cross-file index: same word with different etymology or tags | **Rewrite** as `scripts/index.py` (one tool, optional folder filter). A report only: many conflicts are legitimate (homonyms, tags that depend on the line), and the `dpd-review` skill decides which to align. |
 | `chant_pipeline.py dupes`, `stats` | Repeated lines; counts of units and rows | **Rewrite** as subcommands of `index.py` or a small `stats.py`. |
 | `chant_pipeline.py build` / `preprocess` | Turned each file into pandoc Markdown with classed divs; EPUB via pandoc; PDF via WeasyPrint; titles and About text hard-coded | **Rewrite** as `scripts/assemble.py` (see 4.5). WeasyPrint is dropped. Titles and About move to `books/`. |
 | `chant_pipeline.py dpd`, `q.py`, `ec.py` | Looked up words in the local `dpd.db`; flagged rows whose root/construction/tags differ from DPD | **Replace** with `scripts/simsapa.py` using the Simsapa API (4.4.1). |
-| `b.py` + `md2c.py` | Compact one-line-per-item draft format (`T\|`, `E\|`, `H\|`, `P\|`, `L\|`, `F\|`, `U\|`, `S\|`, `V\|`, `P~`, `P!`, `I\|` …) → chant file, and back | **Rewrite** as `scripts/draft.py build|extract`; format documented in `docs/drafting-workflow.md`. |
+| `b.py` + `md2c.py` | Compact one-line-per-item draft format (`T\|`, `E\|`, `H\|`, `P\|`, `L\|`, `F\|`, `U\|`, `S\|`, `V\|`, `P~`, `P!`, `I\|` …) → chant file, and back | **Rewrite** as `scripts/draft.py build|extract`; format documented in `docs/drafting-workflow.md`. `I\|` changes from line numbers (`I\|file\|from\|to`), which break when the source file is edited, to a file and the normalised key of the Pāli line whose unit is copied; `build` fails if the key is not found. |
 | `wr.py` | Shows the most common existing rows for a word | **Rewrite** as `scripts/index.py rows <word>`. |
-| `ov.py` | Lists Pāli lines that equal an already-settled line elsewhere (to copy, not re-analyse) | **Rewrite** as `scripts/index.py overlaps <files>`. |
-| `align.py` | Bulk replace in table rows by a rules JSON, with a log for the changelog | **Rewrite** as `scripts/align.py` (same rules format, documented). |
+| `ov.py` | Lists Pāli lines that equal an already-settled line elsewhere (to copy, not re-analyse) | **Rewrite** as `scripts/index.py overlaps <files>`. Exact match after normalisation only; near-matches are for the agent to judge. |
+| `align.py` | Bulk replace in table rows by a rules JSON, with a log for the changelog | **Rewrite** as `scripts/align.py` (same rules format, documented). Dry run by default (prints a diff; `--apply` writes); `old` is matched only inside the cell named by the rule (`tags`, `meaning` or `etym`, default `etym`), not anywhere in the row as the legacy `old in line` did. It can print the Was/Now table for the changelog from its log; the rules and the "Why" are written by the agent. |
 | `vchk.py`, `vchk19.py` | One-off DN 22 checks that rebuild variant lists and compare with SC JSON | **Document the method only** (`docs/style-spec.md` variant section). |
 | `split.py`, `split_originals.py`, `estimate.py`, `_s0dn22/patch_pipeline.py` | One-off splitting/sizing for the DN 22 and Vinaya sub-projects | **Not migrated**; one paragraph in `docs/legacy-migration.md`. |
 | `cp`, `gitc` | Wrappers for a sandbox that could not delete files | **Dropped.** |
+
+FR-16a. **What is scripted and what is skill work** (maintainer decision, 2026-10-23). A script is used when its input is our own files or a stable, keyed format (SC JSON segments, the frozen `sources/originals/`, DPD records from the API), and its answer is either exact or a clear failure. Work that needs any of the following is done by an agent following a local skill, which uses the scripts to gather context:
+   - reading markup we don't control and deciding which parts are Pāli (upstream BM Markdown, the Chanting Guide EPUB HTML, Simsapa sutta pages);
+   - finding which passage of a reference matches which text, especially when either side may have been edited since the last check;
+   - deciding whether a difference matters (an expected elision, project notation, a homonym, a real error);
+   - composing word rows, grammar labels and compound member rows from DPD data.
+
+   Scripts never guess where the result can be wrong without an error. They stop with an error, or report a candidate for the agent to review. The split is checked by a spike at the start of tasks 8 and 9 (FR-16b) before the tools are written.
+
+FR-16b. **Spikes.** Before writing the task 8 and task 9 tools, run a short spike on a sample of real texts that tests the FR-16a split. Use throwaway code in a scratch directory, not in `scripts/`. The spike measures where a scripted approach goes wrong silently, how noisy a mechanical check is, and how well an agent does the judgment part given the extractor output. It also checks the assumptions behind FR-12b, FR-19 and FR-20: that a BM anchor maps cleanly to one text, that DPD-check candidates are mostly notation, and that composed member rows need judgment. The findings are written to `docs/script-or-skill.md`, along with any change they cause to this PRD or the task list. The maintainer reviews them before the tools are built.
 
 #### 4.4.1 Simsapa API
 
@@ -217,15 +239,15 @@ Findings that shape the design:
 
 FR-18. `simsapa.py lookup <word>…` must print, for each word, the DPD headwords (`lemma_1`, `pos`, `grammar`, `construction`, `root_key`, meanings) and any `deconstructor` split, using `POST /dict_combined_search` and `GET /word.json?uid=` (replaces `q.py`). `--json` prints the same data as JSON for the skill (FR-20a). `--inflections` adds the plain-text `inflections_html` table.
 
-FR-19. `simsapa.py check <files>…` must report only what can be checked mechanically (replaces `dpd` and `ec.py`):
-   - the row word (or its sandhi-free form) is found in DPD, either as an inflection of some headword or through the deconstructor; words that are not found are listed;
-   - the row's √root matches the `root_key` of at least one candidate headword;
-   - the row's etymology matches at least one line of a candidate's `construction` (after normalising spaces and `>` notation);
-   - a `comp` row's member rows match the members in DPD's `construction` or the deconstructor split.
+FR-19. `simsapa.py check <files>…` (replaces `dpd` and `ec.py`) reports two kinds of result:
+   - **Flags**, which are exact: the row word (or its sandhi-free form) is not found in DPD, either as an inflection of any headword or through the deconstructor; or the row's √root matches the `root_key` of no candidate headword; or a row says "no root in DPD" but a candidate headword has a `root_key`.
+   - **Candidates**, which are for review, not errors: the row's etymology matches no line of any candidate's `construction` after normalising spaces and `>` notation; or a `comp` row's member rows differ from the members in DPD's `construction` or the deconstructor split. The legacy `ec.py` notes that most such output is project notation; with about 7,500 row words it would be hundreds of lines, and the set changes whenever DPD changes.
 
-   Rows tagged `(trad.)` or "no root in DPD", indeclinables, pronouns and the *antara-* rule follow the spec's exceptions. **Grammar tags are not checked by this script**; they are reviewed with the skill (FR-20a).
+   Each candidate is printed with a key: word, our etymology (or member list), and a short hash of the DPD data it was compared with. The `dpd-review` skill (FR-20b) sorts candidates into project notation, wrong homonym or real error, and writes its verdict to `checks/dpd-review.tsv` (key, verdict, reason, date). `check` hides candidates whose key is in that file, so a re-run shows only new ones. A change in DPD changes the hash, so the item comes back on its own. Exit status: 1 if there are flags, or candidates not yet reviewed when `--strict` is passed; otherwise 0.
 
-FR-20. `simsapa.py gloss <file|text>` must call `POST /gloss_text` on a Pāli line or file. For each word it prints a draft row in the compact draft format: the word, an **empty tag slot**, the candidate meanings (`meaning_1` of each direct result), etymology from `construction`, and member rows from DPD's `construction` or `deconstructions[]`. Words with several candidate headwords list all of them for the drafter to choose. This is raw material for the skill, not a finished table.
+   Rows tagged `(trad.)`, indeclinables, pronouns and the *antara-* rule follow the spec's exceptions. **Grammar tags are not checked by this script**; they are reviewed with the skill (FR-20a).
+
+FR-20. `simsapa.py gloss <file|text>` must call `POST /gloss_text` on a Pāli line or file and print, for each word as spelled in our line, the **candidate data** for the skill: every candidate headword (`lemma_1`, `pos`, `grammar`, `meaning_1`, all `construction` lines, `root_key`), the `deconstructions[]` splits, and the two commonest settled rows for that word from `index.py rows`. Output is JSON by default (`--text` for a readable form), one block per Pāli line. The apostrophe join and the mapping back to our spelling are done by the script, since they are mechanical. The script does **not** compose `R|`/`M|` rows: choosing the construction line, the members and the *antara-* exception is analysis, done with the `pali-word-analysis` skill.
 
 FR-20a. **Local skill for word analysis.** Provide `.claude/skills/pali-word-analysis/SKILL.md`, a Claude Code skill that an agent loads when drafting or reviewing word tables. It must:
    - tell the agent to get DPD data first (`simsapa.py gloss` for a new line, `simsapa.py lookup --json [--inflections]` for single words) and never to label a word without it;
@@ -237,9 +259,14 @@ FR-20a. **Local skill for word analysis.** Provide `.claude/skills/pali-word-ana
 
    The skill points to `docs/style-spec.md` for the rules rather than repeating them.
 
+FR-20b. **Other local skills.** Each points to `docs/style-spec.md`, `docs/quality-process.md` and `docs/decisions.md` rather than repeating them, and names the scripts it uses to gather context.
+   - `source-compare`: given texts, find their reference passage (grep the upstream Markdown, `compare.py extract`, Simsapa sutta routes, or the Chanting Guide EPUB HTML read when needed) and write or fix the `sources/ref-map.tsv` entries. Run `compare.py diff`, clean passages the extractor cannot (mixed Pāli/English Vinaya pages), check variant cues against the source's substitution lines (09) or by rebuilding the lists (10, the method of the legacy `vchk.py`), and classify each difference against the file's CHANGELOG and `docs/decisions.md` as expected, a reference artefact, or unexplained. Report; never edit texts without the maintainer's decision.
+   - `dpd-review`: run `simsapa.py check`, review each new candidate with `simsapa.py lookup --json`, and write the verdict to `checks/dpd-review.tsv`. Also review `index.py` conflicts (same word, different etymology or tags): decide which are legitimate and which to align, write `align.py` rules, run them as a dry run, then apply, and write the changelog entry ("Why" in the agent's words, Was/Now from the `align.py` log).
+   - `draft-new-text`: the whole workflow of FR-22, step by step, calling the scripts and the `pali-word-analysis` and `source-compare` skills in order, and ending with the quality-process checks and the changelog.
+
 FR-21. `scripts/simsapa_fmt.py` (copied from `EXERCISES`) is kept for ad-hoc agent queries with `curl`, as recommended in `docs/simsapa-localhost-api-search-endpoints.md`.
 
-FR-22. `docs/drafting-workflow.md` must describe the full workflow for adding a new text: get the Pāli from a source (Simsapa sutta routes, BM upstream Markdown, the Community Chanting Book, or the Chanting Guide) → `simsapa.py gloss` → assign grammar labels and finish the rows with the `pali-word-analysis` skill (FR-20a) → `draft.py build` → `make lint` → `make compare` → `simsapa.py check` → `index.py overlaps` / `rows` for consistency → changelog entry → build.
+FR-22. The workflow for adding a new text is: get the Pāli from a source (Simsapa sutta routes, BM upstream Markdown, the Community Chanting Book, or the Chanting Guide) and add its `ref-map.tsv` entry → `index.py overlaps` (copy settled units with `I|`) → `simsapa.py gloss` → write the rows and grammar labels with the `pali-word-analysis` skill (FR-20a) → `draft.py build` → `make lint` → compare with the `source-compare` skill → `simsapa.py check` and the `dpd-review` skill → `index.py` for consistency → changelog entry → build. The `draft-new-text` skill (FR-20b) is the agent's step-by-step version. `docs/drafting-workflow.md` is a short overview for people: the steps, the draft format, and pointers to the skills.
 
 #### 4.4.2 Makefile targets
 
@@ -252,9 +279,9 @@ FR-23. The Makefile must provide at least:
 | `make epub` / `make pdf` | All books in one format |
 | `make book BOOK=01_morning_chanting` | One book, both formats |
 | `make lint` / `make lint-fix` | `scripts/lint.py` on all texts |
-| `make compare` | Pāli check against `sources/` |
+| `make compare` | Pāli diff for every `sources/ref-map.tsv` entry (report; fails only on a missing anchor or segment) |
 | `make index` | Cross-file consistency report |
-| `make dpd-check` | `simsapa.py check` on all texts (needs Simsapa running) |
+| `make dpd-check` | `simsapa.py check` on all texts (needs Simsapa running): flags, plus candidates not yet in `checks/dpd-review.tsv` |
 | `make fetch-sources` | Clones/updates `sources/upstream/` at the pinned commits (FR-12a) |
 | `make covers` | Renders all covers (PDF page and EPUB PNG) |
 | `make epubcheck` | Validates every EPUB in `build/epub/` with `epubcheck` (FR-30a) |
@@ -336,7 +363,7 @@ FR-34. `docs/style-spec.md` must re-state, in this repo's own words, the rules f
 
 FR-35. `docs/decisions.md` must list the maintainer's dated decisions found in the legacy specs and PRDs (e.g. `comp` tag 2026-10-01; English-titled chants 2026-10-04; DN 22 decisions D1–D17; Vinaya decisions V1–V19), each with date, decision and source, so that the rationale survives.
 
-FR-36. `docs/quality-process.md` must describe the legacy checking routine as the standard for any change: lint to 0 ERROR/0 STRAY with each WARN explained; Pāli compare against the source; `simsapa.py check` on every row plus a review of grammar labels with the `pali-word-analysis` skill; an independent spot check of 10 random units by a separate agent that did not draft them; consistency alignment across files; a changelog entry for every change ("Was / Now / Why / Reference").
+FR-36. `docs/quality-process.md` must describe the legacy checking routine as the standard for any change: lint to 0 ERROR/0 STRAY with each WARN explained; Pāli compare against the source, with the differences classified by the `source-compare` skill; `simsapa.py check` on every row with no flags and every candidate reviewed by the `dpd-review` skill, plus a review of grammar labels with the `pali-word-analysis` skill; an independent spot check of 10 random units by a separate agent that did not draft them; consistency alignment across files; a changelog entry for every change ("Was / Now / Why / Reference").
 
 FR-37. `docs/legacy-migration.md` (FR-13, FR-14) plus a short description of the legacy project's history (sessions S0–S22, the DN 22 and Vinaya sub-projects) and of the tools that were not migrated.
 
@@ -360,6 +387,7 @@ FR-40. Required tools to document: `pandoc` (≥ 3.1.2, needed for the typst wri
 - A separate review of the 48 S22-affected files (maintainer decision, 2026-10-22: not needed now). They stay listed in `docs/legacy-migration.md`.
 - Using the Community Chanting Book in any check (only recorded and fetched for now).
 - Assigning grammar labels (case, number, gender, person, tense, voice, mood) with scripts, or splitting compounds with our own rules. Labels are LLM work guided by the skill (FR-20a), and compounds come from DPD via Simsapa.
+- Scripted judgment (FR-16a): finding where a text starts in a reference, guessing which reference lines are English, classifying compare differences or DPD-check candidates, and composing word rows from DPD data. These are skill work (FR-20a, FR-20b).
 - Committing the Ṭhānissaro *Chanting Guide* (only its locations are recorded).
 - Keeping the legacy git history (decision: start fresh with one import commit).
 - Migrating legacy built EPUBs/PDFs, drafts (`_tools/drafts/*.c`), scratch folders, or the local `dpd.db`.
@@ -380,6 +408,7 @@ FR-40. Required tools to document: `pandoc` (≥ 3.1.2, needed for the typst wri
 
 - **One parser, two outputs.** `assemble.py` parses each text once and emits pandoc Markdown with classed divs. EPUB and PDF both start from that file, so the two formats cannot drift apart.
 - **One spec is enough.** The legacy main, Vinaya and DN 22 specs have identical `tags`, `english-stopwords` and `repeat-note` blocks. The Vinaya `rubrics` block is also identical, and DN 22's is empty, which is harmless because DN 22 files have no rubrics. So one `docs/style-spec.md` serves all books. Book 10's behaviour comes from its `options` (from the DN 22 spec's `options` block).
+- **Scripts gather, skills judge.** Scripts extract, normalise, look up and diff, and fail loudly when their keyed input (an anchor, a segment, a `I|` key, a DPD hash) is gone. Agents, following the skills, do the matching and classification that the legacy heuristics did silently (FR-16a). Reviewed verdicts are stored (`sources/ref-map.tsv`, `checks/dpd-review.tsv`), so re-runs show only what changed.
 - **Spec-driven checks.** `lint.py` reads its rule lists from fenced code blocks in `docs/style-spec.md`, as the legacy script did. Per-book behaviour (DN 22 heading numbers and glosses, cross-file repeats, variants) comes from an `options` block, or from the book's `metadata.txt`.
 - **Parsing rules** (from the legacy parser): title `# …`; English title `*…*` on the next line; `### ` Pāli heading; `**Pāli**` line; `**Literal:**`/`**Faithful:**`; table rows `| **`word`** | `(tags)` meaning; **[etym]** |`; member rows starting `| ↳ `; the repeat note in italics; citation `*SC-ID*`; rubrics `*(…)*`; Vinaya instruction lines `> …`; `**Variant:** …` cues.
 - **Simsapa.** The API is bound to `127.0.0.1`. The port is in `<SIMSAPA_DIR>/api-port.txt` (default 4848). Use the `uid` from search results rather than building uids. `/word.json?uid=` is the safe route for uids containing `/`. A miss is HTTP 404. Fulltext sutta search ignores diacritics, so check hits by fetching the text.
@@ -396,9 +425,11 @@ FR-40. Required tools to document: `pandoc` (≥ 3.1.2, needed for the typst wri
 4. `epubcheck` reports 0 fatals and 0 errors on every EPUB (FR-30a); any remaining warnings are listed.
 5. Each EPUB's metadata (title, subtitle, language, rights, sources) matches its `metadata.txt`.
 6. Spot comparison of three PDFs (01, 07a, 10) against the legacy PDFs shows the same content in the same order, with no missing glyphs (`↳`, √, ṁ, ṭ, ḷ).
-7. `make dpd-check` runs against Simsapa on all migrated texts. Every flag it raises (word not found, root or construction mismatch, compound members) is either explained or listed for review.
-8. Using the skill, an agent drafts the table for one line of a sutta not in the repo, and the result passes `make lint` and `simsapa.py check`.
+7. `make dpd-check` runs against Simsapa on all migrated texts. Every flag (word not found, root mismatch, wrong "no root in DPD") is explained or listed for review, and every candidate (etymology or member mismatch) has a verdict in `checks/dpd-review.tsv`.
+8. Using the `draft-new-text` and `pali-word-analysis` skills, an agent drafts the table for one line of a sutta not in the repo, and the result passes `make lint` and `simsapa.py check`.
 9. A fresh agent session, given only `CLAUDE.md`, finds the style spec and runs the check routine without further instructions.
+10. Every text has a `sources/ref-map.tsv` entry (or is listed as having no reference), `make compare` runs over all of them, and every difference has been classified with the `source-compare` skill.
+11. `docs/script-or-skill.md` records the task 8 and task 9 spike findings (FR-16b) and the maintainer's review of them.
 
 ## 9. Open Questions
 
