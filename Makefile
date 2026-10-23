@@ -113,12 +113,12 @@ build/tmp/%.md: $$(wildcard books/$$*/*) $(BUILD_SCRIPTS) | build/covers/%.png
 # it as up to date (docs/book-build.md).
 build/epub/%.epub: build/tmp/%.md build/covers/%.png templates/epub.css $(EPUB_FONTS)
 	@mkdir -p $(@D)
-	$(PANDOC) --defaults build/tmp/$*.pandoc.yaml --css templates/epub.css \
+	$(PANDOC) --defaults build/tmp/$*.pandoc.json --css templates/epub.css \
 		$(EPUB_FONTS:%=--epub-embed-font=%) -o $@
 	@$(EPUBCHECK) $@ || { rm -f $@; echo "epubcheck failed; removed $@" >&2; exit 1; }
 
 build/tmp/%.typ: build/tmp/%.md $(PDF_TEMPLATES)
-	$(PANDOC) --defaults build/tmp/$*.pandoc.yaml -t typst \
+	$(PANDOC) --defaults build/tmp/$*.pandoc.json -t typst \
 		--template templates/pandoc/book.typst --lua-filter templates/pandoc/chant.lua -o $@
 
 build/pdf/%.pdf: build/tmp/%.typ build/covers/%.json $(TYPST_TEMPLATES) $(FONTS)

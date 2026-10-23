@@ -7,8 +7,8 @@ How the 13 books are made from `texts/` and `books/`. The commands are Make targ
 ```text
 books/<book>/metadata.txt ─┐
 books/<book>/about.md ─────┼─ scripts/assemble.py ─→ build/tmp/<book>.md ─┬─ pandoc ─→ build/epub/<book>.epub ─→ epubcheck
-texts/<folder>/NN_*.md ────┘                         build/tmp/<book>.meta.yaml
-                                                     build/tmp/<book>.pandoc.yaml
+texts/<folder>/NN_*.md ────┘                         build/tmp/<book>.meta.json
+                                                     build/tmp/<book>.pandoc.json
                                                                            └─ pandoc -t typst ─→ build/tmp/<book>.typ ─→ typst ─→ build/pdf/<book>.pdf
 
 books/<book>/metadata.txt ─ assemble.py --cover-data ─→ build/covers/<book>.json ─→ typst (cover.typ) ─→ build/covers/<book>.png
@@ -57,12 +57,12 @@ For each folder in `texts`, the files `NN_*.md` are taken in name order. `CHANGE
 
 A unit closes at the next Pāli line, heading, title, citation or instruction line. A lint ERROR or STRAY in the book's files prints a warning; the book is still built.
 
-`<book>.meta.yaml` is the metadata pandoc gets (written as JSON, which is valid YAML): a typed title (`main` and `subtitle`, so that both reach the EPUB package), `lang`, `rights`, `source`, and `cover-image`. Two keys are for the PDF only, and the EPUB writer ignores them: `book-id`, and `cover-pdf` (the `cover-image` override relative to the repo root, when there is one). `<book>.pandoc.yaml` is a pandoc defaults file with the input, the metadata file, the table of contents, and the TOC depth and split level: 1, or 2 for a book in parts.
+`<book>.meta.json` is the metadata pandoc gets (JSON; pandoc reads it as YAML, of which JSON is a subset): a typed title (`main` and `subtitle`, so that both reach the EPUB package), `lang`, `rights`, `source`, and `cover-image`. Two keys are for the PDF only, and the EPUB writer ignores them: `book-id`, and `cover-pdf` (the `cover-image` override relative to the repo root, when there is one). `<book>.pandoc.json` is a pandoc defaults file, also JSON read as YAML, with the input, the metadata file, the table of contents, and the TOC depth and split level: 1, or 2 for a book in parts.
 
 ## EPUB
 
 ```sh
-pandoc --defaults build/tmp/<book>.pandoc.yaml --css templates/epub.css \
+pandoc --defaults build/tmp/<book>.pandoc.json --css templates/epub.css \
   --epub-embed-font=… -o build/epub/<book>.epub
 epubcheck build/epub/<book>.epub
 ```
@@ -86,7 +86,7 @@ The PNG is 1748 × 2480 px, with a white page. `make covers` renders all of them
 ## PDF
 
 ```sh
-pandoc --defaults build/tmp/<book>.pandoc.yaml -t typst \
+pandoc --defaults build/tmp/<book>.pandoc.json -t typst \
   --template templates/pandoc/book.typst --lua-filter templates/pandoc/chant.lua \
   -o build/tmp/<book>.typ
 typst compile --root . --font-path fonts --ignore-system-fonts build/tmp/<book>.typ build/pdf/<book>.pdf

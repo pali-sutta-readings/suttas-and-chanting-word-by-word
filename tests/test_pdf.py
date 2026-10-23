@@ -63,7 +63,7 @@ class PdfTest(unittest.TestCase):
         assemble.assemble("test", out, bks, texts, covers, today="2026-01-02")
         cls.typ = out / "test.typ"
         subprocess.run(
-            ["pandoc", "--defaults", str(out / "test.pandoc.yaml"), "-t", "typst",
+            ["pandoc", "--defaults", str(out / "test.pandoc.json"), "-t", "typst",
              "--template", str(cls.tmp / "templates/pandoc/book.typst"),
              "--lua-filter", str(cls.tmp / "templates/pandoc/chant.lua"),
              "-o", str(cls.typ)],

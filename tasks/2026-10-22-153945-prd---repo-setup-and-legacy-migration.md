@@ -295,7 +295,7 @@ FR-28. Each `about.md` must be created from the legacy About text: the `ABOUT` t
 
 FR-29. `scripts/assemble.py <book>` must read the book's metadata, concatenate its texts (`NN_*.md` in name order, never `CHANGELOG.md`), and write one pandoc-Markdown file to `build/tmp/<book>.md`. Each element is wrapped in a classed fenced div, as in the legacy `preprocess()`: `pali` (with `lang="pi"`), `literal`, `faithful`, `unit`, `repeat`, `citation`, `rubric`, `subtitle`, and for 09/10 `instruction`, `variant`, `gloss`. The English title is added to the table-of-contents entry (`.toc-en` span), as before.
 
-FR-30. EPUB: `pandoc build/tmp/<book>.md --metadata-file build/tmp/<book>.meta.yaml -o build/epub/<book>.epub` (the `meta.yaml` is written by `assemble.py` from `metadata.txt`, with the title order applied and empty keys dropped) with `--toc --toc-depth=1 --split-level=1`, `templates/epub.css`, the embedded fonts, and `--epub-cover-image` set to the generated cover PNG (or the override).
+FR-30. EPUB: `pandoc build/tmp/<book>.md --metadata-file build/tmp/<book>.meta.json -o build/epub/<book>.epub` (the `meta.json` is written by `assemble.py` from `metadata.txt`, with the title order applied and empty keys dropped) with `--toc --toc-depth=1 --split-level=1`, `templates/epub.css`, the embedded fonts, and `--epub-cover-image` set to the generated cover PNG (or the override).
 
 FR-30a. **EPUB validation.** Every generated EPUB must be validated with `epubcheck`. The EPUB build rule runs `epubcheck` on each file right after pandoc writes it; any fatal or error fails the rule and removes the invalid EPUB, so that Make does not treat it as up to date. Warnings are printed but do not fail the build. `make epubcheck` re-validates all built EPUBs.
 

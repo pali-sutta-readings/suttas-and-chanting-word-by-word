@@ -62,8 +62,8 @@ class AssembleTest(unittest.TestCase):
     def run_assemble(self, name):
         md = assemble.assemble(name, self.out, self.books, self.texts,
                                self.covers, today="2026-01-02")
-        meta = json.loads((self.out / f"{name}.meta.yaml").read_text())
-        defaults = json.loads((self.out / f"{name}.pandoc.yaml").read_text())
+        meta = json.loads((self.out / f"{name}.meta.json").read_text())
+        defaults = json.loads((self.out / f"{name}.pandoc.json").read_text())
         return md.read_text(), meta, defaults
 
     def test_single_folder_book(self):

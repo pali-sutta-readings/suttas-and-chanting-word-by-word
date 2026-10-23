@@ -5,10 +5,10 @@ Writes three files to the output folder (default build/tmp/):
 
     <book>.md           the About page and every text, with each element
                         wrapped in a classed fenced div (docs/book-build.md)
-    <book>.meta.yaml    pandoc metadata from books/<book>/metadata.txt:
+    <book>.meta.json    pandoc metadata from books/<book>/metadata.txt:
                         typed title and subtitle, language, rights, sources,
                         cover; keys with empty values are dropped
-    <book>.pandoc.yaml  pandoc defaults: input, metadata file, TOC depth and
+    <book>.pandoc.json  pandoc defaults: input, metadata file, TOC depth and
                         split level (2 for a book in parts, else 1)
 
 With --cover-data it prints instead the JSON that templates/typst/cover.typ
@@ -184,10 +184,11 @@ def assemble(book_id, out_dir, books_dir=books.BOOKS_DIR,
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     md = out_dir / f"{book_id}.md"
-    meta = out_dir / f"{book_id}.meta.yaml"
-    defaults = out_dir / f"{book_id}.pandoc.yaml"
+    meta = out_dir / f"{book_id}.meta.json"
+    defaults = out_dir / f"{book_id}.pandoc.json"
     md.write_text("\n".join(chunks), encoding="utf-8")
-    # JSON is valid YAML, and needs no quoting rules of its own.
+    # pandoc reads both files as YAML; JSON is valid YAML and needs no
+    # quoting rules of its own.
     dump = lambda d: json.dumps(d, ensure_ascii=False, indent=2) + "\n"
     meta.write_text(dump(pandoc_metadata(book, cover_path(book, covers_dir))), encoding="utf-8")
     depth = 2 if in_parts else 1
