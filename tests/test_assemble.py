@@ -183,6 +183,15 @@ class AssembleTest(unittest.TestCase):
         self.assertEqual([f.name for f in files], ["01_text.md"])
         self.assertIsNone(part.heading)
 
+    def test_book_files_include_inserted_texts(self):
+        self.make_book("one", "  - texts")
+        folder = self.books / "one" / "texts"
+        for name in ("01a_inserted.md", "02_next.md"):
+            shutil.copy(folder / "01_text.md", folder / name)
+        book = books.load_book("one", self.books)
+        [(_, files)] = books.book_files(book)
+        self.assertEqual([f.name for f in files], ["01_text.md", "01a_inserted.md", "02_next.md"])
+
     def test_book_for_text(self):
         self.make_book("parts", "\n".join([
             "  - folder: 01_one", '    heading: "Part One"',

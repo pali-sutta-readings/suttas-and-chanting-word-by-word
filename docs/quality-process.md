@@ -24,7 +24,7 @@ make fetch-sources     # once, and after a re-pin of sources/UPSTREAM.txt
 make compare
 ```
 
-`compare` checks each file's Pāli lines, normalised, against the text's source: the *Bhikkhu Manual* (upstream Markdown), the *Chanting Guide* (if a local copy is present), `sources/reference-pali-supplement.md`, SuttaCentral's JSON for book 10, or the Vinaya originals in `sources/originals/`. Every difference must be one of:
+`compare` checks each file's Pāli lines, normalised, against the text's source: the *Bhikkhu Manual* (upstream Markdown), the *Chanting Guide* (if a local copy is present), `sources/reference-pali-supplement.md`, SuttaCentral's JSON for book 10, or the Vinaya originals in `sources/originals/`. Which passage belongs to which text is recorded in `sources/ref-map.tsv` (an anchor, an anchor range or a segment range), written and kept with the `source-compare` skill (`.claude/skills/source-compare/`); the script never guesses it, and stops with a map error if an anchor or segment is gone. For the Vinaya pages, where English and Pāli are mixed, `compare` checks that each Pāli line of ours occurs, in order, in the passage (`contain` mode); the skill reads those passages once for formulae missing from our text. Classify every reported item with the skill. Every difference must be one of:
 
 - a filled elision (*…pe…*, “…”), written out from the text's own wording and logged;
 - a logged misprint fix, or a logged restoration decided by the maintainer;

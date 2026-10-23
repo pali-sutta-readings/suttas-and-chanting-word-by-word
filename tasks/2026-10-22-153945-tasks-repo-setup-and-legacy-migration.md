@@ -10,17 +10,19 @@
 - `scripts/chantlib/spec.py` - Reads the fenced rule blocks from `docs/style-spec.md`.
 - `scripts/chantlib/parse.py` - Chant-file parser (line kinds, units, rows, member rows).
 - `scripts/chantlib/text.py` - Shared normalisation helpers (NFC, ṃ→ṁ, Pāli-letter folding).
-- `scripts/chantlib/books.py` - Reads `books/*/metadata.txt` (YAML-subset reader, book options, `book_for_text` from a file's path), `load_book` (validated `Book` with `Part`s), `book_files` (text folders resolved inside the book folder).
+- `scripts/chantlib/books.py` - Reads `books/*/metadata.txt` (YAML-subset reader, book options, `book_for_text` from a file's path), `load_book` (validated `Book` with `Part`s), `book_files` (text folders resolved inside the book folder; `NN*.md`, so `NNa_` texts are included).
 - `scripts/lint.py` - Lint and safe auto-fix.
 - `scripts/assemble.py` - Builds one pandoc-Markdown file per book, plus `<book>.meta.json` (with `book-id`/`cover-pdf` for the PDF) and a pandoc defaults file `<book>.pandoc.json`; `--deps` prints the book's make dependencies; `--cover-data` prints the cover JSON.
-- `scripts/compare.py` - `extract` (normalised Pāli stream of a text or a mapped reference passage) and `diff` (report over `sources/ref-map.tsv`).
-- `scripts/index.py` - Cross-file index, dupes, stats, rows, overlaps.
-- `scripts/align.py` - Rules-based bulk alignment, cell-scoped, dry run by default, with a change log.
-- `scripts/draft.py` - Compact draft format ↔ chant file (`I|` by Pāli-line key).
+- `scripts/compare.py` - `extract` (normalised Pāli stream of a text or a mapped reference passage) and `diff` (report over `sources/ref-map.tsv`; `diff` and `contain` modes; keys `anchor`, `anchor..end`, `seg..seg`, Chanting Guide `Start..End` headings).
+- `scripts/index.py` - Cross-file index (etymology and word-class tag conflicts; `--all-tags`), dupes, stats, rows, overlaps.
+- `scripts/align.py` - Rules-based bulk alignment, cell-scoped, whole-cell match by default (substring rules skip cells already aligned), dry run by default, with a change log and `--changelog` Was/Now tables.
+- `scripts/draft.py` - Compact draft format ↔ chant file (`I|` by Pāli-line key; `T0|` for a table header without rows); `extract` refuses a file whose layout would not round-trip.
 - `scripts/simsapa.py` - Simsapa API client (lookup; check with flags and candidates; gloss as candidate data).
 - `scripts/simsapa_fmt.py` - Copied formatter for ad-hoc `curl` queries.
 - `tests/test_smoke.py` - Checks that `chantlib` imports, so `make test` runs from the start.
-- `tests/` - `unittest` tests: `test_spec.py`, `test_parse.py`, `test_lint.py`, `test_assemble.py`, `test_compare.py`, `test_index.py`, `test_draft.py`, `test_simsapa.py`.
+- `tests/` - `unittest` tests: `test_spec.py`, `test_parse.py`, `test_lint.py`, `test_assemble.py`, `test_compare.py`, `test_index.py`, `test_align.py`, `test_draft.py`, `test_simsapa.py`.
+- `tests/fixtures/compare/` - BM-style Markdown (Contents, anchors, divs, link line, italic table cells, an anchor off a heading), SC JSON and supplement snippets, small texts and `map.tsv`.
+- `tests/fixtures/index/` - Two small texts in two folders with etymology and tag conflicts.
 - `tests/fixtures/` - Small chant files: `good.md`, `good-vinaya.md`, `good-dn22.md` (from real texts) and `bad-*.md` (one rule broken each); later, recorded Simsapa JSON responses.
 - `tests/test_parse.py`, `tests/test_lint.py` - Parser, text helpers, lint checks, tag order, repeats, `--fix`.
 - `tests/test_assemble.py` - Assembles fixture books from a temp `books/` tree: div order, TOC span, parts, metadata (incl. PDF keys, cover data), CHANGELOG/originals excluded; missing, outside or empty text folders rejected; lint paths for a book folder; loads the 13 real books.
@@ -28,7 +30,8 @@
 - `books/<book>/texts/**`, `books/09_vinaya_formulae/0N_*/**` - Migrated chant files and changelogs (content; created by migration, never edited by this feature).
 - `sources/MIGRATION-MANIFEST.tsv` - Written by the migration script.
 - `sources/UPSTREAM.txt` - Upstream repos, pinned commits, Chanting Guide locations.
-- `sources/ref-map.tsv` - Text → reference passage (source, file, anchor or segment range); written with the `source-compare` skill.
+- `sources/ref-map.tsv` - Text → reference passage (source, file, key, mode, note) for all 209 texts; written with the `source-compare` skill.
+- `sources/upstream/chanting-guide-thanissaro.md` - Optional local copy of the legacy Chanting Guide conversion (git-ignored; used by `make compare` for 03/18, 03/19, 07a/07–10).
 - `checks/dpd-review.tsv` - Reviewed `simsapa.py check` candidates (key, verdict, reason, date); written with the `dpd-review` skill.
 - `sources/reference-pali-supplement.md`, `sources/suttacentral/*.json`, `sources/originals/**` - Reference texts for `compare`.
 - `books/<book>/metadata.txt`, `books/<book>/00_about.md` - Per-book metadata and About text (13 books). `title`/`subtitle` are as displayed (FR-27); `pali-title-first` only says which of them is Pāli. About sub-headings are `{.unnumbered .unlisted}`.
@@ -42,7 +45,7 @@
 - `docs/style-spec.md` - Editorial rules with machine-readable blocks.
 - `docs/decisions.md` - Dated maintainer decisions.
 - `docs/quality-process.md` - Checking routine.
-- `docs/legacy-migration.md` - Migration sources, manifest columns, version-conflict evidence, affected-file list, legacy history, tools not migrated.
+- `docs/legacy-migration.md` - Migration sources, manifest columns, version-conflict evidence, affected-file list, legacy history, tools not migrated, lint baseline, compare review, layout findings.
 - `docs/drafting-workflow.md` - Short overview of adding a text; points to the `draft-new-text` skill.
 - `docs/script-or-skill.md` - What is scripted and what is skill work (PRD FR-16a); task 8 and 9 spike findings and decisions.
 - `docs/book-build.md` - Book pipeline: metadata keys, About, assembled div format, EPUB build, epubcheck, cover, PDF (Lua filter mapping, layout, font check), dependencies.
@@ -237,47 +240,46 @@ The cover reads `sys.inputs` (`title`, `subtitle`, `series`, `accent`). The PDF 
 
 **Specs.** PRD FR-12b, FR-16, FR-16a, FR-16b, FR-20b. Scripts gather context and fail loudly; agents, following the skills, do the matching and the judgment.
 
-`compare.py` has two subcommands, driven by `sources/ref-map.tsv` (columns: `text`, `source`, `file`, `key`, `note`; `source` is `bm`, `supplement`, `sc`, `original`, `chanting-guide` or `none`):
+`compare.py` has two subcommands, driven by `sources/ref-map.tsv` (columns: `text`, `source`, `file`, `key`, `mode`, `note`; `source` is `bm`, `supplement`, `sc`, `original`, `chanting-guide` or `none`; `mode` is `diff` (default) or `contain`). Key syntax and the reasons for it are in `docs/script-or-skill.md` (spike 1):
 - `extract FILE` prints the normalised Pāli stream of one of our texts (Pāli lines only; variant cues, `(×3)` and rubrics excluded; `text.norm_line`). `extract --ref ENTRY` prints the stream of one mapped reference passage:
-  - BM upstream Markdown: the section under the `<a id>` anchor (optionally narrowed by a sub-heading or line span in `key`), with structural rules only: drop the `**Contents**` list, the anchors and the "(English)" sections, remove the line-end `\` and `[…]` leader brackets;
-  - `reference-pali-supplement.md`: a segment-id range (`[id] text` lines);
-  - SC bilara JSON: a segment range;
-  - `sources/originals/…`: the whole file;
+  - BM upstream Markdown and `sources/originals/` (BM pages): key `anchor` (from the heading carrying `<a id="anchor">` to the next heading carrying any anchor) or `anchor..end` (up to, not including, the heading with anchor `end`; `..END` for the end of the file). Structural rules only: drop `<div class="english">`/`<div class="instr">` blocks, headings, the `**Contents**` list, HTML tags, wholly italic lines and lines with a Markdown link to `http(s)`; decode HTML entities; remove the blockquote `>`, the line-end `\` and the `[…]` leader brackets (keep their words);
+  - `reference-pali-supplement.md`: `id..id` (`[id] text` lines, inclusive);
+  - SC bilara JSON: `seg..seg` (inclusive; `:0.n` and `.0` heading segments skipped);
   - `chanting-guide`: skipped with a report line if `sources/upstream/chanting-guide-thanissaro.md` is absent.
   A missing anchor, segment or file is an error that names the map entry.
-- `diff [TEXTS]` compares the two streams for each map entry and prints the differences with 40 characters of context. It is a report: exit 0 with differences, exit 1 only on a map error. Texts with no map entry are listed.
+- `diff [TEXTS]` compares the two streams for each map entry and prints the differences with 40 characters of context. In `contain` mode (the BM Vinaya pages) it instead checks that each of our Pāli lines occurs, in order, in the normalised raw passage (English included), and lists the lines not found. It is a report: exit 0 with differences, exit 1 only on a map error. Texts with no map entry are listed.
 
-No English-detection, stopword or chant-location heuristics are ported from the legacy `ref_stream()`/`compare()`.
+No English-detection, stopword, quote or chant-location heuristics are ported from the legacy `ref_stream()`/`compare()`.
 
 `index.py` has these subcommands (reports; never a gate):
-- `index [--folder X]`: same word with different etymology (E lines) or tags (T lines);
+- `index [--folder X] [--all-tags]`: same word with different etymology (E lines) or tags (T lines). T lines compare word-class tokens only (case, number and agreeing gender left out, spike 1); `--all-tags` compares whole tags;
 - `dupes`;
 - `stats`;
 - `rows WORD… [--json]`: the two commonest existing rows;
 - `overlaps FILES`: Pāli lines equal (after normalisation, exact) to a line in another folder.
 
-`align.py TREE RULES.json LOG.json [--apply]` uses the legacy rules format (`word` regex, `old`, `new`, `why`, `ref`) plus an optional `cell` (`tags`, `meaning` or `etym`; default `etym`). `old` is matched only inside that cell. Without `--apply` it prints a diff and writes nothing. `--changelog` prints the Was/Now table from a log.
+`align.py TREE RULES.json LOG.json [--apply]` uses the legacy rules format (`word` regex, `old`, `new`, `why`, `ref`) plus an optional `cell` (`tags`, `meaning` or `etym`; default `etym`) and `match` (`cell`, the default: `old` equals the whole trimmed cell content; or `substring`, which skips cells already containing `new`). `old` is matched only inside that cell. Without `--apply` it prints a diff and writes nothing. `--changelog` prints the Was/Now table from a log.
 
 `draft.py build DRAFT OUT.md` / `extract FILE.md` uses the compact format: `T|` title, `E|` English title, `U|` rubric, `H|` heading, `P|` Pāli (`P!` force full table, `P~` force repeat note), `L|` literal, `F|` faithful, `R|` row, `M|` member row, `C|` citation, `S|` instruction, `V|` variant, `I|` copy a settled unit. Read `BACKUP/_tools/helpers/b.py` and `md2c.py` for the exact syntax. `I|` changes from line numbers to `I|<text path>|<Pāli line>`: the unit whose Pāli line has the same normalised key is copied; `build` fails if the key is not found or is found twice.
 **Depends on:** 5.0, 3.0.
 
 - [ ] 8.0 Consistency and authoring tools (FR-12b, FR-16, FR-16a, FR-16b, FR-20b)
-  - [ ] 8.1 **Spike: script or skill for compare, index, align and draft** (FR-16b). Throwaway code in the scratchpad, not in `scripts/`. Sample: `01_morning_chanting` (all), `07a_suttas/01_dhammacakkappavattana_sutta` (BM sub-headings such as *Bhummānaṁ devānaṁ*), one Vinaya part with substitution lists (`books/09_vinaya_formulae/01_vinaya_notes_requisites`), and one book-10 section (SC JSON).
+  - [x] 8.1 **Spike: script or skill for compare, index, align and draft** (FR-16b). Throwaway code in the scratchpad, not in `scripts/`. Sample: `01_morning_chanting` (all), `07a_suttas/01_dhammacakkappavattana_sutta` (BM sub-headings such as *Bhummānaṁ devānaṁ*), one Vinaya part with substitution lists (`books/09_vinaya_formulae/01_vinaya_notes_requisites`), and one book-10 section (SC JSON).
     - **Mapping:** for each sample text, find its BM anchor (or SC range) by hand. Count how many map 1:1 to an anchor, how many need a sub-heading or line span, and how many span several anchors or share one. Decide the `key` syntax for `ref-map.tsv` from this.
     - **Extractor:** write a minimal structural extractor (anchor section, drop Contents/anchors/"(English)", strip `\` and `[…]`) and diff the sample against it. Run the legacy `chant_pipeline.py compare` (on a scratch copy, with the BM upstream file as `--ref`) on the same sample. For each approach, count real differences, false differences, and silent mislocations.
     - **Robustness:** on scratch copies, (a) rename a BM heading, delete an anchor, and insert a line in a BM section; (b) edit a Pāli line and add a unit in one of our texts. Record which approach fails loudly and which gives a wrong but plausible result.
     - **Skill half:** with only the extractor output, the CHANGELOG and `docs/decisions.md`, have an agent classify the sample differences (expected / reference artefact / unexplained) and clean the Vinaya passage. Note how accurate it is and what context it was missing.
     - **index / align / draft:** run a throwaway `index` on the full tree and sample 20 E/T conflicts: how many are legitimate (homonyms, context tags) versus alignment candidates? Re-run one legacy alignment rule (from the S22 changelogs or `_tools/dn22`/`_tools/vinaya` PRDs) with the legacy `old in line` match and with a cell-scoped match; count spurious hits. Grep the legacy drafts in `BACKUP/_tools/drafts/` for `I|` lines and check how many of their line ranges still point at the right unit in the current texts.
-    - Write the findings to `docs/script-or-skill.md` (sections: method, sample, results per tool, decision). Update the PRD and sub-tasks 8.2–8.10 if a finding changes the split (e.g. a structural rule that turns out safe, or a check that should move to the skill). **Stop and ask the maintainer to review the findings before 8.2.**
-  - [ ] 8.2 Write `scripts/compare.py` (`extract`, `extract --ref`, `diff`) and the `ref-map.tsv` reader, as in Specs and the spike decision.
-  - [ ] 8.3 Write `tests/test_compare.py`, with small reference fixtures (one BM-style Markdown with Contents, anchors, an "(English)" section, `\` and `[…]`; one SC JSON snippet; one supplement snippet) and a small map. Test that a missing anchor is an error naming the entry, and that differences give exit 0.
-  - [ ] 8.4 Write `.claude/skills/source-compare/SKILL.md` (FR-20b): frontmatter with a `description` that triggers on comparing texts with their sources or on mapping a text to a reference; locating passages, writing `ref-map.tsv` entries, cleaning mixed Pāli/English passages, the variant-cue checks (09 substitution lines; 10 rebuilt lists, the legacy `vchk.py` method), and the classification against the CHANGELOG and `docs/decisions.md`. Point to `docs/quality-process.md` and `docs/style-spec.md` instead of repeating them. Update the compare step of `docs/quality-process.md` to name `ref-map.tsv` and the skill.
-  - [ ] 8.5 Using the skill, write `sources/ref-map.tsv` for all texts in 01–10 (`none` with a note where a text has no reference). Add `make compare` (requires `sources/upstream/`; print a hint to run `make fetch-sources` if it is missing).
-  - [ ] 8.6 Run `make compare` on all texts and classify every difference with the `source-compare` skill: (a) expected (filled `…pe…` elisions, leader brackets, logged misprint fixes, variants); (b) reference artefacts; (c) unexplained. Record (b) and (c) in `docs/legacy-migration.md` (FR-12b). Do not change texts. Note in `docs/script-or-skill.md` anything the skill needed that the spike did not foresee.
-  - [ ] 8.7 Write `scripts/index.py` with the five subcommands; `tests/test_index.py`; `make index`.
-  - [ ] 8.8 Write `scripts/align.py` (dry run by default, cell-scoped match, `--apply`, `--changelog`), plus a test on a fixture tree that includes a row where `old` appears in the meaning but not the etymology.
-  - [ ] 8.9 Write `scripts/draft.py` (`build` and `extract`, `I|` by Pāli-line key). `tests/test_draft.py` round-trips the fixtures (`extract` then `build` gives a file identical to the original) and tests that an `I|` key not found, or found twice, fails.
-  - [ ] 8.10 Commit: "Compare, index, align and draft tools; source-compare skill".
+    - Write the findings to `docs/script-or-skill.md` (sections: method, sample, results per tool, decision). Update the PRD and sub-tasks 8.2–8.10 if a finding changes the split (e.g. a structural rule that turns out safe, or a check that should move to the skill). **Stop and ask the maintainer to review the findings before 8.2.** Result (`docs/script-or-skill.md`, spike 1): 17/17 sample texts map to one key; the keyed extractor gives 16 identical and 9 real differences in 07a/01 (8 logged, 1 unlogged BM misprint), with no false differences or mislocations; legacy compare gave 5 false differences and missed two reference changes on scratch copies. Decisions: key syntax `anchor` / `anchor..end` / `seg..seg`; a `mode` column with `contain` for the BM Vinaya pages (a quote heuristic was tried and rejected, 29/60); index T report by word class; align matches whole cells by default and must be safe to re-run. PRD FR-12b, FR-16 and FR-20b and the task 8 specs updated. Maintainer review (2026-10-23): accepted.
+  - [x] 8.2 Write `scripts/compare.py` (`extract`, `extract --ref`, `diff`) and the `ref-map.tsv` reader, as in Specs and the spike decision.
+  - [x] 8.3 Write `tests/test_compare.py`, with small reference fixtures (one BM-style Markdown with Contents, anchors, an "(English)" section, `\` and `[…]`; one SC JSON snippet; one supplement snippet) and a small map. Test that a missing anchor is an error naming the entry, that `anchor..end` stops before `end`, that `contain` mode lists a line not found (and one found out of order), and that differences give exit 0.
+  - [x] 8.4 Write `.claude/skills/source-compare/SKILL.md` (FR-20b): frontmatter with a `description` that triggers on comparing texts with their sources or on mapping a text to a reference; locating passages, writing `ref-map.tsv` entries, cleaning mixed Pāli/English passages, the one-time omission review of `contain`-mode passages, the variant-cue checks (09 substitution lines; 10 rebuilt lists, the legacy `vchk.py` method), and the classification against the CHANGELOG and `docs/decisions.md`. Point to `docs/quality-process.md` and `docs/style-spec.md` instead of repeating them. Update the compare step of `docs/quality-process.md` to name `ref-map.tsv` and the skill.
+  - [x] 8.5 Using the skill, write `sources/ref-map.tsv` for all texts in 01–10 (`none` with a note where a text has no reference). Starting points: the 09 changelogs give each file's BM line range (turn it into anchors); each book-10 text gives its SC range in its citation; the `mode` is `contain` for the 09 BM pages. Add `make compare` (requires `sources/upstream/`; print a hint to run `make fetch-sources` if it is missing).
+  - [x] 8.6 Run `make compare` on all texts and classify every difference with the `source-compare` skill: (a) expected (filled `…pe…` elisions, leader brackets, logged misprint fixes, variants); (b) reference artefacts; (c) unexplained. Record (b) and (c) in `docs/legacy-migration.md` (FR-12b). Do not change texts. Note in `docs/script-or-skill.md` anything the skill needed that the spike did not foresee. Result: 104 identical, 49 all lines found, 56 with items; 3 unexplained (07a/01 *khandhā*, 07c/04 *bhikkhū*, 03/19's source). The structural rules gained wholly italic table cells; keys gained anchors off headings and Chanting Guide end headings. Found and fixed: `folder_files` skipped the `NNa_*` texts (04a/09a, 04a/09b, 04b/07a), so they were missing from the built books.
+  - [x] 8.7 Write `scripts/index.py` with the five subcommands; `tests/test_index.py` (including the word-class projection of tags); `make index`.
+  - [x] 8.8 Write `scripts/align.py` (dry run by default, cell-scoped match, `--apply`, `--changelog`), plus a test on a fixture tree that includes a row where `old` appears in the meaning but not the etymology, and a substring rule whose `old` is part of its `new` (applying the rules twice changes nothing the second time).
+  - [x] 8.9 Write `scripts/draft.py` (`build` and `extract`, `I|` by Pāli-line key). `tests/test_draft.py` round-trips the fixtures (`extract` then `build` gives a file identical to the original) and tests that an `I|` key not found, or found twice, fails.
+  - [x] 8.10 Commit: "Compare, index, align and draft tools; source-compare skill".
 
 ### 9.0 Simsapa client and word-analysis skills
 

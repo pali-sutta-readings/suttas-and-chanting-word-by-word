@@ -170,12 +170,14 @@ def load_book(book, books_dir=BOOKS_DIR):
 def folder_files(folder):
     """The text files of one text folder, in name order.
 
-    Only `NN_name.md` files count, so CHANGELOG.md is never included. `00_`
-    files are not texts and are skipped too: `00_about.md` (if a book
-    folder is given) and `00_original_*`, which belong in sources/originals/.
+    Only files named with a two-digit number count (`NN_name.md`, and
+    `NNa_name.md` for a text inserted later, e.g. 04a/09a_ratana_sutta.md),
+    so CHANGELOG.md is never included. `00_` files are not texts and are
+    skipped too: `00_about.md` (if a book folder is given) and
+    `00_original_*`, which belong in sources/originals/.
     """
     return sorted(
-        p for p in Path(folder).glob("[0-9][0-9]_*.md")
+        p for p in Path(folder).glob("[0-9][0-9]*.md")
         if not p.name.startswith("00_")
     )
 

@@ -61,7 +61,7 @@ Plain Markdown, placed before the texts. `{today}` is replaced with the build da
 
 ## Assembly: `scripts/assemble.py BOOK`
 
-For each folder in `texts`, the files `NN_*.md` are taken in name order. `CHANGELOG.md` and `00_original_*` are never included. Each file is parsed with `chantlib.parse`, and each line kind is written as:
+For each folder in `texts`, the files `NN_*.md` are taken in name order, including a text inserted later with a letter after its number (`09a_ratana_sutta.md` sorts after `09_…` and before `10_…`). `CHANGELOG.md` and `00_` files are never included. Each file is parsed with `chantlib.parse`, and each line kind is written as:
 
 | Line kind | Output |
 | :--- | :--- |

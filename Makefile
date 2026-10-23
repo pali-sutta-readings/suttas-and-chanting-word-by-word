@@ -128,5 +128,16 @@ build/pdf/%.pdf: build/tmp/%.typ build/covers/%.json $(TYPST_TEMPLATES) $(FONTS)
 	@mkdir -p $(@D)
 	$(TYPST) compile $(TYPST_FLAGS) $< $@
 
-compare index dpd-check:
+# Pāli check against sources/ref-map.tsv: a report, failing only on a broken
+# map entry (docs/quality-process.md §2).
+compare:
+	@test -d sources/upstream/bhikkhu-manual || \
+		{ echo "sources/upstream/ is missing: run make fetch-sources first" >&2; exit 1; }
+	@$(PYTHON) scripts/compare.py diff
+
+# Cross-file consistency report (docs/quality-process.md §6); never a gate.
+index:
+	@$(PYTHON) scripts/index.py index
+
+dpd-check:
 	@echo "make $@: not implemented yet"
