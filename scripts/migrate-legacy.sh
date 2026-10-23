@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # Copy the legacy project's texts and assets into this repo, byte for byte.
 #
+# ONE-TIME SCRIPT, KEPT AS A RECORD. It ran once, on 2026-10-22 (commit
+# 9a2cbb9), and is not maintained: the repo's content and layout have moved
+# on (texts now live under books/), so it is not expected to work on the
+# repo again. See docs/legacy-migration.md.
+#
 # Which snapshot each file comes from, and why, is set out in
 # docs/legacy-migration.md. In short: texts for 01–08 come from S22, their
 # changelogs from BACKUP, and everything for 09a–10 from FINAL. File

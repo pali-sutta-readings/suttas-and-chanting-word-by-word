@@ -1,13 +1,33 @@
 # Book build
 
-How the 13 books are made from `texts/` and `books/`. The commands are Make targets (`make help`).
+How the 13 books are made from `books/`. The commands are Make targets (`make help`).
+
+## Book folders
+
+Each book has one folder under `books/` with everything that goes into it:
+
+```text
+books/01_morning_chanting/
+  metadata.txt            title, sources, the list of text folders, …
+  00_about.md             the About page (00_ sorts it first)
+  cover.jpg               optional cover override
+  texts/                  the chant files, NN_name.md, and CHANGELOG.md
+books/09_vinaya_formulae/ a book in parts: one numbered folder per part
+  metadata.txt
+  00_about.md
+  01_vinaya_notes_requisites/   NN_name.md and CHANGELOG.md
+  …
+  05_vinaya_notes_uposatha/
+```
+
+A book in one part keeps its texts in `texts/`. A book in parts has one folder per part, numbered so that the folders sort in book order. Each text folder has its own `CHANGELOG.md`. Files starting `00_` are never texts, so `00_about.md` is not linted or built as a chant; `scripts/lint.py books/<book>` lints all of a book's texts.
 
 ## The pipeline
 
 ```text
 books/<book>/metadata.txt ─┐
-books/<book>/about.md ─────┼─ scripts/assemble.py ─→ build/tmp/<book>.md ─┬─ pandoc ─→ build/epub/<book>.epub ─→ epubcheck
-texts/<folder>/NN_*.md ────┘                         build/tmp/<book>.meta.json
+books/<book>/00_about.md ──┼─ scripts/assemble.py ─→ build/tmp/<book>.md ─┬─ pandoc ─→ build/epub/<book>.epub ─→ epubcheck
+books/<book>/*/NN_*.md ────┘                         build/tmp/<book>.meta.json
                                                      build/tmp/<book>.pandoc.json
                                                                            └─ pandoc -t typst ─→ build/tmp/<book>.typ ─→ typst ─→ build/pdf/<book>.pdf
 
@@ -27,15 +47,15 @@ YAML-compatible `key: value` lines, so that pandoc can also read the file with `
 | `pali-title-first` | `true` when the title is the Pāli one (04a *Paritta*, 05 *Anumodanā*); otherwise the title is English and the subtitle Pāli. It tells the cover which line is Pāli; it does not reorder the two. |
 | `series-line` | The short line printed on the cover, e.g. "Pāli with word-by-word English". |
 | `accent` | Optional cover accent colour. |
-| `texts` | The `texts/` folders of the book, in order. A book in parts (09) lists `folder` + `heading` mappings instead; each heading becomes a level-1 part heading, and the chants under it move down one level. |
+| `texts` | The text folders of the book, in order, relative to the book folder: `texts` for a book in one part. A book in parts (09) lists `folder` + `heading` mappings instead (`folder: 01_vinaya_notes_requisites`); a folder that is missing, outside the book folder, or has no texts is an error; each heading becomes a level-1 part heading, and the chants under it move down one level. |
 | `sources` | A list: the attribution of the Pāli sources and references. Written to the EPUB as `dc:source` (joined with `; `). |
 | `rights` | The licence line (`dc:rights`). |
 | `cover-image` | Empty: use the generated cover `build/covers/<book>.png` when it has been built. A path (relative to the book folder) overrides it. |
-| `about` | The About file, normally `about.md`. |
+| `about` | The About file, normally `00_about.md`. |
 | `author`, `publisher` | Empty on purpose (maintainer decision, 2026-10-22: no wrong attribution). Empty keys are dropped before pandoc sees them, because pandoc would otherwise write empty `dc:creator`/`dc:publisher` elements. |
 | `options` | Book options for lint and parsing (style spec §12.2): `heading-gloss`, `heading-numbers`, `repeat-across-files`, `dpd-variant-rows`. All default to `false`; only book 10 sets them. |
 
-## About text: `books/<book>/about.md`
+## About text: `books/<book>/00_about.md`
 
 Plain Markdown, placed before the texts. `{today}` is replaced with the build date (`$BUILD_DATE` if set, else today). The level-2 headings are `{.unnumbered .unlisted}`, so that they stay out of the table of contents. Keep the AI-disclosure paragraphs.
 

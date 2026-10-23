@@ -4,14 +4,13 @@
 - `**/.gitkeep` - Keep the skeleton folders in git until they get content.
 - `Makefile` - All build and check targets (`check-tools`, `all`, `epub`, `pdf`, `book`, `covers`, `lint`, `lint-fix`, `compare`, `index`, `dpd-check`, `fetch-sources`, `epubcheck`, `test`, `clean`). Per-book text dependencies come from `build/deps/<book>.mk` (written by `assemble.py --deps`).
 - `scripts/check-tools.sh` - Checks tool presence and minimum versions, prints install hints.
-- `scripts/migrate-legacy.sh` - One-off legacy migration with verification and manifest.
-- `tests/test_migrate.sh` - Runs the migration into a temp dir; checks totals, re-run no-op and `--force`. Part of `make test`; skips without the legacy folder.
+- `scripts/migrate-legacy.sh` - One-time legacy migration with verification and manifest. Ran once (2026-10-22); kept as a record, not maintained.
 - `scripts/fetch-sources.sh` - Clones/updates upstream source repos at pinned commits.
 - `scripts/chantlib/__init__.py` - Shared package for the Python tools.
 - `scripts/chantlib/spec.py` - Reads the fenced rule blocks from `docs/style-spec.md`.
 - `scripts/chantlib/parse.py` - Chant-file parser (line kinds, units, rows, member rows).
 - `scripts/chantlib/text.py` - Shared normalisation helpers (NFC, ṃ→ṁ, Pāli-letter folding).
-- `scripts/chantlib/books.py` - Reads `books/*/metadata.txt` (YAML-subset reader, book options, folder → book), `load_book` (validated `Book` with `Part`s), `book_files`.
+- `scripts/chantlib/books.py` - Reads `books/*/metadata.txt` (YAML-subset reader, book options, `book_for_text` from a file's path), `load_book` (validated `Book` with `Part`s), `book_files` (text folders resolved inside the book folder).
 - `scripts/lint.py` - Lint and safe auto-fix.
 - `scripts/assemble.py` - Builds one pandoc-Markdown file per book, plus `<book>.meta.json` (with `book-id`/`cover-pdf` for the PDF) and a pandoc defaults file `<book>.pandoc.json`; `--deps` prints the book's make dependencies; `--cover-data` prints the cover JSON.
 - `scripts/compare.py` - Pāli check against sources.
@@ -21,16 +20,16 @@
 - `scripts/simsapa.py` - Simsapa API client (lookup, check, gloss).
 - `scripts/simsapa_fmt.py` - Copied formatter for ad-hoc `curl` queries.
 - `tests/test_smoke.py` - Checks that `chantlib` imports, so `make test` runs from the start.
-- `tests/` - `unittest` tests: `test_spec.py`, `test_parse.py`, `test_lint.py`, `test_assemble.py`, `test_compare.py`, `test_index.py`, `test_draft.py`, `test_simsapa.py`, `test_migrate.sh`.
+- `tests/` - `unittest` tests: `test_spec.py`, `test_parse.py`, `test_lint.py`, `test_assemble.py`, `test_compare.py`, `test_index.py`, `test_draft.py`, `test_simsapa.py`.
 - `tests/fixtures/` - Small chant files: `good.md`, `good-vinaya.md`, `good-dn22.md` (from real texts) and `bad-*.md` (one rule broken each); later, recorded Simsapa JSON responses.
 - `tests/test_parse.py`, `tests/test_lint.py` - Parser, text helpers, lint checks, tag order, repeats, `--fix`.
-- `tests/test_assemble.py` - Assembles fixture books from a temp `books/`/`texts/` tree: div order, TOC span, parts, metadata (incl. PDF keys, cover data), CHANGELOG/originals excluded; loads the 13 real books.
+- `tests/test_assemble.py` - Assembles fixture books from a temp `books/` tree: div order, TOC span, parts, metadata (incl. PDF keys, cover data), CHANGELOG/originals excluded; missing, outside or empty text folders rejected; lint paths for a book folder; loads the 13 real books.
 - `tests/test_pdf.py` - PDF pipeline on a fixture book in parts, in a temp typst root: Lua filter output (function calls, word tables, member rows, `toc-en`, contents placement), typst compile with no warnings, standalone cover PNG. Skips without pandoc/typst.
-- `texts/**` - Migrated chant files and changelogs (content; created by migration, never edited by this feature).
+- `books/<book>/texts/**`, `books/09_vinaya_formulae/0N_*/**` - Migrated chant files and changelogs (content; created by migration, never edited by this feature).
 - `sources/MIGRATION-MANIFEST.tsv` - Written by the migration script.
 - `sources/UPSTREAM.txt` - Upstream repos, pinned commits, Chanting Guide locations.
 - `sources/reference-pali-supplement.md`, `sources/suttacentral/*.json`, `sources/originals/**` - Reference texts for `compare`.
-- `books/<book>/metadata.txt`, `books/<book>/about.md` - Per-book metadata and About text (13 books). `title`/`subtitle` are as displayed (FR-27); `pali-title-first` only says which of them is Pāli. About sub-headings are `{.unnumbered .unlisted}`.
+- `books/<book>/metadata.txt`, `books/<book>/00_about.md` - Per-book metadata and About text (13 books). `title`/`subtitle` are as displayed (FR-27); `pali-title-first` only says which of them is Pāli. About sub-headings are `{.unnumbered .unlisted}`.
 - `templates/epub.css` - EPUB styling (adapted from legacy `style.css`): embedded Crimson/Noto Sans/Noto Sans Math, `instruction`/`gloss` classes, tags in small Noto Sans.
 - `templates/pandoc/book.typst` - Pandoc typst template: imports `book.typ`/`cover.typ`, cover (or `cover-pdf` override), blank verso, page numbers from the About page, body.
 - `templates/pandoc/chant.lua` - Lua filter: classed divs → typst function calls, unit head → `#unit-head`, tables → `#word-table`, `Code` → tags/plain text, `.toc-en` → `#toc-en`, contents page after About, cover-data path for the template.
@@ -56,7 +55,9 @@
 - The legacy `chant_pipeline.py` is **reference only**. Read its regexes and rules; write new code. Use `BACKUP/_tools/chant_pipeline.py` (904 lines), the latest version. It covers 01–10, the `options` block, `ABOUT`, `ABOUT_VINAYA`, and the 09 part titles. `S22/chant_pipeline.py` (704 lines) is an older 01–08-only copy.
 - Legacy baseline (verified 2026-10-22 on a scratch copy of `BACKUP`): legacy lint gives 0 ERROR / 0 STRAY, and 4 WARN (01–08), 18 WARN (09a–09e), 0 WARN (10).
 - In Makefile prerequisites, use `$(wildcard scripts/*.py scripts/chantlib/*.py)`; Make does not expand `**`.
-- Never edit files under `texts/` in this feature. If lint or compare finds problems in a text, report them; don't fix them.
+- Repo layout (maintainer decision, 2026-10-23): each book's metadata, About text (`00_about.md`) and texts live together in `books/<book>/`. A book in one part keeps its texts in `books/<book>/texts/`; the Vinaya book has part folders `books/09_vinaya_formulae/01_…` – `05_…` (legacy 09a–09e). The texts were first migrated into a top-level `texts/<legacy folder>/` and moved after task 7; items done before then are worded for the old layout where they say so. The legacy short IDs (07a/04, 09c/06) still name texts; `docs/legacy-migration.md` has the folder table.
+- The legacy migration (task 2.0) was a one-time operation, run on 2026-10-22. `scripts/migrate-legacy.sh` and `sources/MIGRATION-MANIFEST.tsv` are a record of that run (the manifest's paths are the `texts/<legacy folder>/` ones it wrote) and are not kept working. `tests/test_migrate.sh` was removed on 2026-10-23.
+- Never edit the text files (`books/*/texts/`, `books/09_vinaya_formulae/0N_*/`) in this feature. If lint or compare finds problems in a text, report them; don't fix them.
 - Commit on `main` after each top-level task.
 - Simsapa answering on 2026-10-22 during task 1 reported `app_version` 1.0.0-alpha.8, not the 1.1.0-alpha.1 noted in PRD FR-17a; re-check the response fields when recording fixtures in task 9.
 - Simsapa must be running on port 4848 (or `$SIMSAPA_DIR/api-port.txt`) for task 9 and `make dpd-check`; nothing else needs it.
@@ -98,11 +99,11 @@ Update the file after completing each sub-task, not just after completing an ent
   - [x] 2.1 Write `scripts/migrate-legacy.sh` (bash, `set -euo pipefail`) with argument parsing: positional `LEGACY_DIR` (default as in Notes), `--dest DIR` (default: the repo root, found from the script's own path; used by the test), `--force`, `--dry-run`, `--help`. Resolve `FINAL`, `S22`, `BACKUP`, `EXERCISES`; fail clearly if any is missing.
   - [x] 2.2 Implement a `copy_file src dest snapshot` function that skips `._*`, `.DS_Store`, `__pycache__`, `*.pyc`. If `dest` exists and differs from `src`, refuse without `--force` (collect such files and exit non-zero at the end). Otherwise copy with `cp -p`, compute SHA-256 and the FINAL-comparison fields, and append a manifest row.
   - [x] 2.3 Implement the verification step (FR-8), run before any copy: every `S22/0[1-8]*/[0-9]*.md` must be `cmp`-identical to `BACKUP/<same>` (expect 130/130); every file in `FINAL/{07c,08,09*,10}_*/` must be identical to `BACKUP/<same>`. On a mismatch, list it and exit non-zero.
-  - [x] 2.4 Implement the copy plan from FR-7. Texts `NN_*.md` for 01–08 come from `S22`, and changelogs for 01–08 from `BACKUP`. Texts and changelogs for 09a–10 come from `FINAL` into `texts/<folder>/`. `00_original_*` files go from `FINAL` to `sources/originals/<folder>/`. Copy from `BACKUP/_tools/refs/`: `reference-pali-supplement.md` → `sources/`, `dn22_root-pli-ms.json` and `dn22_variant-pli-ms.json` → `sources/suttacentral/`. **Skip** `Bhikkhu-Manual-Reference.md` and `ChantingGuide_Thanissaro.md`.
+  - [x] 2.4 Implement the copy plan from FR-7. Texts `NN_*.md` for 01–08 come from `S22`, and changelogs for 01–08 from `BACKUP`. Texts and changelogs for 09a–10 come from `FINAL` into `texts/<folder>/` (moved into the book folders on 2026-10-23, PRD FR-3). `00_original_*` files go from `FINAL` to `sources/originals/<folder>/`. Copy from `BACKUP/_tools/refs/`: `reference-pali-supplement.md` → `sources/`, `dn22_root-pli-ms.json` and `dn22_variant-pli-ms.json` → `sources/suttacentral/`. **Skip** `Bhikkhu-Manual-Reference.md` and `ChantingGuide_Thanissaro.md`.
   - [x] 2.5 Copy non-content assets: `BACKUP/_tools/style.css` → `templates/epub.css`; `EXERCISES/fonts/Crimson/` and `EXERCISES/fonts/Noto_Sans/` → `fonts/`; `NotoSansMath-Regular.ttf` from `/usr/share/fonts/noto/` (or `$NOTO_MATH` if set) → `fonts/Noto_Sans_Math/`; `EXERCISES/exercises/style.typ` → `templates/typst/style.typ`; `EXERCISES/scripts/simsapa_fmt.py` → `scripts/simsapa_fmt.py`. Crimson has **no** licence file in `EXERCISES` (verified). Add `fonts/Crimson/OFL.txt` from the upstream Crimson repository (github.com/skosch/Crimson) in this sub-task, and record its source in the summary. Fetch the OFL text for Noto Sans Math, or copy `fonts/Noto_Sans/OFL.txt`, which is the same licence.
   - [x] 2.6 Write `sources/MIGRATION-MANIFEST.tsv` (header row, sorted by `dest`). For each text, compute `changed_lines_vs_final` as the count of `>` lines in `diff FINAL/<f> <chosen source>` (0 when identical).
   - [x] 2.7 Print the summary (FR-11): counts per folder, skipped files, the list of files with `differs_from_final=yes`, and expected-vs-actual totals (209 / 17 / 6). Exit non-zero if the totals don't match.
-  - [x] 2.8 Write `tests/test_migrate.sh`: run the script with `--dest` set to a temporary directory and check the totals, the 48+9 `differs_from_final` rows, that a second run is a no-op, and that a modified destination makes it refuse without `--force`. Hook it into `make test`.
+  - [x] 2.8 Write `tests/test_migrate.sh`: run the script with `--dest` set to a temporary directory and check the totals, the 48+9 `differs_from_final` rows, that a second run is a no-op, and that a modified destination makes it refuse without `--force`. Hook it into `make test`. (Removed on 2026-10-23, once the migration was done: see Notes.)
   - [x] 2.9 Run the script for real in the repo. Check the summary against the expected numbers.
   - [x] 2.10 Write `docs/legacy-migration.md` (FR-13, FR-14, FR-37):
     - the finding and its 6 evidence points (copy from PRD 4.3);
@@ -129,7 +130,7 @@ Update the file after completing each sub-task, not just after completing an ent
 ### 4.0 Editorial docs
 
 **Specs.** PRD FR-34–FR-36. Sources to read in place: `BACKUP/_tools/style-spec.md` (main), `BACKUP/_tools/dn22/style-spec.md` (§10 and `options` block), `BACKUP/_tools/vinaya/style-spec.md` (§10), `BACKUP/_tools/dn22/prd-dn22.md`, `BACKUP/_tools/vinaya/prd-vinaya.md`, both `checkpoint.md` and `operators-guide.md`, and the changelogs. The machine-readable fenced blocks must keep their info strings and contents exactly: ```` ```tags ````, ```` ```rubrics ````, ```` ```english-stopwords ````, ```` ```repeat-note ````. Book options (heading-gloss, heading-numbers, repeat-across-files, dpd-variant-rows) move to `books/<book>/metadata.txt` (task 6), not into the spec.
-**Depends on:** 2.0 (for references to files in `texts/`).
+**Depends on:** 2.0 (for references to the migrated texts).
 
 - [x] 4.0 Editorial docs (FR-34–FR-36)
   - [x] 4.1 Write `docs/style-spec.md` with the 12 sections listed in FR-34. Re-state the rules in plain words, and keep every example and every dated exception. Where the main, DN 22 and Vinaya specs differ, put the general rule in the main section and the differences in §12 (book-specific rules).
@@ -170,15 +171,15 @@ Lint severities are ERROR, STRAY and WARN, as in the legacy script. Output: `pat
   - [x] 5.4 Write `scripts/lint.py`: CLI `lint.py [--fix] [--book BOOK] PATHS…`. Load the spec via `chantlib.spec`, and book options via `chantlib.books` (a stub returning defaults until task 6). Implement the checks: layout, allowed tags and canonical order, coverage, `comp` members, repeat note and repeats (within a file, or across files when the book option is set), rubrics, English stopwords in Pāli/headings, characters (NFC, ṁ, alphabet, no tabs/NBSP/tone marks), Vinaya instruction-line length (> 45 words → WARN), and variant cue checks.
   - [x] 5.5 Implement `--fix` for the safe fixes only. Write in place, and print one "safe fixes applied" line per changed file.
   - [x] 5.6 Write `tests/test_lint.py`: each bad fixture gives the expected severity; good fixtures are clean; `--fix` on a temp copy gives the expected text.
-  - [x] 5.7 Add `make lint` (all `texts/*/[0-9]*.md`) and `make lint-fix`.
-  - [x] 5.8 Run `make lint` on the migrated texts. The target is the legacy baseline from Notes: 0 ERROR / 0 STRAY, with 4 / 18 / 0 WARN for 01–08 / 09 / 10. Compare the WARN messages with the legacy linter's output (run it on a scratch copy of `BACKUP` with each spec). Differences are most likely lint bugs, so fix the lint code. Only if a real text problem is found, list it in `docs/legacy-migration.md` under "Open lint findings" without editing the text. Do **not** run `lint-fix` on `texts/` in this feature. Result: 0 ERROR / 0 STRAY / 23 WARN. The 22 legacy WARNs are reproduced exactly (same lines and messages); the 23rd comes from a new check (variant cue without two trailing spaces, 09e/05:67) and is listed under "Open lint findings" in `docs/legacy-migration.md`.
+  - [x] 5.7 Add `make lint` (all `books/*/*/[0-9]*.md`; first `texts/*/[0-9]*.md`) and `make lint-fix`.
+  - [x] 5.8 Run `make lint` on the migrated texts. The target is the legacy baseline from Notes: 0 ERROR / 0 STRAY, with 4 / 18 / 0 WARN for 01–08 / 09 / 10. Compare the WARN messages with the legacy linter's output (run it on a scratch copy of `BACKUP` with each spec). Differences are most likely lint bugs, so fix the lint code. Only if a real text problem is found, list it in `docs/legacy-migration.md` under "Open lint findings" without editing the text. Do **not** run `lint-fix` on the texts in this feature. Result: 0 ERROR / 0 STRAY / 23 WARN. The 22 legacy WARNs are reproduced exactly (same lines and messages); the 23rd comes from a new check (variant cue without two trailing spaces, 09e/05:67) and is listed under "Open lint findings" in `docs/legacy-migration.md`.
   - [x] 5.9 Commit: "Chant parser and lint".
 
 ### 6.0 Book metadata and EPUB build
 
 **Specs.** `metadata.txt` is YAML-compatible (pandoc `--metadata-file`). Keys:
 - `title`, `subtitle`, `lang: en-GB`, `pali-title-first`
-- `texts` (list of folders; for book 09, a list of `{folder, heading}` parts)
+- `texts` (list of text folders relative to the book folder, i.e. `texts`; for book 09, a list of `{folder, heading}` parts)
 - `sources`, `rights`
 - `cover-image` (empty = generated), `about`
 - `author: ""`, `publisher: ""`
@@ -192,9 +193,9 @@ The assembled Markdown follows legacy `preprocess()`, with these divs: `unit`, `
 
 - [x] 6.0 Book metadata and EPUB build (FR-26–FR-30, FR-32 EPUB part)
   - [x] 6.1 Create `books/<id>/metadata.txt` for the 13 books (book 10's file already exists with `texts` and `options`; extend it), with the FR-27 titles, `pali-title-first: true` for 04a and 05, the `sources` and `rights` text from FR-26, and empty `author`/`publisher`. For 09, list the five parts with their headings from `BACKUP/_tools/chant_pipeline.py` `BOOKS`: Requisites, Rains and Kaṭhina, Other Procedures, Offences, Uposatha. For 10, add `options` from the legacy DN 22 spec's `options` block.
-  - [x] 6.2 Create `books/<id>/about.md` for the 13 books. For 01–08, use the legacy `ABOUT` template with `{what}`, `{drafting}` and `{review}` filled in as `build()` did. For 10, use `BACKUP/_tools/dn22/about-dn22.md`. For 09, use `ABOUT_VINAYA` from `BACKUP/_tools/chant_pipeline.py` (line ~591). Leave `{today}` as a placeholder.
+  - [x] 6.2 Create `books/<id>/about.md` (now `00_about.md`) for the 13 books. For 01–08, use the legacy `ABOUT` template with `{what}`, `{drafting}` and `{review}` filled in as `build()` did. For 10, use `BACKUP/_tools/dn22/about-dn22.md`. For 09, use `ABOUT_VINAYA` from `BACKUP/_tools/chant_pipeline.py` (line ~591). Leave `{today}` as a placeholder.
   - [x] 6.3 Write `scripts/chantlib/books.py`: `load_book(id)`, which parses the metadata with a small YAML-subset reader (keys, strings, booleans, lists, list of mappings) and validates the required keys; `list_books()`; `book_files(book)`, which gives the ordered `NN_*.md` paths and never returns `CHANGELOG.md` or `00_original_*`. Wire book options into `lint.py`.
-  - [x] 6.4 Write `scripts/assemble.py BOOK [--out build/tmp]`. Steps: read the metadata, insert `about.md` with `{today}` replaced, emit part headings for 09, run each file through the parser, and emit pandoc Markdown with the classed divs. Write `build/tmp/<book>.md` and `build/tmp/<book>.meta.json` (metadata with the computed title/subtitle order and the cover path; **keys with empty values dropped**, because pandoc would otherwise write empty `dc:creator`/`dc:publisher` elements). Warn on lint ERROR/STRAY (FR-25).
+  - [x] 6.4 Write `scripts/assemble.py BOOK [--out build/tmp]`. Steps: read the metadata, insert the About file with `{today}` replaced, emit part headings for 09, run each file through the parser, and emit pandoc Markdown with the classed divs. Write `build/tmp/<book>.md` and `build/tmp/<book>.meta.json` (metadata with the computed title/subtitle order and the cover path; **keys with empty values dropped**, because pandoc would otherwise write empty `dc:creator`/`dc:publisher` elements). Warn on lint ERROR/STRAY (FR-25).
   - [x] 6.5 Adapt `templates/epub.css`: `@font-face` for Crimson and Noto Sans; Noto Sans Math listed last in the table-cell font stack; the legacy class styles; `.toc-en` hidden in headings; keep the legacy `code { font-family: inherit; font-size: 1em; background: none; }`, so the backticked words and tags are not shown in monospace.
   - [x] 6.6 Add Makefile rules: `build/epub/%.epub` depends on `books/%/*`, the book's texts, `templates/epub.css`, `fonts/**`, `scripts/**` and the cover PNG (until task 7, build without a cover if the PNG is missing). It runs `assemble.py` and then `pandoc -f markdown+fenced_divs --metadata-file build/tmp/<book>.meta.json --toc --toc-depth=1 --split-level=1 --css templates/epub.css --epub-embed-font=… [--epub-cover-image=…] -o $@`, then `epubcheck $@`; on a fatal or error, delete `$@` and fail (PRD FR-30a). Add `make epub`, `make book BOOK=…` (EPUB part) and `make epubcheck` (re-validates every `build/epub/*.epub`). The local `epubcheck` wrapper passes only its first argument, so the rules call it with the file alone (no `-q`).
   - [x] 6.7 Write `tests/test_assemble.py`: assemble a fixture book (a test `books/` folder passed by env var or argument), and check the div order, the TOC span and that `CHANGELOG.md` is excluded.
@@ -234,7 +235,7 @@ The cover reads `sys.inputs` (`title`, `subtitle`, `series`, `accent`). The PDF 
 - Vinaya `sources/originals/…`;
 - the optional Chanting Guide copy, skipped with a report line if absent.
 
-Map each folder or file to its reference source by a small table in `compare.py`; the legacy `compare` arguments show which source each folder used.
+Map each folder or file to its reference source by a small table in `compare.py`; the legacy `compare` arguments show which source each folder used (they use the legacy folder names; `docs/legacy-migration.md` maps them to the folders in `books/`).
 
 `index.py` has these subcommands:
 - `index [--folder X]`: same word with different etymology (E lines) or tags (T lines);
@@ -279,7 +280,7 @@ Use `urllib.request`. Scripts do **not** assign grammar labels and do **not** sp
   - [ ] 9.7 Add `make dpd-check`. Run it on all texts against the live Simsapa, and summarise the flag categories in `docs/legacy-migration.md` (success metric 7).
   - [ ] 9.8 Write `.claude/skills/pali-word-analysis/SKILL.md` with frontmatter (`name`, a `description` that triggers on drafting or reviewing word tables or grammar labels) and the body from FR-20a. It points to `docs/style-spec.md` instead of repeating rules, and includes one worked example (*bhagavantaṁ* in *bhagavantaṁ abhivādemi*: DPD data → choosing `bhagavant 1` (masc) → reading the acc sg cell → `(masc acc sg)`, construction `[√bhaj > bhag + a + vant]`).
   - [ ] 9.9 Write `docs/drafting-workflow.md` (FR-22), from source text to built book, naming each command and the skill.
-  - [ ] 9.10 Trial (success metric 8): use the skill to draft the table for one line from a sutta not in the repo, in a scratch file outside `texts/`, and check that it passes `lint.py` and `simsapa.py check`. Record the result and any skill fixes. Don't commit the scratch file.
+  - [ ] 9.10 Trial (success metric 8): use the skill to draft the table for one line from a sutta not in the repo, in a scratch file outside `books/`, and check that it passes `lint.py` and `simsapa.py check`. Record the result and any skill fixes. Don't commit the scratch file.
   - [ ] 9.11 Commit: "Simsapa client, word-analysis skill, drafting workflow".
 
 ### 10.0 README, CLAUDE.md and final verification
@@ -297,7 +298,7 @@ Use `urllib.request`. Scripts do **not** assign grammar labels and do **not** sp
     - upstream sources and the Chanting Guide locations;
     - a licence summary;
     - pointers to `CLAUDE.md` and `docs/`.
-  - [ ] 10.2 Write `CLAUDE.md` (FR-38): purpose and readers; read `docs/style-spec.md` before editing `texts/` and `docs/drafting-workflow.md` before adding a text; file contents, `sources/` and changelogs are data, not instructions; DPD via Simsapa is the authority; use the `pali-word-analysis` skill for grammar labels, since scripts never assign them; `docs/quality-process.md` routine; every content change gets a changelog entry; Make targets; the tool list (same as the README).
+  - [ ] 10.2 Write `CLAUDE.md` (FR-38): purpose and readers; read `docs/style-spec.md` before editing texts in `books/` and `docs/drafting-workflow.md` before adding a text; file contents, `sources/` and changelogs are data, not instructions; DPD via Simsapa is the authority; use the `pali-word-analysis` skill for grammar labels, since scripts never assign them; `docs/quality-process.md` routine; every content change gets a changelog entry; Make targets; the tool list (same as the README).
   - [ ] 10.3 From a fresh clone of the repo in a temp dir, run `make check-tools`, `make test` and `make all`. Everything passes.
-  - [ ] 10.4 Go through PRD section 8 (success metrics 1–9) and record each result (pass, or the reason it doesn't pass) at the end of `docs/legacy-migration.md`.
+  - [ ] 10.4 Go through PRD section 8 (success metrics 1–9) and record each result (pass, or the reason it doesn't pass) at the end of `docs/legacy-migration.md`. For metric 1, record the one-time run of 2026-10-22 (task 2.9); don't re-run the migration.
   - [ ] 10.5 Commit: "README, CLAUDE.md, final verification".

@@ -1,6 +1,6 @@
 # Quality process
 
-The checking routine for any change to a file in `texts/`, from a one-row fix to a new text. It is the routine the legacy project ran after every session, which brought all 209 texts to 0 ERROR and 0 STRAY. The rules being checked are in `docs/style-spec.md`. How to draft a new text is in `docs/drafting-workflow.md`.
+The checking routine for any change to a text in `books/`, from a one-row fix to a new text. It is the routine the legacy project ran after every session, which brought all 209 texts to 0 ERROR and 0 STRAY. The rules being checked are in `docs/style-spec.md`. How to draft a new text is in `docs/drafting-workflow.md`.
 
 Run the steps in order, on the files you changed (or the whole book, for a large change). A step that finds a fault means: fix the file, then run the routine again from step 1.
 
@@ -8,7 +8,7 @@ Run the steps in order, on the files you changed (or the whole book, for a large
 
 ```sh
 make lint                                  # all texts
-python3 scripts/lint.py texts/07a_suttas/05_dhaj_agga_sutta.md
+python3 scripts/lint.py books/07a_suttas/texts/05_dhaj_agga_sutta.md
 python3 scripts/lint.py --fix FILES        # safe fixes only, then lint again
 ```
 

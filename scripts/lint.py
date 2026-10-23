@@ -3,11 +3,11 @@
 
 Usage: lint.py [--fix] [--book BOOK] PATH...
 
-A PATH is a chant file or a texts/ folder (its NN_*.md files; never
-CHANGELOG.md). The allowed tags, rubrics, English stopwords and the repeat
+A PATH is a chant file, a text folder such as books/<book>/texts/ (its
+NN_*.md files; never CHANGELOG.md), or a book folder (all its text folders). The allowed tags, rubrics, English stopwords and the repeat
 note are read from the fenced blocks in docs/style-spec.md. Book options
 (style spec §12.2) come from books/<book>/metadata.txt: from --book, or else
-from the book whose `texts` lists the file's folder.
+from the book whose folder holds the file.
 
 Output: `path:line: SEVERITY message`, then a total. Severities:
 ERROR (breaks a rule), STRAY (text outside the allowed structure), WARN (to
@@ -73,11 +73,12 @@ MAX_INSTRUCTION_WORDS = 45
 def text_files(paths):
     out = []
     for p in map(Path, paths):
-        if p.is_dir():
-            out += sorted(
-                f for f in p.glob("[0-9]*.md")
-                if not f.name.startswith("00_original_")
-            )
+        if (p / "metadata.txt").is_file():
+            d = p.resolve()
+            book = books.load_book(d.name, d.parent)
+            out += [f for _, fs in books.book_files(book) for f in fs]
+        elif p.is_dir():
+            out += books.folder_files(p)
         else:
             out.append(p)
     return out

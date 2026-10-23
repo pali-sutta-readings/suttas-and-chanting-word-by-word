@@ -6,7 +6,8 @@ EPUBCHECK ?= epubcheck
 TYPST ?= typst
 
 BOOKS := $(notdir $(wildcard books/*))
-TEXTS := $(wildcard texts/*/[0-9]*.md)
+# Text files: books/<book>/texts/NN_*.md, or books/<book>/NN_<part>/NN_*.md.
+TEXTS := $(wildcard books/*/*/[0-9]*.md)
 # Everything the assembled Markdown depends on besides the book's own files.
 BUILD_SCRIPTS := $(wildcard scripts/*.py scripts/chantlib/*.py) docs/style-spec.md
 # Fonts embedded in each EPUB; templates/epub.css has their @font-face rules.
@@ -43,7 +44,6 @@ check-tools:
 
 test:
 	$(PYTHON) -m unittest discover -s tests
-	tests/test_migrate.sh
 
 fetch-sources:
 	@scripts/fetch-sources.sh
@@ -106,7 +106,10 @@ build/covers/%.png: build/covers/%.json templates/typst/cover.typ templates/typs
 
 # The assembled Markdown names the cover PNG for the EPUB, so the PNG is
 # made first (order-only: a new PNG rebuilds the EPUB, not the Markdown).
-build/tmp/%.md: $$(wildcard books/$$*/*) $(BUILD_SCRIPTS) | build/covers/%.png
+# books/<book>/*.* are the book's own files (metadata, About, a cover
+# override); the text folders have no dot, and their files come from the
+# deps file.
+build/tmp/%.md: $$(wildcard books/$$*/*.*) $(BUILD_SCRIPTS) | build/covers/%.png
 	$(PYTHON) scripts/assemble.py $*
 
 # A fatal or error from epubcheck removes the EPUB, so make does not take

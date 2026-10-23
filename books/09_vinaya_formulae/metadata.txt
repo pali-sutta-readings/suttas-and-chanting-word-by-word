@@ -4,21 +4,21 @@ lang: en-GB
 pali-title-first: false
 series-line: "Pāli with word-by-word English"
 texts:
-  - folder: 09a_vinaya_notes_requisites
+  - folder: 01_vinaya_notes_requisites
     heading: "Requisites"
-  - folder: 09b_vinaya_notes_rains_and_kathina
+  - folder: 02_vinaya_notes_rains_and_kathina
     heading: "Rains and Kaṭhina"
-  - folder: 09c_vinaya_notes_other_procedures
+  - folder: 03_vinaya_notes_other_procedures
     heading: "Other Procedures"
-  - folder: 09d_vinaya_notes_offences
+  - folder: 04_vinaya_notes_offences
     heading: "Offences"
-  - folder: 09e_vinaya_notes_uposatha
+  - folder: 05_vinaya_notes_uposatha
     heading: "Uposatha"
 sources:
   - "Bhikkhu Manual, Reference Edition (Amaravati Publications, 2020), CC BY-NC-ND 4.0"
   - "Digital Pāḷi Dictionary (dpdict.net), as reference for roots and analysis"
 rights: "English renderings CC BY-NC 4.0; Pāli text under the licences of its sources. Free distribution only."
 cover-image: ""
-about: about.md
+about: 00_about.md
 author: ""
 publisher: ""

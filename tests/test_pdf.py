@@ -32,7 +32,7 @@ sources:
   - "Source One"
 rights: "Free distribution only."
 cover-image: ""
-about: about.md
+about: 00_about.md
 author: ""
 publisher: ""
 """
@@ -46,13 +46,12 @@ class PdfTest(unittest.TestCase):
         # A scratch typst root with the templates, the cover data and the
         # assembled book at the paths that book.typst expects.
         cls.tmp = Path(tempfile.mkdtemp())
-        texts, bks = cls.tmp / "texts", cls.tmp / "books"
+        bks = cls.tmp / "books"
         for folder, fixture in (("01_one", "good.md"), ("02_two", "good-vinaya.md")):
-            (texts / folder).mkdir(parents=True)
-            shutil.copy(FIXTURES / fixture, texts / folder / "01_text.md")
-        (bks / "test").mkdir(parents=True)
+            (bks / "test" / folder).mkdir(parents=True)
+            shutil.copy(FIXTURES / fixture, bks / "test" / folder / "01_text.md")
         (bks / "test" / "metadata.txt").write_text(METADATA)
-        (bks / "test" / "about.md").write_text(
+        (bks / "test" / "00_about.md").write_text(
             "# About This Book {.unnumbered}\n\n## Licence {.unnumbered .unlisted}\n\n*Built {today}.*\n")
         shutil.copytree(ROOT / "templates", cls.tmp / "templates")
         covers = cls.tmp / "build" / "covers"
@@ -60,7 +59,7 @@ class PdfTest(unittest.TestCase):
         (covers / "test.json").write_text(json.dumps(
             assemble.cover_data(books.load_book("test", bks)), ensure_ascii=False))
         out = cls.tmp / "build" / "tmp"
-        assemble.assemble("test", out, bks, texts, covers, today="2026-01-02")
+        assemble.assemble("test", out, bks, covers, today="2026-01-02")
         cls.typ = out / "test.typ"
         subprocess.run(
             ["pandoc", "--defaults", str(out / "test.pandoc.json"), "-t", "typst",

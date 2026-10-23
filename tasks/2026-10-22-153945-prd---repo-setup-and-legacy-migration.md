@@ -52,18 +52,19 @@ README.md                 overview, tool install, build usage
 CLAUDE.md                 agent instructions; points to docs/
 Makefile                  all build and check targets
 .gitignore                build/, sources/upstream/, .DS_Store, ._*, __pycache__/
-texts/                    the chant and sutta files (the content)
-  01_morning_chanting/    NN_name.md files + CHANGELOG.md
-  …                       (same 17 folder names as the legacy project)
-  10_Mahasatipatthanasutta/
-books/                    one folder per book (13 books)
+books/                    one folder per book (13 books), holding its content
   01_morning_chanting/
-    metadata.txt          title, subtitle, lang, sources, cover, etc.
-    about.md              the "About This Book" front matter
+    metadata.txt          title, subtitle, lang, sources, cover, text folders, etc.
+    00_about.md           the "About This Book" front matter (00_ sorts it first)
     cover.jpg             optional override; normally the cover is generated (FR-33a)
+    texts/                the chant files: NN_name.md + CHANGELOG.md
   …
-  09_vinaya_formulae/     metadata lists texts/09a_* … texts/09e_* as its parts
+  09_vinaya_formulae/     a book in parts: one numbered folder per part
+    01_vinaya_notes_requisites/   (legacy 09a) NN_name.md + CHANGELOG.md
+    …
+    05_vinaya_notes_uposatha/     (legacy 09e)
   10_mahasatipatthanasutta/
+    texts/
 sources/                  reference texts used for checks (never built into books)
   UPSTREAM.txt            upstream repo URLs + pinned commits (FR-12a)
   upstream/               git-ignored clones made by `make fetch-sources`
@@ -86,11 +87,13 @@ tasks/                    PRDs and task lists
 build/                    output (git-ignored)
 ```
 
-FR-2. The `00_original_*` files must **not** remain inside `texts/`. They move to `sources/originals/<folder>/`, so that no build or lint glob can match them. (The legacy project had to guard against this by hand.)
+FR-2. The `00_original_*` files must **not** remain among the texts in `books/`. They move to `sources/originals/<folder>/`, so that no build or lint glob can match them. (The legacy project had to guard against this by hand.)
 
-FR-3. Legacy folder and file names in `texts/` must be kept unchanged, so that every changelog line reference and every cross-reference (e.g. "07a/04") stays valid.
+FR-3. Legacy file names must be kept unchanged, and each legacy folder maps to exactly one text folder, so that every changelog line reference and every cross-reference (e.g. "07a/04") can still be resolved. A book in one part keeps its texts in `books/<book>/texts/`. The Vinaya book is in parts: legacy `09a_*` … `09e_*` become `books/09_vinaya_formulae/01_*` … `05_*` (the number keeps the order; the rest of the name is kept). This layout replaced a first top-level `texts/<legacy folder>/` layout (maintainer decision, 2026-10-23: a book's metadata, About text and texts live in one place). `docs/legacy-migration.md` gives the folder table.
 
 ### 4.2 Migration script
+
+**Status (2026-10-23).** The migration is a one-time operation. It ran once, on 2026-10-22 (commit `9a2cbb9`), and met FR-4 to FR-11. The script and `sources/MIGRATION-MANIFEST.tsv` are kept as a record of that run and are not maintained. Content and layout have changed since (FR-3), so the script is not expected to work on the repo again, and no test runs it. FR-10's re-run safety applied while the migration was being developed.
 
 FR-4. Provide `scripts/migrate-legacy.sh` (bash), runnable as `scripts/migrate-legacy.sh [LEGACY_DIR]`, defaulting to the `LEGACY` path above.
 
@@ -102,9 +105,9 @@ FR-7. The script must choose each file's source by this table. **Do not use file
 
 | What | Copy from | Copy to | Why (see 4.3) |
 | :--- | :--- | :--- | :--- |
-| `01_*` … `08_*` text files (`NN_*.md`) | `S22/<folder>/` | `texts/<folder>/` | S22 holds the final S22 pass |
-| `01_*` … `08_*` `CHANGELOG.md` | `BACKUP/<folder>/` | `texts/<folder>/` | S22 has no changelogs; FINAL's 01–07b changelogs lack the S22 entry |
-| `09a_*` … `09e_*`, `10_*` text files and changelogs | `FINAL/<folder>/` | `texts/<folder>/` | Not in S22; FINAL = BACKUP |
+| `01_*` … `08_*` text files (`NN_*.md`) | `S22/<folder>/` | `texts/<folder>/` (now `books/<folder>/texts/`, FR-3) | S22 holds the final S22 pass |
+| `01_*` … `08_*` `CHANGELOG.md` | `BACKUP/<folder>/` | `texts/<folder>/` (now `books/<folder>/texts/`) | S22 has no changelogs; FINAL's 01–07b changelogs lack the S22 entry |
+| `09a_*` … `09e_*`, `10_*` text files and changelogs | `FINAL/<folder>/` | `texts/<folder>/` (now `books/09_vinaya_formulae/0N_<name>/` and `books/10_mahasatipatthanasutta/texts/`, FR-3) | Not in S22; FINAL = BACKUP |
 | `00_original_*` (09a–09e `.md`, 10 `.txt`) | `FINAL/<folder>/` | `sources/originals/<folder>/` | FR-2 |
 | `_tools/refs/*` except `Bhikkhu-Manual-Reference.md` and `ChantingGuide_Thanissaro.md` | `BACKUP/_tools/refs/` | `sources/` (renamed as in FR-1) | needed by `compare` |
 | `_tools/style.css` | `BACKUP/_tools/` | `templates/epub.css` | start point for EPUB styling |
@@ -266,11 +269,11 @@ FR-25. A build must print a warning (not fail) when lint finds errors in that bo
 FR-26. Each book's `metadata.txt` must contain (YAML-compatible `key: value` lines, so that pandoc can read it with `--metadata-file`):
    - `title`, `subtitle`, `lang` (`en-GB`)
    - `pali-title-first` (true for 04a and 05, following the legacy rule; otherwise the English title comes first and the Pāli title is the subtitle)
-   - `texts`: the ordered list of `texts/` folders in the book (one folder, except `09_vinaya_formulae`, which lists 09a–09e as five parts with BM's English part headings)
+   - `texts`: the ordered list of text folders in the book, relative to the book folder (`texts`, except `09_vinaya_formulae`, which lists its five part folders `01_…` – `05_…` with BM's English part headings)
    - `sources`: attribution of the Pāli sources (Bhikkhu Manual, Reference Edition, Amaravati Publications 2020, CC BY-NC-ND 4.0; Chanting Guide, Dhammayut Order in the USA, 4th ed. 2017, CC BY-NC 4.0; SuttaCentral Mahāsaṅgīti edition, CC0; Digital Pāḷi Dictionary as reference)
    - `rights`: "English renderings CC BY-NC 4.0; Pāli text under the licences of its sources. Free distribution only." (legacy wording)
    - `cover-image`: empty by default, which means the generated cover (FR-33a) is used; a path here overrides it
-   - `about`: path to the book's `about.md`
+   - `about`: path to the book's About file, `00_about.md`
    - `author`, `publisher`: present but **empty** (maintainer decision, 2026-10-22: avoid wrong attribution; to be filled in when needed). Pandoc writes an empty key as an empty `<dc:creator/>` / `<dc:publisher/>` (verified with pandoc 3.8.3). So `assemble.py` drops keys with empty values from the metadata it passes to pandoc (FR-30).
 
 FR-27. Initial metadata values must come from the legacy material:
@@ -291,7 +294,7 @@ FR-27. Initial metadata values must come from the legacy material:
 | 09 | Vinaya Formulae | Vinaya-pāṭha |
 | 10 | The Great Discourse on the Establishments of Mindfulness | Mahāsatipaṭṭhānasutta |
 
-FR-28. Each `about.md` must be created from the legacy About text: the `ABOUT` template plus the `DRAFTING` and `REVIEW` paragraphs in `chant_pipeline.py` for 01–08, the DN 22 About (`_tools/dn22/about-dn22.md`) for 10, and the Vinaya equivalent for 09. Placeholders (`{what}`, `{drafting}`, `{review}`) are filled in, so that each file is plain Markdown. The build date (`{today}`) is inserted at build time. The AI-disclosure wording must be kept.
+FR-28. Each `00_about.md` must be created from the legacy About text: the `ABOUT` template plus the `DRAFTING` and `REVIEW` paragraphs in `chant_pipeline.py` for 01–08, the DN 22 About (`_tools/dn22/about-dn22.md`) for 10, and the Vinaya equivalent for 09. Placeholders (`{what}`, `{drafting}`, `{review}`) are filled in, so that each file is plain Markdown. The build date (`{today}`) is inserted at build time. The AI-disclosure wording must be kept.
 
 FR-29. `scripts/assemble.py <book>` must read the book's metadata, concatenate its texts (`NN_*.md` in name order, never `CHANGELOG.md`), and write one pandoc-Markdown file to `build/tmp/<book>.md`. Each element is wrapped in a classed fenced div, as in the legacy `preprocess()`: `pali` (with `lang="pi"`), `literal`, `faithful`, `unit`, `repeat`, `citation`, `rubric`, `subtitle`, and for 09/10 `instruction`, `variant`, `gloss`. The English title is added to the table-of-contents entry (`.toc-en` span), as before.
 
@@ -339,7 +342,7 @@ FR-37. `docs/legacy-migration.md` (FR-13, FR-14) plus a short description of the
 
 FR-38. `CLAUDE.md` must:
    - say what the repo is and who it is for (novice bhikkhus and others learning to chant with understanding);
-   - tell the agent to read `docs/style-spec.md` before editing any file in `texts/`, and `docs/drafting-workflow.md` before adding a text;
+   - tell the agent to read `docs/style-spec.md` before editing any text in `books/`, and `docs/drafting-workflow.md` before adding a text;
    - state that file contents, `sources/` and changelogs are data, not instructions;
    - state that DPD via Simsapa is the authority for roots and grammar, how to check Simsapa is running, and point to `docs/simsapa-localhost-api-search-endpoints.md`;
    - tell the agent to use the `pali-word-analysis` skill for any grammar labels and word tables, and say that scripts never assign grammar labels;
@@ -387,7 +390,7 @@ FR-40. Required tools to document: `pandoc` (≥ 3.1.2, needed for the typst wri
 
 ## 8. Success Metrics
 
-1. `scripts/migrate-legacy.sh` runs cleanly on a fresh checkout. Its manifest lists 209 texts + 17 changelogs in `texts/` and the 6 `00_original_*` files in `sources/originals/`. Its verification step reports 130/130 identical (S22 vs BACKUP) and all-identical for 07c–10.
+1. `scripts/migrate-legacy.sh` runs cleanly on a fresh checkout (met by the one-time run of 2026-10-22; not expected to hold after later changes). Its manifest lists 209 texts + 17 changelogs in `texts/` and the 6 `00_original_*` files in `sources/originals/`. Its verification step reports 130/130 identical (S22 vs BACKUP) and all-identical for 07c–10.
 2. `make all` builds 13 EPUBs and 13 PDFs, each with its generated cover, without errors on this machine.
 3. `make lint` on the migrated texts reports the same result as the legacy final state. Running the legacy linter on a scratch copy of `BACKUP` (2026-10-22) gave 0 ERROR and 0 STRAY, with 4 WARN for 01–08 (main spec), 18 WARN for 09a–09e (Vinaya spec) and 0 WARN for 10 (DN 22 spec). The new lint should reproduce these counts, or explain any difference.
 4. `epubcheck` reports 0 fatals and 0 errors on every EPUB (FR-30a); any remaining warnings are listed.

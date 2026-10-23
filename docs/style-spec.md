@@ -1,6 +1,6 @@
 # Style Specification
 
-This is the rulebook for every text in `texts/`. When a file breaks a rule here, the file is corrected, not the rule. If a rule seems wrong for a particular text, keep the file as it is, note the case, and ask the maintainer. The maintainer's dated decisions, and where they were made, are listed in `docs/decisions.md`.
+This is the rulebook for every text in `books/` (the `NN_name.md` files in each book's `texts/` folder, or in its part folders). When a file breaks a rule here, the file is corrected, not the rule. If a rule seems wrong for a particular text, keep the file as it is, note the case, and ask the maintainer. The maintainer's dated decisions, and where they were made, are listed in `docs/decisions.md`.
 
 Sections 1–11 apply to every book. Section 12 gives the rules that differ for the Vinaya formulae (09a–09e) and for the *Mahāsatipaṭṭhānasutta* (10).
 
@@ -35,7 +35,8 @@ Every text file has exactly this shape. Nothing else may appear in the file.
 - The **Literal:** and **Faithful:** lines each end with two spaces, so that they print on separate lines.
 - The citation line goes directly under the last unit of the passage it covers.
 - No `---` separator lines between units. `lint.py --fix` removes them (2026-10-01).
-- File names are `NN_name.md`, numbered in book order. Each folder also has a `CHANGELOG.md` (§11), which is never built into a book. The untouched source texts (`00_original_*`) live in `sources/originals/`, never in `texts/`.
+- File names are `NN_name.md`, numbered in book order. They live in `books/<book>/texts/`, or, for a book in parts (09), in `books/<book>/NN_<part>/`. Each text folder also has a `CHANGELOG.md` (§11), which is never built into a book. The untouched source texts (`00_original_*`) live in `sources/originals/`, never in `books/`.
+- A text is cited by its legacy short ID, *folder/file number*: 07a/04 is `books/07a_suttas/texts/04_*.md`. For the Vinaya book, 09a–09e are its parts 01–05: 09c/06 is `books/09_vinaya_formulae/03_vinaya_notes_other_procedures/06_*.md`. The changelogs use these IDs, so they are kept for new entries too.
 
 A *unit* is one Pāli line with its Literal and Faithful lines and its word table (or repeat note, §8).
 
@@ -317,7 +318,7 @@ all
 
 ## 11. The changelog
 
-One `CHANGELOG.md` per folder in `texts/`. It is never built into a book. Every change to a text gets an entry. Newest entry at the top:
+One `CHANGELOG.md` per text folder (`books/<book>/texts/`, or each part folder of a book in parts). It is never built into a book. Every change to a text gets an entry. Newest entry at the top:
 
 ```text
 ## 2026-10-02 — session 3 (05_anumodanas)

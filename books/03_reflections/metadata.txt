@@ -4,7 +4,7 @@ lang: en-GB
 pali-title-first: false
 series-line: "Pāli with word-by-word English"
 texts:
-  - 03_reflections
+  - texts
 sources:
   - "Bhikkhu Manual, Reference Edition (Amaravati Publications, 2020), CC BY-NC-ND 4.0"
   - "Chanting Guide (Dhammayut Order in the USA, 4th edition, 2017), CC BY-NC 4.0"
@@ -12,6 +12,6 @@ sources:
   - "Digital Pāḷi Dictionary (dpdict.net), as reference for roots and analysis"
 rights: "English renderings CC BY-NC 4.0; Pāli text under the licences of its sources. Free distribution only."
 cover-image: ""
-about: about.md
+about: 00_about.md
 author: ""
 publisher: ""

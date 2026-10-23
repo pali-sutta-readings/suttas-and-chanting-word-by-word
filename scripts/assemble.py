@@ -156,15 +156,15 @@ def pandoc_metadata(book, cover=None):
 
 
 def assemble(book_id, out_dir, books_dir=books.BOOKS_DIR,
-             texts_dir=books.TEXTS_DIR, covers_dir=COVERS_DIR, today=None):
+             covers_dir=COVERS_DIR, today=None):
     """Write the three output files; returns the path of <book>.md."""
     book = books.load_book(book_id, books_dir)
     spec = load_spec()
     options = book.options
-    parts = books.book_files(book, texts_dir)
-    files = [f for _, fs in parts for f in fs]
-    if not files:
-        raise MetadataError(f"{book_id}: no text files in {[p.folder for p in book.parts]}")
+    parts = books.book_files(book)
+    empty = [part.folder for part, fs in parts if not fs]
+    if empty:
+        raise MetadataError(f"{book_id}: no text files in {', '.join(empty)}")
 
     bad = []
     chunks = [about_text(book, today or date.today().isoformat())]
@@ -203,7 +203,7 @@ def assemble(book_id, out_dir, books_dir=books.BOOKS_DIR,
     return md
 
 
-def make_deps(book_id, books_dir=books.BOOKS_DIR, texts_dir=books.TEXTS_DIR):
+def make_deps(book_id, books_dir=books.BOOKS_DIR):
     """A make fragment for build/deps/<book>.mk (see the Makefile).
 
     The book's outputs depend on its text files and on the deps file. The deps
@@ -214,8 +214,8 @@ def make_deps(book_id, books_dir=books.BOOKS_DIR, texts_dir=books.TEXTS_DIR):
     rel = lambda p: os.path.relpath(p, ROOT)
     deps_file = f"build/deps/{book_id}.mk"
     folders, files = [], []
-    for part, fs in books.book_files(book, texts_dir):
-        folders.append(rel(Path(texts_dir) / part.folder))
+    for part, fs in books.book_files(book):
+        folders.append(rel(book.dir / part.folder))
         files += [rel(f) for f in fs]
     targets = f"build/tmp/{book_id}.md build/epub/{book_id}.epub build/pdf/{book_id}.pdf"
     rule = lambda target, deps: f"{target}: \\\n  " + " \\\n  ".join(deps) + "\n"
@@ -228,10 +228,9 @@ def main(argv=None):
     ap.add_argument("book", help="book id, a folder name under books/")
     ap.add_argument("--out", default=str(ROOT / "build" / "tmp"), help="output folder")
     ap.add_argument("--books-dir", default=str(books.BOOKS_DIR))
-    ap.add_argument("--texts-dir", default=str(books.TEXTS_DIR))
     ap.add_argument("--covers-dir", default=str(COVERS_DIR))
     ap.add_argument("--today", default=os.environ.get("BUILD_DATE"),
-                    help="date for {today} in about.md (default: $BUILD_DATE, else today)")
+                    help="date for {today} in the About page (default: $BUILD_DATE, else today)")
     ap.add_argument("--deps", action="store_true",
                     help="print the book's make dependencies instead of assembling")
     ap.add_argument("--cover-data", action="store_true",
@@ -239,13 +238,13 @@ def main(argv=None):
     a = ap.parse_args(argv)
     try:
         if a.deps:
-            sys.stdout.write(make_deps(a.book, a.books_dir, a.texts_dir))
+            sys.stdout.write(make_deps(a.book, a.books_dir))
             return 0
         if a.cover_data:
             data = cover_data(books.load_book(a.book, a.books_dir))
             sys.stdout.write(json.dumps(data, ensure_ascii=False, indent=2) + "\n")
             return 0
-        md = assemble(a.book, a.out, a.books_dir, a.texts_dir, a.covers_dir, a.today)
+        md = assemble(a.book, a.out, a.books_dir, a.covers_dir, a.today)
     except (MetadataError, SpecError, FileNotFoundError) as e:
         sys.exit(f"assemble.py: {e}")
     print(f"assembled {md}")

@@ -2,7 +2,7 @@
 
 The texts in this repo were made in an earlier, agent-driven project ("the legacy project"). Its working folder was deleted; what remains are two snapshots copied over from a Mac. This document records where each migrated file came from, why one version was chosen where the snapshots disagree, what the legacy project was, and which of its tools were not carried over.
 
-The copy itself is done by `scripts/migrate-legacy.sh`, which writes `sources/MIGRATION-MANIFEST.tsv`.
+The copy was a **one-time operation**. `scripts/migrate-legacy.sh` ran once, on 2026-10-22 (commit `9a2cbb9`), and wrote `sources/MIGRATION-MANIFEST.tsv`. Both are kept as a record of that run and are not maintained. The content and the folder layout have changed since (see "Where the texts are now" below), so the script is not expected to work on this repo again, and nothing tests it.
 
 ## The snapshots
 
@@ -30,6 +30,26 @@ The copy itself is done by `scripts/migrate-legacy.sh`, which writes `sources/MI
 | `style.typ` | `EXERCISES/exercises/` | `templates/typst/` |
 | `simsapa_fmt.py` | `EXERCISES/scripts/` | `scripts/` |
 
+The "To" column is where the run put each file. The texts went into a top-level `texts/` folder, one subfolder per legacy folder, with the legacy names.
+
+### Where the texts are now
+
+On 2026-10-23 (maintainer decision) the texts moved into their book folders under `books/`, so that a book's metadata, About text and texts live in one place. File names were kept and the files were moved, not edited:
+
+| Legacy folder (short ID) | Folder in this repo |
+| :--- | :--- |
+| `01_morning_chanting` … `08_patimokkha_chants` (01 … 08) | `books/<same name>/texts/` |
+| `09a_vinaya_notes_requisites` (09a) | `books/09_vinaya_formulae/01_vinaya_notes_requisites/` |
+| `09b_vinaya_notes_rains_and_kathina` (09b) | `books/09_vinaya_formulae/02_vinaya_notes_rains_and_kathina/` |
+| `09c_vinaya_notes_other_procedures` (09c) | `books/09_vinaya_formulae/03_vinaya_notes_other_procedures/` |
+| `09d_vinaya_notes_offences` (09d) | `books/09_vinaya_formulae/04_vinaya_notes_offences/` |
+| `09e_vinaya_notes_uposatha` (09e) | `books/09_vinaya_formulae/05_vinaya_notes_uposatha/` |
+| `10_Mahasatipatthanasutta` (10) | `books/10_mahasatipatthanasutta/texts/` |
+
+The changelogs and docs cite texts by the legacy short ID (07a/04, 09c/06); this table resolves them, and changelog line numbers still hold. The manifest's `dest` column keeps the paths of the migration run (`texts/<legacy folder>/…`); this table maps them to the current folders. `sources/originals/` keeps the legacy folder names, because those files are sources and are never built.
+
+Later edits are not in the manifest either: `templates/epub.css` and `templates/typst/style.typ` have been adapted since, so their hashes no longer match.
+
 Two licence files were added by hand, because neither source folder has them:
 
 - `fonts/Crimson/OFL.txt` is `LICENSE.txt` from the Crimson repository, <https://github.com/skosch/Crimson>, commit `685b5a2478a7213a806e9bbf1e36f6a9e7f5c7ef`.
@@ -44,7 +64,7 @@ Not copied: macOS junk (`._*`, `.DS_Store`, `__pycache__/`, `*.pyc`); the legacy
 
 ### The manifest
 
-`sources/MIGRATION-MANIFEST.tsv` has one row per copied file, sorted by destination:
+`sources/MIGRATION-MANIFEST.tsv` has one row per copied file, sorted by destination. It records the run of 2026-10-22 and is not updated when files move or change:
 
 | Column | Meaning |
 | :--- | :--- |
@@ -55,17 +75,11 @@ Not copied: macOS junk (`._*`, `.DS_Store`, `__pycache__/`, `*.pyc`); the legacy
 | `differs_from_final` | `yes` / `no` for texts, changelogs and originals; `n/a` for files that have no copy in `FINAL` |
 | `changed_lines_vs_final` | the number of `>` lines in `diff FINAL/<file> <chosen source>` (0 when identical) |
 
-### Running the script
+### The run
 
-```sh
-scripts/migrate-legacy.sh              # default LEGACY path
-scripts/migrate-legacy.sh --dry-run    # verify and report only
-scripts/migrate-legacy.sh --help
-```
+The script was run as `scripts/migrate-legacy.sh` with the default `LEGACY` path. It verified the snapshots before copying anything (below) and would have stopped if a check failed. It refused to overwrite a destination file that differed from its source unless given `--force`. During development it was tested with a script that ran it into a temporary folder; that test was removed once the migration was done.
 
-It verifies the snapshots before copying anything (below), and stops if a check fails. It never overwrites a destination file that differs from its source unless `--force` is given; it lists such files and exits non-zero without copying anything. Re-running it on an up-to-date repo changes nothing. `tests/test_migrate.sh` (part of `make test`) runs it into a temporary folder; it skips when `LEGACY` is not present.
-
-The first run, on 2026-10-22, reported:
+The run, on 2026-10-22, reported:
 
 - S22 vs BACKUP (01–08 texts): 130/130 identical.
 - FINAL vs BACKUP (07c, 08, 09a–09e, 10; every file, including changelogs and originals): 105/105 identical.
@@ -141,7 +155,7 @@ git -C $BACKUP log -1 --format='%h %ad %s' --date=short
 
 ### Review list
 
-The line-level record of every S22 change is the **"2026-10-11 — session S22 (final: whole-tree index alignment)"** entry at the top of each 01–08 changelog in `texts/`. Under one `###` heading per file, its "Line / Was / Now / Why / Reference" table gives each changed row (e.g. *bhagavā* `√bhaj + a + vant` → `√bhaj > bhag + a + vant`, "DPD construction of bhagavant"). If the 48 files are ever reviewed, that table is the list to work through; line numbers refer to the files as they are in `texts/`.
+The line-level record of every S22 change is the **"2026-10-11 — session S22 (final: whole-tree index alignment)"** entry at the top of each 01–08 changelog (`books/<book>/texts/CHANGELOG.md`). Under one `###` heading per file, its "Line / Was / Now / Why / Reference" table gives each changed row (e.g. *bhagavā* `√bhaj + a + vant` → `√bhaj > bhag + a + vant`, "DPD construction of bhagavant"). If the 48 files are ever reviewed, that table is the list to work through; line numbers refer to the files as migrated, and later edits to a file may shift them.
 
 ## History of the legacy project
 
@@ -190,7 +204,7 @@ The legacy linter (`BACKUP/_tools/chant_pipeline.py lint`, run on a scratch copy
 
 | File:line | WARN | Why it is kept |
 | :--- | :--- | :--- |
-| 06/01:55 | compound `vipāka` needs member rows | stem form of one member of the canonical compound *nevavipākanavipākadhammadhammā*, written apart; S11 note in `texts/06_funeral_chants/CHANGELOG.md` |
+| 06/01:55 | compound `vipāka` needs member rows | stem form of one member of the canonical compound *nevavipākanavipākadhammadhammā*, written apart; S11 note in `books/06_funeral_chants/texts/CHANGELOG.md` |
 | 07a/02:913, 1236 | repeat of lines 792, 1112 written out in full | *Aniccā bhante* and *ajjhattā vā bahiddhā vā …* for *saṅkhārā* (masc pl) repeat the lines for *vedanā* (fem sg), so they keep their own tables (style spec §8, query 56) |
 | 07b/03:818 | repeat of line 750 written out in full | *okkamane pubbaṅgamā …*: masc nom pl, then fem nom sg agreeing with *janatā* (query 56) |
 | 09c/10:245–311 (5), 09c/11:245–367 (8) | compound `veramaṇī` needs member rows | first member of *veramaṇī-sikkhāpadaṁ*, which BM writes apart (style spec §12.1, "written apart") |
@@ -207,4 +221,4 @@ The new checks found one problem. It is listed here; the text is not changed in 
 
 | File:line | WARN | Note |
 | :--- | :--- | :--- |
-| `texts/09e_vinaya_notes_uposatha/05_sick_parisuddhi.md:67` | variant line does not end with two spaces | The cue *Āyasmā bhante uttaro bhikkhu* → *Uttaro bhante bhikkhu* (decision V18) lacks the two trailing spaces that §12.1 asks for. A blank line follows it, so the built book is not affected. The fix is to add the two spaces and log it in the changelog. |
+| `books/09_vinaya_formulae/05_vinaya_notes_uposatha/05_sick_parisuddhi.md:67` | variant line does not end with two spaces | The cue *Āyasmā bhante uttaro bhikkhu* → *Uttaro bhante bhikkhu* (decision V18) lacks the two trailing spaces that §12.1 asks for. A blank line follows it, so the built book is not affected. The fix is to add the two spaces and log it in the changelog. |
