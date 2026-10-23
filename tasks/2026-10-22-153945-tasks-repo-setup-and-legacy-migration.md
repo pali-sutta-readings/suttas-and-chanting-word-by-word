@@ -210,7 +210,7 @@ Page: A5. Body Crimson; tables and labels Noto Sans; fallback lists end in `"Not
 The cover reads `sys.inputs` (`title`, `subtitle`, `series`, `accent`). The PDF is the cover page + blank verso + About + contents + texts. EPUB cover: `typst compile --format png --ppi 300 cover.typ build/covers/<book>.png`. Build with `typst compile --font-path fonts/ --ignore-system-fonts`, so the result does not depend on system fonts.
 **Depends on:** 6.0.
 
-- [ ] 7.0 Typst PDF build and generated covers (FR-31–FR-33a)
+- [x] 7.0 Typst PDF build and generated covers (FR-31–FR-33a)
   - [x] 7.1 Adapt `templates/typst/style.typ`: keep the fonts, sizes, page and heading structure; set paper `"a5"` and suitable margins; fonts Crimson (body), Noto Sans (tables), with Noto Sans Math as the last fallback; remove the language-strings, answer-key and disclaimer parts.
   - [x] 7.2 Write `templates/typst/book.typ`: the functions listed in Specs, the word-table function (two columns: auto-sized Word, wrapping Analysis; smaller Noto Sans for tags; member-row indent), the running header from the current level-1 heading, the TOC, and the About page as unnumbered.
   - [x] 7.3 Write `templates/pandoc/book.typst` (based on `pandoc -D typst`): import `style.typ` and `book.typ`, place the cover, a blank verso, the About, the contents and `$body$`; set the document title and language from metadata.
