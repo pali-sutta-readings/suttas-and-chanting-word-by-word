@@ -13,7 +13,7 @@
 - `scripts/chantlib/text.py` - Shared normalisation helpers (NFC, ṃ→ṁ, Pāli-letter folding).
 - `scripts/chantlib/books.py` - Reads `books/*/metadata.txt` (YAML-subset reader, book options, folder → book), `load_book` (validated `Book` with `Part`s), `book_files`.
 - `scripts/lint.py` - Lint and safe auto-fix.
-- `scripts/assemble.py` - Builds one pandoc-Markdown file per book, plus `<book>.meta.yaml` and a pandoc defaults file `<book>.pandoc.yaml`; `--deps` prints the book's make dependencies.
+- `scripts/assemble.py` - Builds one pandoc-Markdown file per book, plus `<book>.meta.yaml` (with `book-id`/`cover-pdf` for the PDF) and a pandoc defaults file `<book>.pandoc.yaml`; `--deps` prints the book's make dependencies; `--cover-data` prints the cover JSON.
 - `scripts/compare.py` - Pāli check against sources.
 - `scripts/index.py` - Cross-file index, dupes, stats, rows, overlaps.
 - `scripts/align.py` - Rules-based bulk alignment with a change log.
@@ -24,25 +24,26 @@
 - `tests/` - `unittest` tests: `test_spec.py`, `test_parse.py`, `test_lint.py`, `test_assemble.py`, `test_compare.py`, `test_index.py`, `test_draft.py`, `test_simsapa.py`, `test_migrate.sh`.
 - `tests/fixtures/` - Small chant files: `good.md`, `good-vinaya.md`, `good-dn22.md` (from real texts) and `bad-*.md` (one rule broken each); later, recorded Simsapa JSON responses.
 - `tests/test_parse.py`, `tests/test_lint.py` - Parser, text helpers, lint checks, tag order, repeats, `--fix`.
-- `tests/test_assemble.py` - Assembles fixture books from a temp `books/`/`texts/` tree: div order, TOC span, parts, metadata, CHANGELOG/originals excluded; loads the 13 real books.
+- `tests/test_assemble.py` - Assembles fixture books from a temp `books/`/`texts/` tree: div order, TOC span, parts, metadata (incl. PDF keys, cover data), CHANGELOG/originals excluded; loads the 13 real books.
+- `tests/test_pdf.py` - PDF pipeline on a fixture book in parts, in a temp typst root: Lua filter output (function calls, word tables, member rows, `toc-en`, contents placement), typst compile with no warnings, standalone cover PNG. Skips without pandoc/typst.
 - `texts/**` - Migrated chant files and changelogs (content; created by migration, never edited by this feature).
 - `sources/MIGRATION-MANIFEST.tsv` - Written by the migration script.
 - `sources/UPSTREAM.txt` - Upstream repos, pinned commits, Chanting Guide locations.
 - `sources/reference-pali-supplement.md`, `sources/suttacentral/*.json`, `sources/originals/**` - Reference texts for `compare`.
 - `books/<book>/metadata.txt`, `books/<book>/about.md` - Per-book metadata and About text (13 books). `title`/`subtitle` are as displayed (FR-27); `pali-title-first` only says which of them is Pāli. About sub-headings are `{.unnumbered .unlisted}`.
 - `templates/epub.css` - EPUB styling (adapted from legacy `style.css`): embedded Crimson/Noto Sans/Noto Sans Math, `instruction`/`gloss` classes, tags in small Noto Sans.
-- `templates/pandoc/book.typst` - Pandoc typst template.
-- `templates/pandoc/chant.lua` - Lua filter: classed divs → typst function calls.
-- `templates/typst/style.typ` - Fonts, sizes, page setup (adapted from `pali-exercises`).
-- `templates/typst/book.typ` - Typst functions for units, tables, headers, TOC.
-- `templates/typst/cover.typ` - Generated cover.
+- `templates/pandoc/book.typst` - Pandoc typst template: imports `book.typ`/`cover.typ`, cover (or `cover-pdf` override), blank verso, page numbers from the About page, body.
+- `templates/pandoc/chant.lua` - Lua filter: classed divs → typst function calls, unit head → `#unit-head`, tables → `#word-table`, `Code` → tags/plain text, `.toc-en` → `#toc-en`, contents page after About, cover-data path for the template.
+- `templates/typst/style.typ` - Fonts (all lists end in Noto Sans Math), sizes, A5 page, running header/footer, heading styles by role (adapted from `pali-exercises`).
+- `templates/typst/book.typ` - Typst functions for the unit elements, word table, tags, `toc-en`, contents page, blank page.
+- `templates/typst/cover.typ` - Generated cover: `cover-page(data)` for the PDF; standalone with `--input cover-data=…` for the EPUB PNG.
 - `fonts/Crimson/`, `fonts/Noto_Sans/`, `fonts/Noto_Sans_Math/` - Fonts with licence files (`Crimson/OFL.txt` and `Noto_Sans_Math/OFL.txt` added from upstream; sources in `docs/legacy-migration.md`).
 - `docs/style-spec.md` - Editorial rules with machine-readable blocks.
 - `docs/decisions.md` - Dated maintainer decisions.
 - `docs/quality-process.md` - Checking routine.
 - `docs/legacy-migration.md` - Migration sources, manifest columns, version-conflict evidence, affected-file list, legacy history, tools not migrated.
 - `docs/drafting-workflow.md` - Workflow for adding a text.
-- `docs/book-build.md` - Book pipeline: metadata keys, About, assembled div format, EPUB build, epubcheck, dependencies.
+- `docs/book-build.md` - Book pipeline: metadata keys, About, assembled div format, EPUB build, epubcheck, cover, PDF (Lua filter mapping, layout, font check), dependencies.
 - `docs/simsapa-localhost-api-search-endpoints.md` - Existing; Simsapa API reference.
 - `.claude/skills/pali-word-analysis/SKILL.md` - Local skill for grammar labels and word tables.
 - `README.md` - Existing one-liner; to be extended.
@@ -210,19 +211,19 @@ The cover reads `sys.inputs` (`title`, `subtitle`, `series`, `accent`). The PDF 
 **Depends on:** 6.0.
 
 - [ ] 7.0 Typst PDF build and generated covers (FR-31–FR-33a)
-  - [ ] 7.1 Adapt `templates/typst/style.typ`: keep the fonts, sizes, page and heading structure; set paper `"a5"` and suitable margins; fonts Crimson (body), Noto Sans (tables), with Noto Sans Math as the last fallback; remove the language-strings, answer-key and disclaimer parts.
-  - [ ] 7.2 Write `templates/typst/book.typ`: the functions listed in Specs, the word-table function (two columns: auto-sized Word, wrapping Analysis; smaller Noto Sans for tags; member-row indent), the running header from the current level-1 heading, the TOC, and the About page as unnumbered.
-  - [ ] 7.3 Write `templates/pandoc/book.typst` (based on `pandoc -D typst`): import `style.typ` and `book.typ`, place the cover, a blank verso, the About, the contents and `$body$`; set the document title and language from metadata.
-  - [ ] 7.4 Write `templates/pandoc/chant.lua`. Pandoc's plain typst output (verified) turns every div into an unclassed `#block[…]`, wraps tables in `#figure(align(center)[#table(…)], kind: table)`, and writes `` `word` ``/`` `(tags)` `` as monospace raw text. The filter must:
+  - [x] 7.1 Adapt `templates/typst/style.typ`: keep the fonts, sizes, page and heading structure; set paper `"a5"` and suitable margins; fonts Crimson (body), Noto Sans (tables), with Noto Sans Math as the last fallback; remove the language-strings, answer-key and disclaimer parts.
+  - [x] 7.2 Write `templates/typst/book.typ`: the functions listed in Specs, the word-table function (two columns: auto-sized Word, wrapping Analysis; smaller Noto Sans for tags; member-row indent), the running header from the current level-1 heading, the TOC, and the About page as unnumbered.
+  - [x] 7.3 Write `templates/pandoc/book.typst` (based on `pandoc -D typst`): import `style.typ` and `book.typ`, place the cover, a blank verso, the About, the contents and `$body$`; set the document title and language from metadata.
+  - [x] 7.4 Write `templates/pandoc/chant.lua`. Pandoc's plain typst output (verified) turns every div into an unclassed `#block[…]`, wraps tables in `#figure(align(center)[#table(…)], kind: table)`, and writes `` `word` ``/`` `(tags)` `` as monospace raw text. The filter must:
     - map the Div classes to raw typst calls;
     - turn each Table into a `#word-table(...)` call (no figure);
     - turn `Code` inlines into styled content (word cells: bold Crimson; tag groups: small Noto Sans);
     - keep `lang="pi"` (typst accepts `lang: "pi"`, verified). Test it on one assembled book with `pandoc … -t typst -o build/tmp/<book>.typ` and inspect the output.
-  - [ ] 7.5 Write `templates/typst/cover.typ`: a simple typographic A5 cover (title, subtitle, series line, rule or ornament, optional accent colour), taking its inputs from `sys.inputs`.
-  - [ ] 7.6 Add Makefile rules: `build/covers/%.png` (cover PNG from metadata via `--input`), `build/pdf/%.pdf` (assemble → pandoc → `typst compile --font-path fonts --ignore-system-fonts --root .`), `make covers`, `make pdf`, `make all`, and the PDF part of `make book`. Make the EPUB rule depend on the cover PNG.
-  - [ ] 7.7 Run `make all`; all 13 EPUBs and 13 PDFs build. Check for typst "unknown font" or missing-glyph warnings (there must be none for `↳`, √, ṁ, ṭ, ḷ).
-  - [ ] 7.8 Visually compare the 01, 07a and 10 PDFs with `$FINAL/_build/*.pdf`: same content in the same order, nothing split badly at page breaks, headers repeat. Open them for the maintainer to check by hand (launch the viewer only).
-  - [ ] 7.9 Commit: "Typst PDF build and generated covers".
+  - [x] 7.5 Write `templates/typst/cover.typ`: a simple typographic A5 cover (title, subtitle, series line, rule or ornament, optional accent colour), taking its inputs from `sys.inputs`.
+  - [x] 7.6 Add Makefile rules: `build/covers/%.png` (cover PNG from metadata via `--input`), `build/pdf/%.pdf` (assemble → pandoc → `typst compile --font-path fonts --ignore-system-fonts --root .`), `make covers`, `make pdf`, `make all`, and the PDF part of `make book`. Make the EPUB rule depend on the cover PNG.
+  - [x] 7.7 Run `make all`; all 13 EPUBs and 13 PDFs build. Check for typst "unknown font" or missing-glyph warnings (there must be none for `↳`, √, ṁ, ṭ, ḷ). Result: 13 + 13 built, no typst warnings, epubcheck 0/0/0 on all 13; a second `make all` does nothing. `pdffonts` lists only Crimson, Noto Sans and Noto Sans Math in every PDF (no fallback to typst's built-in fonts). A charset check found every character of the assembled books in Crimson or Noto Sans Math; only `↳` and the cover's `◆` come from Noto Sans Math.
+  - [x] 7.8 Visually compare the 01, 07a and 10 PDFs with `$FINAL/_build/*.pdf`: same content in the same order, nothing split badly at page breaks, headers repeat. Open them for the maintainer to check by hand (launch the viewer only). Result: Literal, Faithful, `↳`, √ and repeat-note counts are identical in the old and new text of all three (01: 112/112/191/349/0; 07a: 1028/1028/1495/3276/203; 10: 567/567/1016/1882/227), and the Literal lines come in the same order. The only difference is 4 opening quotes in 07a (source `'This …`), which typst sets as ‘ and the legacy PDF as ’. The new PDFs have about half the legacy page count (auto-width Word column, A5 margins and type sizes). Opened for the maintainer.
+  - [x] 7.9 Commit: "Typst PDF build and generated covers".
 
 ### 8.0 Consistency and authoring tools
 

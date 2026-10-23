@@ -11,6 +11,10 @@ Writes three files to the output folder (default build/tmp/):
     <book>.pandoc.yaml  pandoc defaults: input, metadata file, TOC depth and
                         split level (2 for a book in parts, else 1)
 
+With --cover-data it prints instead the JSON that templates/typst/cover.typ
+reads (build/covers/<book>.json): title, subtitle, pali-title-first,
+series-line, accent.
+
 The EPUB and PDF builds both start from <book>.md, so the two formats
 cannot drift apart. A lint ERROR or STRAY in the book's files gives a
 warning, not a failure.
@@ -113,9 +117,25 @@ def cover_path(book, covers_dir=COVERS_DIR):
     return png if png.exists() else None
 
 
+def cover_data(book):
+    """The cover's text, for templates/typst/cover.typ."""
+    m = book.meta
+    return {
+        "title": m["title"],
+        "subtitle": m.get("subtitle") or "",
+        "pali-title-first": bool(m.get("pali-title-first")),
+        "series-line": m.get("series-line") or "",
+        "accent": m.get("accent") or "",
+    }
+
+
 def pandoc_metadata(book, cover=None):
     """The metadata pandoc gets; empty values are dropped (else pandoc writes
-    empty dc:creator / dc:publisher elements)."""
+    empty dc:creator / dc:publisher elements).
+
+    book-id and cover-pdf are for the PDF only (templates/pandoc/chant.lua):
+    the book's cover data is build/covers/<book-id>.json, and cover-pdf is
+    the override image, relative to the repo root."""
     m = book.meta
     title = [{"type": "main", "text": m["title"]}]
     if m.get("subtitle"):
@@ -128,6 +148,9 @@ def pandoc_metadata(book, cover=None):
         "author": m.get("author"),
         "publisher": m.get("publisher"),
         "cover-image": str(cover) if cover else None,
+        "book-id": book.id,
+        "cover-pdf": (os.path.relpath(book.dir / m["cover-image"], ROOT)
+                      if m.get("cover-image") else None),
     }
     return {k: v for k, v in meta.items() if v}
 
@@ -210,10 +233,16 @@ def main(argv=None):
                     help="date for {today} in about.md (default: $BUILD_DATE, else today)")
     ap.add_argument("--deps", action="store_true",
                     help="print the book's make dependencies instead of assembling")
+    ap.add_argument("--cover-data", action="store_true",
+                    help="print the book's cover data (JSON) instead of assembling")
     a = ap.parse_args(argv)
     try:
         if a.deps:
             sys.stdout.write(make_deps(a.book, a.books_dir, a.texts_dir))
+            return 0
+        if a.cover_data:
+            data = cover_data(books.load_book(a.book, a.books_dir))
+            sys.stdout.write(json.dumps(data, ensure_ascii=False, indent=2) + "\n")
             return 0
         md = assemble(a.book, a.out, a.books_dir, a.texts_dir, a.covers_dir, a.today)
     except (MetadataError, SpecError, FileNotFoundError) as e:

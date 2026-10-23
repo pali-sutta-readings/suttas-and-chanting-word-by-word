@@ -100,6 +100,29 @@ class AssembleTest(unittest.TestCase):
         for key in ("author", "publisher", "cover-image"):
             self.assertNotIn(key, meta)
 
+    def test_pdf_metadata_keys(self):
+        self.make_book("one", "  - 01_one")
+        _, meta, _ = self.run_assemble("one")
+        self.assertEqual(meta["book-id"], "one")
+        self.assertNotIn("cover-pdf", meta)
+
+    def test_cover_override_for_pdf(self):
+        self.make_book("one", "  - 01_one", **{"cover-image": "cover.jpg"})
+        _, meta, _ = self.run_assemble("one")
+        self.assertEqual(meta["cover-image"], str(self.books / "one" / "cover.jpg"))
+        self.assertTrue(meta["cover-pdf"].endswith("one/cover.jpg"))
+
+    def test_cover_data(self):
+        self.make_book("one", "  - 01_one", **{"pali-title-first": "true"})
+        data = assemble.cover_data(books.load_book("one", self.books))
+        self.assertEqual(data, {
+            "title": "Test Chants",
+            "subtitle": "Pariyatti-pāṭha",
+            "pali-title-first": True,
+            "series-line": "",
+            "accent": "",
+        })
+
     def test_generated_cover_used_when_built(self):
         self.make_book("one", "  - 01_one")
         self.covers.mkdir()

@@ -9,9 +9,12 @@ books/<book>/metadata.txt ─┐
 books/<book>/about.md ─────┼─ scripts/assemble.py ─→ build/tmp/<book>.md ─┬─ pandoc ─→ build/epub/<book>.epub ─→ epubcheck
 texts/<folder>/NN_*.md ────┘                         build/tmp/<book>.meta.yaml
                                                      build/tmp/<book>.pandoc.yaml
+                                                                           └─ pandoc -t typst ─→ build/tmp/<book>.typ ─→ typst ─→ build/pdf/<book>.pdf
+
+books/<book>/metadata.txt ─ assemble.py --cover-data ─→ build/covers/<book>.json ─→ typst (cover.typ) ─→ build/covers/<book>.png
 ```
 
-The EPUB and the PDF both start from the same assembled Markdown, so the two formats cannot drift apart.
+The EPUB and the PDF both start from the same assembled Markdown, so the two formats cannot drift apart. The cover JSON is page 1 of the PDF and, rendered to PNG, the EPUB cover.
 
 ## Book metadata: `books/<book>/metadata.txt`
 
@@ -54,7 +57,7 @@ For each folder in `texts`, the files `NN_*.md` are taken in name order. `CHANGE
 
 A unit closes at the next Pāli line, heading, title, citation or instruction line. A lint ERROR or STRAY in the book's files prints a warning; the book is still built.
 
-`<book>.meta.yaml` is the metadata pandoc gets (written as JSON, which is valid YAML): a typed title (`main` and `subtitle`, so that both reach the EPUB package), `lang`, `rights`, `source`, and `cover-image`. `<book>.pandoc.yaml` is a pandoc defaults file with the input, the metadata file, the table of contents, and the TOC depth and split level: 1, or 2 for a book in parts.
+`<book>.meta.yaml` is the metadata pandoc gets (written as JSON, which is valid YAML): a typed title (`main` and `subtitle`, so that both reach the EPUB package), `lang`, `rights`, `source`, and `cover-image`. Two keys are for the PDF only, and the EPUB writer ignores them: `book-id`, and `cover-pdf` (the `cover-image` override relative to the repo root, when there is one). `<book>.pandoc.yaml` is a pandoc defaults file with the input, the metadata file, the table of contents, and the TOC depth and split level: 1, or 2 for a book in parts.
 
 ## EPUB
 
@@ -68,6 +71,50 @@ epubcheck build/epub/<book>.epub
 - Embedded fonts (`EPUB_FONTS` in the Makefile): Crimson Roman, Italic, Bold and Bold Italic; Noto Sans Regular; Noto Sans Math. Noto Sans Math is there only for `↳` (U+21B3), which the other fonts lack. It comes straight after the main font in the table-cell font stacks, so it is used only for glyphs the main font does not have.
 - `epubcheck` runs on every EPUB right after pandoc writes it. A fatal or an error fails the build and deletes the EPUB, so Make does not treat it as up to date. Warnings are printed and do not fail. `make epubcheck` checks all built EPUBs again.
 
+## Cover
+
+`templates/typst/cover.typ` makes a typographic A5 cover: the series line at the top, the title, a rule with an ornament, and the subtitle. Its text comes from `build/covers/<book>.json`, which `assemble.py --cover-data BOOK` writes from the metadata (`title`, `subtitle`, `pali-title-first`, `series-line`, `accent`). The Pāli one of title and subtitle (see `pali-title-first`) is set in italic when it is the subtitle. `accent` is a colour such as `"#2e4a7a"`; empty gives the default dark red.
+
+```sh
+typst compile --root . --font-path fonts --ignore-system-fonts \
+  --input cover-data=/build/covers/<book>.json --format png --ppi 300 \
+  templates/typst/cover.typ build/covers/<book>.png
+```
+
+The PNG is 1748 × 2480 px, with a white page. `make covers` renders all of them. When `cover-image` is set in the metadata, that image is used for the EPUB and as page 1 of the PDF instead.
+
+## PDF
+
+```sh
+pandoc --defaults build/tmp/<book>.pandoc.yaml -t typst \
+  --template templates/pandoc/book.typst --lua-filter templates/pandoc/chant.lua \
+  -o build/tmp/<book>.typ
+typst compile --root . --font-path fonts --ignore-system-fonts build/tmp/<book>.typ build/pdf/<book>.pdf
+```
+
+Pandoc's own typst output drops the div classes, wraps each table in a centred figure, and prints the backticked words and tags as monospace raw text. `templates/pandoc/chant.lua` fixes this:
+
+| Pandoc element | typst output |
+| :--- | :--- |
+| a classed div | a call of the function of that name in `templates/typst/book.typ`: `#unit[…]`, `#pali[…]`, `#literal[…]`, `#faithful[…]`, `#repeat-note[…]`, `#citation[…]`, `#rubric[…]`, `#instruction[…]`, `#variant[…]`, `#gloss[…]`; `subtitle` becomes `#en-title[…]` |
+| the blocks of a unit before its first table | `#unit-head[…]`, a sticky, unbreakable block, so the Pāli line and renderings stay on the page where the table starts |
+| a table | `#word-table(header: …, rows: …)`, each row a `(word, analysis, member)` triple; a row whose word starts with `↳` is a member row |
+| `` `(tags)` `` | `#tags[…]`: small Noto Sans |
+| any other `` `word` `` | plain text, which keeps its bold |
+| the `.toc-en` span in a title | `#toc-en[…]`: shown in the contents, hidden in the heading and the running header |
+
+The filter also puts `#contents-page()` after the About text, and gives the template the path of the cover JSON. `templates/pandoc/book.typst` places the cover, a blank verso, then the body; page numbers count from the About page.
+
+Layout (`templates/typst/style.typ`, `book.typ`):
+
+- A5, body Crimson 10.5 pt; tables 9 pt, tag groups and the table header in Noto Sans. Every font list ends with Noto Sans Math, which is used only for glyphs the main font lacks: `↳` (and the cover's `◆`).
+- Each chant starts a new page. In a book in parts (09), each part has a title page of its own.
+- The word table has an auto-sized Word column and a wrapping Analysis column. Its header row repeats when it breaks across pages; member rows are indented.
+- Running header: the book title on even pages, the current chant title on odd pages, none on a page where a chant starts. Page number at the foot.
+- The contents list the Pāli and English titles (level 1, or parts and chants for 09).
+
+The build uses only the fonts in `fonts/` (`--ignore-system-fonts`), so the PDF does not depend on the machine. `pdffonts build/pdf/<book>.pdf` should list only Crimson, Noto Sans and Noto Sans Math; any other font means a glyph fell back to one of typst's built-in fonts.
+
 ## Dependencies
 
-A book is rebuilt when its texts, metadata, About text, the stylesheet, the fonts, the scripts or `docs/style-spec.md` change. The list of a book's text files comes from its metadata. `assemble.py --deps BOOK` writes it to `build/deps/<book>.mk`, which the Makefile includes. The deps file is remade when a text folder changes, but it is replaced only if the file list has changed. So an editor's lock or backup file in a folder does not rebuild the book, but a new or removed text does.
+A book is rebuilt when its texts, metadata, About text, the stylesheet, the fonts, the scripts or `docs/style-spec.md` change. A PDF is also rebuilt when `templates/pandoc/` or `templates/typst/` change, and the cover when the metadata or `cover.typ` changes. The assembled Markdown waits for the cover PNG (order-only), because it names it for the EPUB; a new PNG rebuilds the EPUB, not the Markdown. The list of a book's text files comes from its metadata. `assemble.py --deps BOOK` writes it to `build/deps/<book>.mk`, which the Makefile includes. The deps file is remade when a text folder changes, but it is replaced only if the file list has changed. So an editor's lock or backup file in a folder does not rebuild the book, but a new or removed text does.
