@@ -47,21 +47,25 @@ nav .toc-en { display: inline; }
 .instruction p { font-style: italic; margin: 0.8em 0 0.5em; padding-left: 0.8em; border-left: 2px solid #bbb; }
 .variant p { margin: 0.9em 0 0; font-size: 0.95em; }
 
+/* The word table has no cell borders: the shaded header row alone separates it. */
 table {
   width: 100%;
   border-collapse: collapse;
   margin: 0.6em 0 0;
   font-size: 0.9em;
 }
+/* Pandoc turns the equal dashes of the pipe table into a 50/50 colgroup, which
+   leaves a wide gap after the Word column. Let the columns size to their
+   content instead: Word takes what the words need, Analysis gets the rest. */
+table col { width: auto !important; }
 th, td {
-  border: 1px solid #ccc;
+  border: none;
   padding: 4px 6px;
   text-align: left;
   vertical-align: top;
   font-family: "Crimson", "Noto Sans Math", Georgia, serif;
 }
 th { background: #f2f2f2; }
-td:first-child { width: 28%; }
 
 /* Backticked words and tags are not code: no monospace. */
 code { font-family: inherit; font-size: 1em; background: none; }

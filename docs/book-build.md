@@ -87,7 +87,7 @@ pandoc --defaults build/tmp/<book>.pandoc.json --css templates/epub.css \
 epubcheck build/epub/<book>.epub
 ```
 
-- `templates/epub.css` styles the classed divs. Body text is Crimson; the tag groups are small Noto Sans. The backticked words and tags are `code` in HTML, and the CSS keeps them out of monospace.
+- `templates/epub.css` styles the classed divs. Body text is Crimson; the tag groups are small Noto Sans. The backticked words and tags are `code` in HTML, and the CSS keeps them out of monospace. The word table has no cell borders: only the shaded header row separates it, as in the PDF. Its columns size to their content, overriding the equal-width colgroup pandoc writes for the pipe table, so the Word column does not take half the page.
 - Embedded fonts (`EPUB_FONTS` in the Makefile): Crimson Roman, Italic, Bold and Bold Italic; Noto Sans Regular; Noto Sans Math. Noto Sans Math is there only for `↳` (U+21B3), which the other fonts lack. It comes straight after the main font in the table-cell font stacks, so it is used only for glyphs the main font does not have.
 - `epubcheck` runs on every EPUB right after pandoc writes it. A fatal or an error fails the build and deletes the EPUB, so Make does not treat it as up to date. Warnings are printed and do not fail. `make epubcheck` checks all built EPUBs again.
 
