@@ -281,7 +281,7 @@ The first full run of `make compare` (2026-10-23), over `sources/ref-map.tsv` at
 
 ## DPD check review
 
-The first full run of `make dpd-check` (2026-10-26), Simsapa 1.1.0-alpha.2 with DPD `v0.4.20260501`, over all 22,546 rows (variant rows of book 10 included). Every flag and candidate was reviewed with the `dpd-review` skill, and its verdict is in `checks/dpd-review.tsv`. No text was changed by the review. The rules of the check and how they were measured are in `docs/script-or-skill.md` (spike 2, "Follow-up", "Implementation").
+The first full run of `make dpd-check` (2026-10-26), Simsapa 1.1.0-alpha.2 with DPD `v0.4.20260501`, over all 22,546 rows (variant rows of book 10 included). Every flag and candidate was reviewed with the `dpd-review` skill, and its verdict is in `checks/dpd-review.tsv`. The review itself changed no text; the five errors it found were then corrected in the texts, with changelog entries ("Errors" below). The rules of the check and how they were measured are in `docs/script-or-skill.md` (spike 2, "Follow-up", "Implementation").
 
 **Result.** 644 items (one per word, etymology or tags and DPD data; an item can cover several rows): 7 flags, 303 etymology candidates, 113 grammar candidates, 221 not-found candidates. `make dpd-check` now reports 0 unreviewed items.
 

@@ -8,8 +8,10 @@ TYPST ?= typst
 BOOKS := $(notdir $(wildcard books/*))
 # Text files: books/<book>/texts/NN_*.md, or books/<book>/NN_<part>/NN_*.md.
 TEXTS := $(wildcard books/*/*/[0-9]*.md)
-# Everything the assembled Markdown depends on besides the book's own files.
-BUILD_SCRIPTS := $(wildcard scripts/*.py scripts/chantlib/*.py) docs/style-spec.md
+# Everything the assembled Markdown depends on besides the book's own files:
+# assemble.py, the lint it runs for its warnings, and the spec they read.
+# The check and authoring scripts are left out, so editing them rebuilds nothing.
+BUILD_SCRIPTS := scripts/assemble.py scripts/lint.py $(wildcard scripts/chantlib/*.py) docs/style-spec.md
 # Fonts embedded in each EPUB; templates/epub.css has their @font-face rules.
 EPUB_FONTS := $(addprefix fonts/Crimson/Crimson-,Roman.otf Italic.otf Bold.otf BoldItalic.otf) \
 	fonts/Noto_Sans/NotoSans-Regular.ttf \

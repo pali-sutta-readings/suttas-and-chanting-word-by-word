@@ -391,7 +391,7 @@ FR-40. Required tools to document: `pandoc` (≥ 3.1.2, needed for the typst wri
 
 ## 5. Non-Goals (Out of Scope)
 
-- Changing the content of any text (renderings, analyses, Pāli). Migration is byte-for-byte.
+- Changing the content of any text (renderings, analyses, Pāli). Migration is byte-for-byte. Exception (maintainer, 2026-10-26): the five etymology errors found by the first DPD check review were corrected, with changelog entries (`docs/legacy-migration.md`, "DPD check review").
 - A separate review of the 48 S22-affected files (maintainer decision, 2026-10-22: not needed now). They stay listed in `docs/legacy-migration.md`.
 - Using the Community Chanting Book in any check (only recorded and fetched for now).
 - Assigning grammar labels (case, number, gender, person, tense, voice, mood) with scripts, or splitting compounds with our own rules. Labels are LLM work guided by the skill (FR-20a), and compounds come from DPD via Simsapa.

@@ -1,5 +1,7 @@
 # Simsapa Localhost API search endpoints
 
+*This document comes from the Simsapa repository (<https://github.com/simsapa/simsapa>, `docs/`). Its links to other `docs/*.md` files and to `CLAUDE.md` point there. On 2026-10-26, `dpd-construction-summary.md` was not yet on Simsapa's `main` branch.*
+
 The app runs a local HTTP server (Rocket, `bridges/src/api.rs`, bound to
 `127.0.0.1:<api_port>`) used by the browser extension and other local clients.
 The default port is 4848.
@@ -50,7 +52,7 @@ All search routes reuse the in-app search path
 returned results carry exactly the same producer-owned, **non-nested**
 `<span class='match'>` highlighting, `is_snippet` markers, per-occurrence
 snippet expansion, and snippet-exclusion behaviour as the in-app results. See
-[search-snippet-highlight-pipeline.md](./search-snippet-highlight-pipeline.md)
+[search-snippet-highlight-pipeline.md](https://github.com/simsapa/simsapa/blob/main/docs/search-snippet-highlight-pipeline.md)
 for how the snippet/highlight stages work; this doc only covers the API plumbing.
 
 ---
@@ -502,7 +504,7 @@ fulltext searcher has been initialized (§8):
   `message` is plain language and safe to display;
   it deliberately carries no `flock`/`Tantivy`/errno text (that stays in the log
   and in Run Storage Diagnostics). See
-  [fulltext-index-storage-and-file-locking.md](./fulltext-index-storage-and-file-locking.md).
+  [fulltext-index-storage-and-file-locking.md](https://github.com/simsapa/simsapa/blob/main/docs/fulltext-index-storage-and-file-locking.md).
 
 - **`counts`** are per-DB row counts. Each is resilient: a real `0` means the DB
   is loaded but empty / not installed (consistent with
@@ -835,7 +837,7 @@ A DPD headword record (the numeric `<id>/dpd` lane only) also carries
 (`49236/dpd` *bhaṇāmase*: `"√bhaṇ + a + mase"`, where `construction` is
 `bhaṇa + mase`); `""` when the entry shows none, `null` when the installed
 `dpd.sqlite3` predates the column (see §19.1 and
-[dpd-construction-summary.md](./dpd-construction-summary.md)). The
+[dpd-construction-summary.md](https://github.com/simsapa/simsapa/blob/main/docs/dpd-construction-summary.md)). The
 `dict_words` lane and roots do not have it. Keys are alphabetical, so the
 added key moves no other.
 
@@ -985,7 +987,7 @@ views, not for headless data retrieval.
 | `GET /ai_provider_key?provider=Gemini` | Read a provider's saved API key + enabled state (localhost demo prefill). Returns the key value | §16.4 |
 | `GET /get_book_spine_item_html_by_uid/<window_id>/<spine_item_uid..>` | Full rendered Library-book chapter HTML, by spine-item uid | — |
 | `GET /book_pages/<book_uid>/<resource_path..>` | Rendered Library-book page HTML, by in-book resource path | — |
-| `GET /navigation_timeline?[window_id=<id>]` | The Timeline page of the Sutta Navigation window: every node with a context note on one time axis, as a full HTML page with the find bar. With no navigation tree in the database, the controls and "No timeline data" | [sutta-navigation-tree.md §2h](./sutta-navigation-tree.md) |
+| `GET /navigation_timeline?[window_id=<id>]` | The Timeline page of the Sutta Navigation window: every node with a context note on one time axis, as a full HTML page with the find bar. With no navigation tree in the database, the controls and "No timeline data" | [sutta-navigation-tree.md §2h](https://github.com/simsapa/simsapa/blob/main/docs/sutta-navigation-tree.md) |
 | `GET /sutta_titles_flat_completion_list` | Autocomplete list of sutta titles. **Placeholder — returns `[]`** (the extension uses a bundled list) | — |
 | `GET /dict_words_flat_completion_list` | Autocomplete list of dictionary words. **Placeholder — returns `[]`** | — |
 
@@ -1002,7 +1004,7 @@ views, not for headless data retrieval.
 | `GET /prev_chapter/<window_id>/<current_spine_item_uid..>` | Navigate `window_id` to the previous Library-book chapter. |
 | `GET /next_chapter/<window_id>/<current_spine_item_uid..>` | Navigate `window_id` to the next Library-book chapter. |
 | `GET /show_toc_tab/<window_id>/<spine_item_uid..>` | Show the sidebar's **TOC** tab in `window_id` with the entry for `spine_item_uid` revealed (ancestors expanded, entry selected and scrolled into view). Called by the in-page TOC button on book chapter pages. Always `200` — it hands off to the GUI and does not read the DB. |
-| `GET /open_sutta_navigation?node_uid=<uid>` | Open or raise the **Sutta Navigation** window with the node's level entered (the button on a Timeline entry). 404 when the tree has no such node. See [sutta-navigation-tree.md §2h](./sutta-navigation-tree.md). |
+| `GET /open_sutta_navigation?node_uid=<uid>` | Open or raise the **Sutta Navigation** window with the node's level entered (the button on a Timeline entry). 404 when the tree has no such node. See [sutta-navigation-tree.md §2h](https://github.com/simsapa/simsapa/blob/main/docs/sutta-navigation-tree.md). |
 | `GET /lookup_window_query/<text>` | Open the word-lookup window and run a query (text in the path). |
 | `POST /lookup_window_query` | Open the word-lookup window. If `query_text` is a word **uid** (contains `/`) it opens that entry directly (dict_words → DPD headword fallback); otherwise it runs a lookup search. Body: `LookupWindowRequest` (§15). |
 | `GET /summary_query/<window_id>/<text>` | Run a summary query in `window_id`. |
@@ -1181,7 +1183,7 @@ result — picking each ambiguous word's sense and each compound's break-down �
 while streaming progress. Both live in `bridges/src/api.rs`; the glossing core
 is `helpers::process_all_paragraphs()` (shared with the in-app GlossTab), the
 engine is the shared fallback walk in `bridges/src/ai_engine.rs`. See
-[gloss-ai-word-selection.md](./gloss-ai-word-selection.md) for the resolution
+[gloss-ai-word-selection.md](https://github.com/simsapa/simsapa/blob/main/docs/gloss-ai-word-selection.md) for the resolution
 chain, the item-id scheme (`p<pi>w<wi>` / `d` / `c<k>`) and cache semantics.
 
 ### 16.1 `POST /gloss_text`
@@ -2027,9 +2029,9 @@ write the join in three ways:
 
 A final `n` before `ti` stands for `ṁ`, and a vowel before `ti` is often
 lengthened (`dhārayāmī` for `dhārayāmi`). The rules that take these apart are
-in [pali-sandhi-and-quote-marks.md](./pali-sandhi-and-quote-marks.md); the DPD
+in [pali-sandhi-and-quote-marks.md](https://github.com/simsapa/simsapa/blob/main/docs/pali-sandhi-and-quote-marks.md); the DPD
 lookup rule is
-[search-snippet-highlight-pipeline.md §9d](./search-snippet-highlight-pipeline.md).
+[search-snippet-highlight-pipeline.md §9d](https://github.com/simsapa/simsapa/blob/main/docs/search-snippet-highlight-pipeline.md).
 
 **Rule for agents: send the whole form, `ti` included.** Any of the three
 spellings works, and a spaced form is sent as one form (`"vuttan ti"`). The
@@ -2055,7 +2057,7 @@ The query is normalised the DPD way (lowercased, `ṃ` → `ṁ`, quotes handled
   plural), with no split, which is what that spelling means.
 - A word ending in a vowel and **`n`** that has no exact match is looked up as
   its `ṁ` spelling before any guess: `vuttan` is `vuttaṁ`, `kin` is `kiṁ`. See
-  [search-snippet-highlight-pipeline.md §9f](./search-snippet-highlight-pipeline.md).
+  [search-snippet-highlight-pipeline.md §9f](https://github.com/simsapa/simsapa/blob/main/docs/search-snippet-highlight-pipeline.md).
 
 Measured on the dist DB (`dpd_release_version = v0.4.20260501`). `results`
 shows the first few uids; `iti` (`13466/dpd`) is appended to the results of an
@@ -2317,7 +2319,7 @@ them, most for exact `/gloss_text` on long texts.
 **`construction_summary`** is the construction as DPD's entry displays it,
 root base replaced by root + sign: *carati 1.1* (`construction` `cara + ti`)
 has `"√car + a + ti"`. It is the bracketed text of DPD's rendered summary
-line, taken at bootstrap; see [dpd-construction-summary.md](./dpd-construction-summary.md).
+line, taken at bootstrap; see Simsapa's [dpd-construction-summary.md](https://github.com/simsapa/simsapa/blob/main/docs/dpd-construction-summary.md).
 `""` means DPD's entry shows no bracket (no `construction`, no `meaning_1`,
 or neither). `null` means the installed `dpd.sqlite3` predates the column;
 everything else in the result is unaffected.
@@ -2326,7 +2328,7 @@ everything else in the result is unaffected.
 `<id>/dpd` form, which `/word.json` resolves to the structured `dpd_headwords`
 record. The rendered HTML entry is a `dict_words` row with a different,
 hyphenated uid (`dhamma-1-01/dpd`); see "DPD records correlate to dict_words"
-in the repository's `CLAUDE.md`, and §13.3. `/word_html?uid=49139/dpd` also
+in Simsapa's [`CLAUDE.md`](https://github.com/simsapa/simsapa/blob/main/CLAUDE.md), and §13.3. `/word_html?uid=49139/dpd` also
 resolves the numeric form.
 
 ```sh
