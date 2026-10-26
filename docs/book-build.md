@@ -129,7 +129,7 @@ Layout (`templates/typst/style.typ`, `book.typ`):
 
 - A5, body Crimson 10.5 pt; tables 9 pt, tag groups and the table header in Noto Sans. Every font list ends with Noto Sans Math, which is used only for glyphs the main font lacks: `↳` (and the cover's `◆`).
 - Each chant starts a new page. In a book in parts (09), each part has a title page of its own.
-- The word table has an auto-sized Word column and a wrapping Analysis column. Its header row repeats when it breaks across pages; member rows are indented.
+- The word table has an auto-sized Word column and a wrapping Analysis column, and no cell borders: only the shaded header row separates it. Its header row repeats when it breaks across pages; member rows are indented.
 - Running header: the book title on even pages, the current chant title on odd pages, none on a page where a chant starts. Page number at the foot.
 - The contents list the Pāli and English titles (level 1, or parts and chants for 09).
 

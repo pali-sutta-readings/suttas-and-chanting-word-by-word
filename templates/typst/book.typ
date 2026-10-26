@@ -86,13 +86,14 @@
 #let tags(body) = text(font: fonts.sans, size: sizes.tags, body)
 
 // rows: (word, analysis, member) triples; member rows start with ↳ and are
-// indented. The header repeats when a table breaks across pages.
+// indented. The header repeats when a table breaks across pages. The table
+// has no cell borders: the shaded header row alone separates it.
 #let word-table(header: (), rows: ()) = {
   set text(size: sizes.table)
   set par(justify: false, leading: document-style.leading.table)
   table(
     columns: (auto, 1fr),
-    stroke: 0.4pt + colors.rule,
+    stroke: none,
     inset: (x: 4pt, y: 3.5pt),
     fill: (_, y) => if y == 0 { colors.header-fill },
     table.header(..header.map(h => text(font: fonts.sans, size: sizes.tags, h))),
