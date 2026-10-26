@@ -52,9 +52,12 @@
 #let pali(body) = block(below: document-style.spacing.after-pali,
   text(lang: "pi", weight: "bold", size: sizes.pali, body))
 
+// The literal and faithful renderings. The wider space above sets them apart
+// from each other; the gap from the Pāli line is after-pali (1.2em), which is
+// wider still, so that gap does not change.
 #let rendering(body) = {
   set par(justify: false, spacing: 0.6em)
-  block(above: 0.6em, below: 0.6em, body)
+  block(above: 0.9em, below: 0.6em, body)
 }
 #let literal(body) = rendering(body)
 #let faithful(body) = rendering(body)

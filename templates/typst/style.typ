@@ -29,9 +29,9 @@
 
   // Line spacing (leading)
   leading: (
-    body: 0.6em,
+    body: 0.8em,
     unit-head: 0.4em,    // The Pāli line and renderings of a unit
-    table: 0.45em,
+    table: 0.9em,
   ),
 
   // Paragraph spacing
@@ -49,6 +49,7 @@
   // Colors
   colors: (
     text: black,
+    link: rgb("#1a5fb4"),    // URL links; covers do not use document-setup
     rule: luma(170),
     header-fill: luma(238),
   ),
@@ -104,6 +105,11 @@
     leading: document-style.leading.body,
     spacing: document-style.spacing.after-paragraph,
   )
+
+  // URL links are blue and underlined. The cover is built by cover.typ, which
+  // imports document-style but does not call document-setup, so it keeps its
+  // own design.
+  show link: it => text(fill: document-style.colors.link, underline(it))
 
   set block(
     spacing: document-style.spacing.after-paragraph,
