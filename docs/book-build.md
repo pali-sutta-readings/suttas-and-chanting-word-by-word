@@ -57,7 +57,7 @@ YAML-compatible `key: value` lines, so that pandoc can also read the file with `
 
 ## About text: `books/<book>/00_about.md`
 
-Plain Markdown, placed before the texts. `{today}` is replaced with the build date (`$BUILD_DATE` if set, else today). The level-2 headings are `{.unnumbered .unlisted}`, so that they stay out of the table of contents. Keep the AI-disclosure paragraphs.
+Plain Markdown, placed before the texts. `{today}` is replaced with the build date (`$BUILD_DATE` if set, else today), and `{site-url}` with the URL where the books are published (`SITE_URL` in `scripts/assemble.py`); the "Where to find this book" section uses it. The level-2 headings are `{.unnumbered .unlisted}`, so that they stay out of the table of contents. Keep the AI-disclosure paragraphs.
 
 ## Assembly: `scripts/assemble.py BOOK`
 
@@ -77,7 +77,7 @@ For each folder in `texts`, the files `NN_*.md` are taken in name order, includi
 
 A unit closes at the next Pāli line, heading, title, citation or instruction line. A lint ERROR or STRAY in the book's files prints a warning; the book is still built.
 
-`<book>.meta.json` is the metadata pandoc gets (JSON; pandoc reads it as YAML, of which JSON is a subset): a typed title (`main` and `subtitle`, so that both reach the EPUB package), `lang`, `rights`, `source`, and `cover-image`. Two keys are for the PDF only, and the EPUB writer ignores them: `book-id`, and `cover-pdf` (the `cover-image` override relative to the repo root, when there is one). `<book>.pandoc.json` is a pandoc defaults file, also JSON read as YAML, with the input, the metadata file, the table of contents, and the TOC depth and split level: 1, or 2 for a book in parts.
+`<book>.meta.json` is the metadata pandoc gets (JSON; pandoc reads it as YAML, of which JSON is a subset): a typed title (`main` and `subtitle`, so that both reach the EPUB package), `lang`, `rights`, `source`, `cover-image`, and `series-line` and `site-url`, which `templates/pandoc/epub3.html` prints on the EPUB title page under the subtitle (the URL as a link). That template is pandoc's own `epub3` template with those two lines added. Two keys are for the PDF only, and the EPUB writer ignores them: `book-id`, and `cover-pdf` (the `cover-image` override relative to the repo root, when there is one). `<book>.pandoc.json` is a pandoc defaults file, also JSON read as YAML, with the input, the metadata file, the table of contents, and the TOC depth and split level: 1, or 2 for a book in parts.
 
 ## EPUB
 
@@ -93,7 +93,7 @@ epubcheck build/epub/<book>.epub
 
 ## Cover
 
-`templates/typst/cover.typ` makes a typographic A5 cover: the series line at the top, the title, a rule with an ornament, and the subtitle. Its text comes from `build/covers/<book>.json`, which `assemble.py --cover-data BOOK` writes from the metadata (`title`, `subtitle`, `pali-title-first`, `series-line`, `accent`). The Pāli one of title and subtitle (see `pali-title-first`) is set in italic when it is the subtitle. `accent` is a colour such as `"#2e4a7a"`; empty gives the default dark red.
+`templates/typst/cover.typ` makes an A5 cover in the style of the Pāli Sutta Readings video title pages: a dark blue page with a faint Dhamma wheel (`templates/typst/assets/dhamma-wheel-white-5.png`, white at 5% opacity), a green band across the middle of the page and of the wheel, with the title in Abhaya Libre X Bold and the subtitle in Noto Sans under it, and at the foot the series line in small capitals and the URL where the books are published (`SITE_URL` in `scripts/assemble.py`, which passes it to the cover as `site-url`). Its text comes from `build/covers/<book>.json`, which `assemble.py --cover-data BOOK` writes from the metadata (`title`, `subtitle`, `pali-title-first`, `series-line`, `accent`). The Pāli one of title and subtitle (see `pali-title-first`) is set in italic when it is the subtitle. `accent` is the colour of the band, such as `"#2e4a7a"`; empty gives the default green `#16423c`. Abhaya Libre X is a version of Abhaya Libre with the Pāli diacritics (ṃ ṅ ṭ ḍ ṇ ḷ), which the original lacks; it is used only on the cover.
 
 ```sh
 typst compile --root . --font-path fonts --ignore-system-fonts \
@@ -101,7 +101,7 @@ typst compile --root . --font-path fonts --ignore-system-fonts \
   templates/typst/cover.typ build/covers/<book>.png
 ```
 
-The PNG is 1748 × 2480 px, with a white page. `make covers` renders all of them. When `cover-image` is set in the metadata, that image is used for the EPUB and as page 1 of the PDF instead.
+The PNG is 1748 × 2480 px. `make covers` renders all of them. When `cover-image` is set in the metadata, that image is used for the EPUB and as page 1 of the PDF instead.
 
 ## PDF
 
@@ -127,14 +127,14 @@ The filter also puts `#contents-page()` after the About text, and gives the temp
 
 Layout (`templates/typst/style.typ`, `book.typ`):
 
-- A5, body Crimson 10.5 pt; tables 9 pt, tag groups and the table header in Noto Sans. Every font list ends with Noto Sans Math, which is used only for glyphs the main font lacks: `↳` (and the cover's `◆`).
+- A5, body Crimson 10.5 pt; tables 9 pt, tag groups and the table header in Noto Sans. Every font list ends with Noto Sans Math, which is used only for glyphs the main font lacks: `↳`.
 - Each chant starts a new page. In a book in parts (09), each part has a title page of its own.
 - The word table has an auto-sized Word column and a wrapping Analysis column, and no cell borders: only the shaded header row separates it. Its header row repeats when it breaks across pages; member rows are indented.
 - Running header: the book title on even pages, the current chant title on odd pages, none on a page where a chant starts. Page number at the foot.
 - The contents list the Pāli and English titles (level 1, or parts and chants for 09).
 
-The build uses only the fonts in `fonts/` (`--ignore-system-fonts`), so the PDF does not depend on the machine. `pdffonts build/pdf/<book>.pdf` should list only Crimson, Noto Sans and Noto Sans Math; any other font means a glyph fell back to one of typst's built-in fonts.
+The build uses only the fonts in `fonts/` (`--ignore-system-fonts`), so the PDF does not depend on the machine. `pdffonts build/pdf/<book>.pdf` should list only Crimson, Noto Sans, Noto Sans Math and, from the cover, Abhaya Libre X; any other font means a glyph fell back to one of typst's built-in fonts.
 
 ## Dependencies
 
-A book is rebuilt when its texts, metadata, About text, the stylesheet, the fonts, the build scripts (`assemble.py`, `lint.py`, `chantlib/`) or `docs/style-spec.md` change. The check and authoring scripts (`compare.py`, `index.py`, `align.py`, `draft.py`, `simsapa.py`) are not dependencies: they do not touch the build. A PDF is also rebuilt when `templates/pandoc/` or `templates/typst/` change, and the cover when the metadata or `cover.typ` changes. The assembled Markdown waits for the cover PNG (order-only), because it names it for the EPUB; a new PNG rebuilds the EPUB, not the Markdown. The list of a book's text files comes from its metadata. `assemble.py --deps BOOK` writes it to `build/deps/<book>.mk`, which the Makefile includes. The deps file is remade when a text folder changes, but it is replaced only if the file list has changed. So an editor's lock or backup file in a folder does not rebuild the book, but a new or removed text does.
+A book is rebuilt when its texts, metadata, About text, the stylesheet, the fonts, the build scripts (`assemble.py`, `lint.py`, `chantlib/`) or `docs/style-spec.md` change. The check and authoring scripts (`compare.py`, `index.py`, `align.py`, `draft.py`, `simsapa.py`) are not dependencies: they do not touch the build. A PDF is also rebuilt when `templates/pandoc/` or `templates/typst/` change, and the cover when the metadata, `cover.typ` or its image in `templates/typst/assets/` changes. The assembled Markdown waits for the cover PNG (order-only), because it names it for the EPUB; a new PNG rebuilds the EPUB, not the Markdown. The list of a book's text files comes from its metadata. `assemble.py --deps BOOK` writes it to `build/deps/<book>.mk`, which the Makefile includes. The deps file is remade when a text folder changes, but it is replaced only if the file list has changed. So an editor's lock or backup file in a folder does not rebuild the book, but a new or removed text does.

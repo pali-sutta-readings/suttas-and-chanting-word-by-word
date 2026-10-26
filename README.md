@@ -51,7 +51,7 @@ checks/
   dpd-review.tsv     reviewed DPD-check items, so a re-run shows only new ones
 scripts/             Python tools (standard library only) and shell scripts
 templates/           EPUB stylesheet, pandoc template and Lua filter, typst templates
-fonts/               Crimson, Noto Sans, Noto Sans Math (SIL OFL)
+fonts/               Crimson, Noto Sans, Noto Sans Math, Abhaya Libre X (SIL OFL)
 docs/                style spec, decisions, workflows, build and Simsapa API notes
 tests/               unit tests and their fixtures
 .claude/skills/      skills for agents: word analysis, source compare, DPD review, drafting

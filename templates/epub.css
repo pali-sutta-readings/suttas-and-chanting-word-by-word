@@ -72,5 +72,8 @@ td > code { font-family: "Noto Sans", "Noto Sans Math", sans-serif; font-size: 0
 section.titlepage { text-align: center; margin-top: 30%; }
 section.titlepage h1.main { font-size: 1.8em; margin-bottom: 0.5em; }
 section.titlepage h1.subtitle { font-size: 1.3em; font-style: italic; font-weight: normal; }
+section.titlepage p.series-line { margin-top: 3em; font-family: "Noto Sans", sans-serif;
+  font-size: 0.8em; letter-spacing: 0.1em; text-transform: uppercase; }
+section.titlepage p.site-url { font-family: "Noto Sans", sans-serif; font-size: 0.8em; }
 nav ol { list-style: none; padding-left: 0; }
 nav ol ol { padding-left: 1.2em; }

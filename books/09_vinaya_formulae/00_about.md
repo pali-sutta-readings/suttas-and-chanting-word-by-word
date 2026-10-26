@@ -4,6 +4,10 @@ This book gives the Pāli formulae of the Vinaya sections of the *Bhikkhu Manual
 
 Each formula is followed by a literal English rendering that keeps the Pāli word order, the *Bhikkhu Manual*'s own English rendering, and a table that analyses every word: its grammar, its meaning, and how it is built from its root. Where a formula changes with the situation (a senior or junior listener, one article or several, near or far), the changed words follow it, each with a short table.
 
+## Where to find this book {.unnumbered .unlisted}
+
+This book and the others in the series can be downloaded as EPUB and PDF from <{site-url}>.
+
 ## Where the text comes from {.unnumbered .unlisted}
 
 - **Bhikkhu Manual**, Reference Edition (Amaravati Publications, 2020; CC BY-NC-ND 4.0) is the only source of the Pāli and of the renderings marked “Faithful”. Its spelling and word-joining are kept, with these changes: a few obvious misprints are corrected; formulae it abbreviates are given in full, from its own wording; and the leader's words, printed in brackets there, are not marked here.

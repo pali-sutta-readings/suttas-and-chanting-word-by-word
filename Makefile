@@ -20,6 +20,8 @@ EPUB_FONTS := $(addprefix fonts/Crimson/Crimson-,Roman.otf Italic.otf Bold.otf B
 FONTS := $(wildcard fonts/*/*.otf fonts/*/*.ttf)
 TYPST_FLAGS := --root . --font-path fonts --ignore-system-fonts
 TYPST_TEMPLATES := $(wildcard templates/typst/*.typ)
+# The cover's background image (the Dhamma wheel).
+COVER_ASSETS := $(wildcard templates/typst/assets/*)
 PDF_TEMPLATES := templates/pandoc/book.typst templates/pandoc/chant.lua
 
 .PHONY: help check-tools test clean all epub pdf book covers \
@@ -102,7 +104,7 @@ build/covers/%.json: books/%/metadata.txt $(BUILD_SCRIPTS)
 	@mkdir -p $(@D)
 	$(PYTHON) scripts/assemble.py --cover-data $* > $@.tmp && mv $@.tmp $@
 
-build/covers/%.png: build/covers/%.json templates/typst/cover.typ templates/typst/style.typ $(FONTS)
+build/covers/%.png: build/covers/%.json templates/typst/cover.typ templates/typst/style.typ $(COVER_ASSETS) $(FONTS)
 	$(TYPST) compile $(TYPST_FLAGS) --input cover-data=/$< --format png --ppi 300 \
 		templates/typst/cover.typ $@
 
@@ -116,9 +118,10 @@ build/tmp/%.md: $$(wildcard books/$$*/*.*) $(BUILD_SCRIPTS) | build/covers/%.png
 
 # A fatal or error from epubcheck removes the EPUB, so make does not take
 # it as up to date (docs/book-build.md).
-build/epub/%.epub: build/tmp/%.md build/covers/%.png templates/epub.css $(EPUB_FONTS)
+build/epub/%.epub: build/tmp/%.md build/covers/%.png templates/epub.css templates/pandoc/epub3.html $(EPUB_FONTS)
 	@mkdir -p $(@D)
 	$(PANDOC) --defaults build/tmp/$*.pandoc.json --css templates/epub.css \
+		--template templates/pandoc/epub3.html \
 		$(EPUB_FONTS:%=--epub-embed-font=%) -o $@
 	@$(EPUBCHECK) $@ || { rm -f $@; echo "epubcheck failed; removed $@" >&2; exit 1; }
 
@@ -126,7 +129,7 @@ build/tmp/%.typ: build/tmp/%.md $(PDF_TEMPLATES)
 	$(PANDOC) --defaults build/tmp/$*.pandoc.json -t typst \
 		--template templates/pandoc/book.typst --lua-filter templates/pandoc/chant.lua -o $@
 
-build/pdf/%.pdf: build/tmp/%.typ build/covers/%.json $(TYPST_TEMPLATES) $(FONTS)
+build/pdf/%.pdf: build/tmp/%.typ build/covers/%.json $(TYPST_TEMPLATES) $(COVER_ASSETS) $(FONTS)
 	@mkdir -p $(@D)
 	$(TYPST) compile $(TYPST_FLAGS) $< $@
 

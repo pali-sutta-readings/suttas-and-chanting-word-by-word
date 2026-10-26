@@ -13,7 +13,7 @@ Writes three files to the output folder (default build/tmp/):
 
 With --cover-data it prints instead the JSON that templates/typst/cover.typ
 reads (build/covers/<book>.json): title, subtitle, pali-title-first,
-series-line, accent.
+series-line, accent, site-url.
 
 The EPUB and PDF builds both start from <book>.md, so the two formats
 cannot drift apart. A lint ERROR or STRAY in the book's files gives a
@@ -36,6 +36,9 @@ import lint
 
 ROOT = books.ROOT
 COVERS_DIR = ROOT / "build" / "covers"
+# Where the books are published: on the cover, the EPUB title page, and in
+# the About text as {site-url}.
+SITE_URL = "https://pali-sutta-readings.github.io/pali-chanting-word-by-word/"
 
 # Line kinds that become a one-line classed div, and their class.
 DIV_CLASS = {
@@ -106,7 +109,8 @@ def render_text(cf, shift=0):
 
 def about_text(book, today):
     text = (book.dir / book.meta["about"]).read_text(encoding="utf-8")
-    return text.replace("{today}", today).rstrip("\n") + "\n"
+    text = text.replace("{today}", today).replace("{site-url}", SITE_URL)
+    return text.rstrip("\n") + "\n"
 
 
 def cover_path(book, covers_dir=COVERS_DIR):
@@ -126,6 +130,7 @@ def cover_data(book):
         "pali-title-first": bool(m.get("pali-title-first")),
         "series-line": m.get("series-line") or "",
         "accent": m.get("accent") or "",
+        "site-url": SITE_URL,
     }
 
 
@@ -148,6 +153,8 @@ def pandoc_metadata(book, cover=None):
         "author": m.get("author"),
         "publisher": m.get("publisher"),
         "cover-image": str(cover) if cover else None,
+        "series-line": m.get("series-line"),
+        "site-url": SITE_URL,
         "book-id": book.id,
         "cover-pdf": (os.path.relpath(book.dir / m["cover-image"], ROOT)
                       if m.get("cover-image") else None),

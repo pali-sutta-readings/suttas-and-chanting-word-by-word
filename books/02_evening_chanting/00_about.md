@@ -2,6 +2,10 @@
 
 This book gives the Pāli text of the evening chanting (Sāyaṇha-vandanā), as chanted in monasteries of the Ajahn Chah lineage in the West. Each line of Pāli is followed by a literal English rendering that keeps the Pāli word order, a more natural English rendering, and a table that analyses every word: its grammar, its meaning, and how it is built from its root.
 
+## Where to find this book {.unnumbered .unlisted}
+
+This book and the others in the series can be downloaded as EPUB and PDF from <{site-url}>.
+
 ## Where the Pāli comes from {.unnumbered .unlisted}
 
 - **Bhikkhu Manual**, Reference Edition (Amaravati Publications, 2020; CC BY-NC-ND 4.0) is the main source. Its spelling and word-joining are kept, with these changes: the leader's opening words, printed in brackets there, are not marked here; a few obvious misprints are corrected; and the few words it leaves out where the other two sources agree are restored.

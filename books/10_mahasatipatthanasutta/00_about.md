@@ -4,6 +4,10 @@ This book gives the Pāli text of the *Mahāsatipaṭṭhānasutta*, the Great D
 
 The discourse is divided into sentences, and long sentences into clauses. Each is followed by a literal English rendering that keeps the Pāli word order, a more natural English rendering, and a table that analyses every word: its grammar, its meaning, and how it is built from its root. Every compound is also broken into its members. A passage that the discourse repeats word for word is given its table once; later it keeps its two renderings and points back to the first. Where a passage repeats with a few words changed (the nine charnel grounds, the hindrances, the sense bases), the changed words follow it, each with a short table.
 
+## Where to find this book {.unnumbered .unlisted}
+
+This book and the others in the series can be downloaded as EPUB and PDF from <{site-url}>.
+
 ## Where the Pāli comes from {.unnumbered .unlisted}
 
 - **SuttaCentral**, Mahāsaṅgīti edition of the Pāli Canon (suttacentral.net, text *dn22*). SuttaCentral states that the original Pāli texts are in the public domain. Its spelling and word-joining are kept. Its notes on variant readings are left out.

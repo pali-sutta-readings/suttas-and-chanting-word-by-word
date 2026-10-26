@@ -124,6 +124,7 @@ class AssembleTest(unittest.TestCase):
             "pali-title-first": True,
             "series-line": "",
             "accent": "",
+            "site-url": assemble.SITE_URL,
         })
 
     def test_generated_cover_used_when_built(self):
