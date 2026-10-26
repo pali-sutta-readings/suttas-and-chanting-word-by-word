@@ -327,3 +327,21 @@ Corrected on 2026-10-26, with entries in the 03, 04a and 07a changelogs; their l
 | 04a/05:22 | *dvādasañca* `(card acc pl)` | Cardinals 11–18 are plural; the *ñ* comes from the sandhi with *ca*. DPD parses *dvādasaṁ* only as a singular (`expected`). |
 
 The 249 notation verdicts include 43 shortened chains. New rows write DPD's chain in full (`pali-word-analysis` skill §7). The settled shortened chains stay as they are (open query D17) unless they are aligned with `align.py`; aligned rows come back for review on the next run.
+
+## Success metrics (2026-10-26)
+
+PRD section 8, checked at the end of the repo setup. Unless noted, the commands were run in a fresh clone of the repo (commit `fc14799`) in a temp folder, with pandoc 3.8.3, typst 0.15.1, python 3.14.7, epubcheck 5.1.0, and Simsapa 1.1.0-alpha.3 with DPD `v0.4.20260501` running. In the clone, `make check-tools` reported every required tool OK and `make test` ran 145 tests, all passing.
+
+| # | Metric | Result |
+| :--- | :--- | :--- |
+| 1 | Migration script runs cleanly; manifest; 130/130 identical | **Pass**, by the one-time run of 2026-10-22 ("The run" above): 209 texts, 17 changelogs and 6 originals; S22 vs BACKUP 130/130 identical; FINAL vs BACKUP 105/105 identical for 07c–10. Not re-run: the script is a record of that run and the texts have since moved to `books/`. |
+| 2 | `make all` builds 13 EPUBs and 13 PDFs with covers | **Pass.** `make -j4 all` in the clone: 13 EPUBs, 13 PDFs, each with its generated cover; no errors (about 75 s). |
+| 3 | `make lint` reproduces the legacy result | **Pass, with one explained difference.** 0 ERROR, 0 STRAY, 23 WARN over 209 files. The 22 legacy WARNs are reproduced on the same lines ("Lint baseline"); the 23rd comes from a check the legacy linter did not have (the variant cue at 09e/05:67 without its two trailing spaces, "Open lint findings"). |
+| 4 | `epubcheck`: 0 fatals and 0 errors on every EPUB | **Pass.** All 13: 0 fatals, 0 errors, 0 warnings, 0 infos. |
+| 5 | EPUB metadata matches `metadata.txt` | **Pass.** Title, subtitle, language, sources and rights in each EPUB's `content.opf` compared with the book's `metadata.txt` by a throwaway script: 0 mismatches over 13 books. |
+| 6 | 01, 07a and 10 PDFs: same content and order as the legacy PDFs, no missing glyphs | **Pass.** Content and order were compared with the legacy PDFs in task 7 (Literal, Faithful, `↳`, √ and repeat-note counts identical; Literal lines in the same order; only four opening quotes in 07a set as ‘ instead of ’). The new PDFs: `↳`/√ counts 191/349 (01), 1495/3277 (07a: one √ more than the legacy, from the *asita* correction under "Errors"), 1016/1882 (10); ṁ, ṭ and ḷ present; no replacement characters; every font embedded (Crimson, Noto Sans, Noto Sans Math). |
+| 7 | `make dpd-check` on all texts; every flag explained, every candidate reviewed | **Pass.** 644 items reviewed ("DPD check review"); the 5 errors were corrected (commit `0e21e4e`), and 639 verdicts remain in `checks/dpd-review.tsv`. In the clone: 22,546 rows, 0 flags, 0 candidates, 639 hidden. |
+| 8 | A drafted line passes `lint` and `simsapa.py check` | **Pass**, by the trial of 2026-10-26 (*Dhp 1*, first line; `docs/script-or-skill.md`, "Trial"). |
+| 9 | A fresh agent session, given only `CLAUDE.md`, finds the style spec and runs the check routine | **Not yet run.** `CLAUDE.md` points to `docs/style-spec.md`, `docs/quality-process.md` and the skills, and lists the Make targets. The trial needs a new session started by the maintainer. |
+| 10 | Every text mapped; `make compare` runs over all; every difference classified | **Pass.** `make compare` in the clone covers all 209 texts and exits 0. Without the local Chanting Guide copy it skips and lists its 5 texts (03/18, 07a/07–07a/10), as expected; with Simsapa running, the 36 `sc` entries are compared. In the working repo (with the Chanting Guide copy): 105 identical, 49 with every line found, 55 with items, all classified ("Compare review"; 03/19 has been identical since its fix). |
+| 11 | `docs/script-or-skill.md` records the spike findings and the maintainer's review | **Partly.** Both spikes are recorded, with spike 1's review (2026-10-23). Spike 2's "Decision" still says "Awaiting maintainer review": the tools of task 9 were built on it, but no review note was written down. |
