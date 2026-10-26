@@ -22,6 +22,18 @@ The texts are built into 13 books, each as an EPUB and an A5 PDF:
 
 The texts were made in an earlier project and migrated here; `docs/legacy-migration.md` tells that story.
 
+## Workflows at a glance
+
+How the books are built from `books/`, and how the checks and their reviews fit together:
+
+![Build and check flow: books/ → assemble.py → pandoc and typst → EPUB and PDF; lint, compare, index and dpd-check → reports → skills](docs/images/tools-flow.jpg)
+
+How a new text is drafted: settled lines are reused, and the other lines are glossed through the Simsapa API, which gives DPD's data for each word; an agent then writes the rows with the `pali-word-analysis` skill:
+
+![Glossing flow: Pāli lines → draft.py and index.py overlaps → simsapa.py gloss with /gloss_text and /lookup_forms → candidate data → pali-word-analysis skill → draft.py build → checks](docs/images/gloss-flow.jpg)
+
+The diagrams are drawn in `docs/images/*.svg`. After editing one, render it again with `rsvg-convert -z 1.5 -b white X.svg -o X.png && magick X.png -quality 90 X.jpg`.
+
 ## Folders
 
 ```text

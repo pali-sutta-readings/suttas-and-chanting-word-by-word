@@ -1,0 +1,161 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1240" viewBox="0 0 1500 1240">
+  <style>
+    text { font-family: 'Noto Sans', 'DejaVu Sans', sans-serif; fill: #1f2937; }
+    .title { font-size: 26px; font-weight: bold; }
+    .h { font-size: 16px; font-weight: bold; }
+    .s { font-size: 13px; fill: #374151; }
+    .c { font-family: 'Noto Sans Mono', 'DejaVu Sans Mono', monospace; }
+    .note { font-size: 13px; fill: #4b5563; font-style: italic; }
+    .num { font-size: 15px; font-weight: bold; fill: #ffffff; }
+    .script { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.8; }
+    .inner { fill: #ffffff; stroke: #93c5fd; stroke-width: 1.4; }
+    .data { fill: #f3f4f6; stroke: #6b7280; stroke-width: 1.8; }
+    .api { fill: #ffedd5; stroke: #ea580c; stroke-width: 1.8; }
+    .route { fill: #ffffff; stroke: #fdba74; stroke-width: 1.4; }
+    .skill { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.8; }
+    .out { fill: #fef9c3; stroke: #ca8a04; stroke-width: 1.8; }
+    .arrow { fill: none; stroke: #374151; stroke-width: 1.8; marker-end: url(#a); }
+    .both { fill: none; stroke: #ea580c; stroke-width: 1.8; marker-start: url(#o); marker-end: url(#o); }
+    .dash { fill: none; stroke: #6b7280; stroke-width: 1.6; stroke-dasharray: 6 4; marker-end: url(#a); }
+    .odash { fill: none; stroke: #ea580c; stroke-width: 1.6; stroke-dasharray: 6 4; marker-start: url(#o); marker-end: url(#o); }
+    .badge { fill: #374151; }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+    <marker id="o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#ea580c"/>
+    </marker>
+  </defs>
+  <rect width="1500" height="1240" fill="#ffffff"/>
+
+  <text x="30" y="42" class="title">Drafting a new text: glossing with the Simsapa API</text>
+  <text x="30" y="68" class="note">docs/drafting-workflow.md · draft-new-text skill</text>
+
+  <!-- 1 source -->
+  <circle cx="40" cy="120" r="14" class="badge"/><text x="35" y="125" class="num">1</text>
+  <rect x="70" y="90" width="930" height="64" rx="8" class="data"/>
+  <text x="85" y="116" class="h">Pāli lines from the source</text>
+  <text x="85" y="139" class="s">Bhikkhu Manual · Community Chanting Book · Chanting Guide · SuttaCentral (through Simsapa); entry in <tspan class="c">sources/ref-map.tsv</tspan></text>
+
+  <!-- 2 draft build -->
+  <circle cx="40" cy="220" r="14" class="badge"/><text x="35" y="225" class="num">2</text>
+  <rect x="70" y="190" width="930" height="60" rx="8" class="script"/>
+  <text x="85" y="216" class="h c">draft.py build</text>
+  <text x="85" y="238" class="s">a draft with only the <tspan class="c">T|</tspan> and <tspan class="c">P|</tspan> lines → a scratch chant file</text>
+
+  <!-- 3 overlaps -->
+  <circle cx="40" cy="316" r="14" class="badge"/><text x="35" y="321" class="num">3</text>
+  <rect x="70" y="286" width="930" height="60" rx="8" class="script"/>
+  <text x="85" y="312" class="h c">index.py overlaps SCRATCH.md</text>
+  <text x="85" y="334" class="s">which Pāli lines already have a settled table in another text</text>
+
+  <path d="M535,154 L535,188" class="arrow"/>
+  <path d="M535,250 L535,284" class="arrow"/>
+
+  <!-- branch: settled -->
+  <rect x="70" y="400" width="380" height="76" rx="8" class="out"/>
+  <text x="85" y="426" class="h">line already analysed</text>
+  <text x="85" y="448" class="s">copy the unit with <tspan class="c">I|</tspan> (by its Pāli-line key);</text>
+  <text x="85" y="466" class="s">no new analysis</text>
+  <path d="M260,346 L260,398" class="arrow"/>
+  <path d="M260,476 L260,1028" class="arrow"/>
+
+  <!-- 4 gloss -->
+  <path d="M770,346 L770,398" class="arrow"/>
+  <text x="780" y="378" class="note">new lines</text>
+  <circle cx="512" cy="430" r="14" class="badge"/><text x="507" y="435" class="num">4</text>
+  <rect x="540" y="400" width="460" height="352" rx="8" class="script"/>
+  <text x="555" y="428" class="h c">simsapa.py gloss --text "…" | FILE</text>
+
+  <rect x="555" y="442" width="430" height="44" rx="6" class="inner"/>
+  <text x="568" y="469" class="s">remove <tspan class="c">(×N)</tspan>; one paragraph per Pāli line</text>
+
+  <rect x="555" y="498" width="430" height="58" rx="6" class="inner"/>
+  <text x="568" y="521" class="s">exact gloss: one token per word, in order,</text>
+  <text x="568" y="541" class="s">nothing dropped or chosen</text>
+
+  <rect x="555" y="568" width="430" height="100" rx="6" class="inner"/>
+  <text x="568" y="590" class="s">a token <tspan class="c">not_found</tspan>, or elided <tspan class="c">x'</tspan>: the two fixed respellings</text>
+  <text x="568" y="612" class="s">· <tspan class="c">sabb'</tspan> → stem + vowel (citation forms only)</text>
+  <text x="568" y="632" class="s">· <tspan class="c">attham-</tspan>, <tspan class="c">buddhañ</tspan> → hyphen off, final m ñ ṅ n → ṁ</text>
+  <text x="568" y="654" class="note">the output says which respelling answered</text>
+
+  <rect x="555" y="680" width="430" height="58" rx="6" class="inner"/>
+  <text x="568" y="703" class="s"><tspan class="c">index.py rows</tspan>: the rows other texts</text>
+  <text x="568" y="723" class="s">already use for each word, with counts</text>
+
+  <path d="M770,486 L770,496" class="arrow"/>
+  <path d="M770,556 L770,566" class="arrow"/>
+  <path d="M770,668 L770,678" class="arrow"/>
+
+  <!-- Simsapa -->
+  <rect x="1090" y="400" width="380" height="352" rx="10" class="api"/>
+  <text x="1108" y="430" class="h">Simsapa app: localhost API</text>
+  <text x="1108" y="452" class="s c">127.0.0.1:4848</text>
+  <text x="1108" y="472" class="s">(or <tspan class="c">$SIMSAPA_DIR/api-port.txt</tspan>)</text>
+
+  <rect x="1105" y="490" width="350" height="96" rx="6" class="route"/>
+  <text x="1118" y="514" class="h c" style="font-size:14px">POST /gloss_text</text>
+  <text x="1118" y="534" class="s c">"options": {"exact": true}</text>
+  <text x="1118" y="556" class="s">→ <tspan class="c">paragraphs[].tokens[]</tspan>:</text>
+  <text x="1118" y="574" class="s c">token_index, original_word, lookup</text>
+
+  <rect x="1105" y="598" width="350" height="96" rx="6" class="route"/>
+  <text x="1118" y="622" class="h c" style="font-size:14px">POST /lookup_forms</text>
+  <text x="1118" y="642" class="s">≤ 5,000 forms per call, one result each</text>
+  <text x="1118" y="664" class="s">→ <tspan class="c">status, headwords[],</tspan></text>
+  <text x="1118" y="682" class="s c">form_grammar_raw, deconstructions[]</text>
+
+  <text x="1108" y="722" class="s">DPD (Digital Pāḷi Dictionary) data;</text>
+  <text x="1108" y="740" class="s">the authority for roots and grammar</text>
+
+  <path d="M987,527 L1103,527" class="both"/>
+  <path d="M987,630 L1103,630" class="both"/>
+
+  <!-- 5 JSON -->
+  <path d="M770,752 L770,784" class="arrow"/>
+  <circle cx="512" cy="816" r="14" class="badge"/><text x="507" y="821" class="num">5</text>
+  <rect x="540" y="786" width="460" height="118" rx="8" class="out"/>
+  <text x="555" y="812" class="h">candidate data, per token (JSON or text)</text>
+  <text x="555" y="836" class="s">status · respelling used · each headword: <tspan class="c">pos</tspan>, <tspan class="c">grammar</tspan>,</text>
+  <text x="555" y="855" class="s">meaning, <tspan class="c">construction</tspan>, <tspan class="c">construction_summary</tspan>,</text>
+  <text x="555" y="874" class="s"><tspan class="c">root_key</tspan>, <tspan class="c">root_base</tspan>, DPD's parses of the form · splits</text>
+  <text x="555" y="890" class="s">· settled rows. <tspan style="font-weight:bold">No rows are composed.</tspan></text>
+
+  <!-- 6 skill -->
+  <path d="M770,904 L770,926" class="arrow"/>
+  <circle cx="512" cy="958" r="14" class="badge"/><text x="507" y="963" class="num">6</text>
+  <rect x="540" y="928" width="460" height="84" rx="8" class="skill"/>
+  <text x="555" y="954" class="h">agent with the pali-word-analysis skill</text>
+  <text x="555" y="977" class="s">picks the reading the line needs; writes tags, meaning,</text>
+  <text x="555" y="996" class="s">etymology: <tspan class="c">R|</tspan> rows and <tspan class="c">M|</tspan> member rows; Literal, Faithful</text>
+  <text x="1020" y="968" class="note">Scripts never assign grammar labels:</text>
+  <text x="1020" y="986" class="note">DPD lists the possible readings, and the line decides.</text>
+
+  <!-- 7 build file -->
+  <path d="M770,1012 L770,1028" class="arrow"/>
+  <circle cx="40" cy="1060" r="14" class="badge"/><text x="35" y="1065" class="num">7</text>
+  <rect x="70" y="1030" width="930" height="60" rx="8" class="script"/>
+  <text x="85" y="1056" class="h c">draft.py build DRAFT books/&lt;book&gt;/texts/NN_name.md</text>
+  <text x="85" y="1078" class="s">the draft (<tspan class="c">I|</tspan>, <tspan class="c">R|</tspan>, <tspan class="c">M|</tspan> …) becomes the chant file</text>
+
+  <!-- 8 checks -->
+  <path d="M535,1090 L535,1124" class="arrow"/>
+  <circle cx="40" cy="1156" r="14" class="badge"/><text x="35" y="1161" class="num">8</text>
+  <rect x="70" y="1126" width="930" height="64" rx="8" class="skill"/>
+  <text x="85" y="1152" class="h">checks and log</text>
+  <text x="85" y="1175" class="s"><tspan class="c">lint.py</tspan> · <tspan class="c">compare.py</tspan> · <tspan class="c">simsapa.py check</tspan> → dpd-review skill · <tspan class="c">index.py</tspan> · 10-unit spot check · CHANGELOG.md</text>
+  <path d="M1000,1158 L1440,1158 L1440,754" class="odash"/>
+  <text x="1250" y="1148" class="note">check uses /lookup_forms</text>
+
+  <!-- legend -->
+  <g transform="translate(70,1208)">
+    <rect width="26" height="18" rx="4" class="script"/><text x="34" y="14" class="s">script</text>
+    <rect x="120" width="26" height="18" rx="4" class="api"/><text x="154" y="14" class="s">Simsapa localhost API</text>
+    <rect x="325" width="26" height="18" rx="4" class="data"/><text x="359" y="14" class="s">source</text>
+    <rect x="440" width="26" height="18" rx="4" class="out"/><text x="474" y="14" class="s">result</text>
+    <rect x="555" width="26" height="18" rx="4" class="skill"/><text x="589" y="14" class="s">judgment: agent with a skill</text>
+  </g>
+</svg>
