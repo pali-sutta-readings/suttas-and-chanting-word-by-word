@@ -62,7 +62,7 @@ ety:dammi#df50362971	notation	shortened chain without DPD's sign a (√dā + a +
 ety:damāpayanto#52a27cd674	dpd-gap	DPD has no headword row for damāpayanto (prp of the causative of dameti); its splits (dama + apayanto) are not the word	2026-10-26
 ety:dassī#24e0e75ab5	notation	shortened chain without DPD's sign a (√dis + a > disa > dassa + ī); query D17	2026-10-26
 ety:daṭṭhabbaṁ#2061b64c08	notation	shortened chain without DPD's sign a (√dis + a > disa > dassa + tabba); query D17	2026-10-26
-ety:desayi#a7d02fc3f5	query	row has both e and aya (√dis + e + aya + i); DPD has only the sign *aya (√dis + *aya > desaya + i)	2026-10-26
+ety:desayi#a7d02fc3f5	error	decided: follow DPD's single causative sign (√dis + *aya > desaya + i); the row should read √dis + aya + i, without e	2026-10-26
 ety:desissāmi#d804ebbd31	notation	future sign written issā (before mi) where DPD's lemma has no tense sign; DPD √dis + *e > dese	2026-10-26
 ety:dhamma-pahaṁsāna-pāṭhaṁ#f04e349b99	notation	member pahaṁsana is DPD's headword (pa + √haṁs + ana); the text spells pahaṁsāna, which DPD lacks	2026-10-26
 ety:dhammacakkappavattana-suttaṁ#710515a724	notation	members finer than DPD's split dhammacakkappavattana + sutta	2026-10-26
@@ -144,7 +144,7 @@ ety:niddārāmatamanuyuttā#e6b0e581b9	notation	member niddārāmataṁ where DP
 ety:nimmānaratino#f090ea3652	notation	ending written ī where DPD writes ino (nimmāna + rati + ino)	2026-10-26
 ety:nissajjāmi#10c9713219	notation	DPD's summary is only nī + √sajj (entry without meaning_1); the row is fuller	2026-10-26
 ety:nivattissāmi#9cafea1fae	notation	future sign written issā (before mi); DPD's lemma ni + √vatt + a + ti has none	2026-10-26
-ety:nivedayuṁ#f0ef42ff7c	query	row has both e and aya (ni + √vid + e + aya + uṁ); DPD has only the sign *aya (ni + √vid + *aya > vedaya + i)	2026-10-26
+ety:nivedayuṁ#f0ef42ff7c	error	decided: follow DPD's single causative sign (ni + √vid + *aya > vedaya); the row should read ni + √vid + aya + uṁ, without e	2026-10-26
 ety:niyyāti#83502f8fbf	notation	shortened chain without DPD's sign a (nī + √yā + a + ti); query D17	2026-10-26
 ety:nāccuṇhāya#063ad68b53	notation	member uṇha where DPD writes uṇhā + a	2026-10-26
 ety:nāmanvayena#62d463594c	notation	DPD's ending ena after the members	2026-10-26
@@ -159,7 +159,7 @@ ety:parinibbāniko#35c8340866	notation	shortened chain without DPD's sign a (par
 ety:pariyodapeyya#3de5f5c74d	notation	causative sign written pe where DPD writes āpe > dāpe > dape	2026-10-26
 ety:passa#0c54b35cfa	notation	chain written √dis > pass + a where DPD writes √dis + a > disa > passa + a	2026-10-26
 ety:passa#294c0b0525	notation	DPD √dis + a > disa > passa + a; our row puts the stem (passa) in parentheses	2026-10-26
-ety:passantu#5327c4f1f9	query	etymology gives the root only ([√dis]); DPD √dis + a > disa > passa + ti; style spec §6 asks for the construction	2026-10-26
+ety:passantu#5327c4f1f9	error	decided: give the construction, in the shape of the settled passa- rows (passati [√dis > passa + ti]): √dis > passa + ntu	2026-10-26
 ety:passasissāmī'ti#8f82a3cfa0	notation	shortened chain without DPD's sign a (pa + √sas + a > sasa), future sign and iti added; query D17	2026-10-26
 ety:pasutaṁ#e22d1f6435	homonym	metrical short form of pasūta (pa + √su), as the note says; DPD's pasutaṁ row lists pasuta (√si, √sar)	2026-10-26
 ety:pattiyā#66e88cd645	dpd-gap	DPD's lookup row for pattiyā lacks patti 2.1, foot-soldier (√pad + ti), which the row means	2026-10-26
@@ -309,8 +309,8 @@ grammar:adhipatino#219aea633f	expected	member of maggādhipatino, nom pl in -ino
 grammar:adhipatī#848530e344	expected	member of lokādhipatī, -i lengthened for the metre (note on the compound row)	2026-10-26
 grammar:agge#10ed5e7aab	expected	eastern nominative in -e (row note)	2026-10-26
 grammar:akkharā#ef4efd21ad	expected	last member of a possessive compound with kavitā/kāveyyā, agreeing (adj masc nom pl)	2026-10-26
-grammar:anekā#3df89ee08d	query	anekā with masc antarāyā; DPD declines aneka like a pronoun (masc nom pl aneke) and gives anekā only as fem	2026-10-26
-grammar:anekā#5685ebaaa2	query	anekā with masc antarāyā; DPD declines aneka like a pronoun (masc nom pl aneke) and gives anekā only as fem	2026-10-26
+grammar:anekā#3df89ee08d	dpd-gap	decided: the tag fits the line (agrees with antarāyā, masc nom pl) and anekā is the source's form; DPD declines aneka pronominally (aneke) and lacks this parse	2026-10-26
+grammar:anekā#5685ebaaa2	dpd-gap	decided: the tag fits the line (agrees with antarāyā, masc nom pl) and anekā is the source's form; DPD declines aneka pronominally (aneke) and lacks this parse	2026-10-26
 grammar:añjalī#d7fbc0f8e4	expected	final -i lengthened (row note)	2026-10-26
 grammar:aññā#4f24b12327	expected	irregular dative of aññā (row note)	2026-10-26
 grammar:aṭṭhacattāḷīsa#911eb2d6b8	expected	stem form, for the metre (row note)	2026-10-26
@@ -331,7 +331,7 @@ grammar:divā#ea75f88b1d	expected	stem with -n- inserted after ratti (row note);
 grammar:dukkhanirodhaṁ#6d3e57beda	expected	masc in DPD; nt here, agreeing with ariyasaccaṁ (row note)	2026-10-26
 grammar:dukkhasamudayaṁ#fd31698d75	expected	masc in DPD; nt here, agreeing with ariyasaccaṁ (row note)	2026-10-26
 grammar:dvādas'ākāraṁ#2ef949d994	expected	DPD lists dvādasākāra as a noun; read here as an adjective (row note)	2026-10-26
-grammar:dvādasañca#0df5d343c2	query	dvādasaṁ (+ ca) tagged acc pl; DPD parses the cardinal only in the singular (nt nom sg, masc acc sg …)	2026-10-26
+grammar:dvādasañca#0df5d343c2	expected	decided: cardinals 11-18 are plural (nom/acc dvādasa); the ñ comes from the sandhi with ca; DPD parses dvādasaṁ only as a singular	2026-10-26
 grammar:eka-rājā#0543737622	dpd-gap	rājan nom sg rājā in the compound; DPD parses ekarājā as an a-stem (nom pl …)	2026-10-26
 grammar:garuno#3ffc9fd701	expected	member of saddhamma-garuno, -uno as nom pl for the metre (note on the compound row)	2026-10-26
 grammar:ghātā#90aafb01f1	dpd-gap	agent noun ghātar (nom sg ghātā), not a DPD headword (row note); DPD parses ghāta	2026-10-26

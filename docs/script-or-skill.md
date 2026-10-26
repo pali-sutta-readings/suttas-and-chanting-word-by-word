@@ -280,9 +280,9 @@ The grammar candidates are review items, nearly all explained by the row's note 
 | (j) an enclitic we add to the analysis (`ca`, `api`, `pi`, `eva`, `va`, `iti`) when DPD splits it off | `saṁ + √ghaṭ + a + ca` / split `saṅghaṁ + ca` | 306 |
 | (c) extended, found by the trial of task 9.12: DPD's "uncertain" marker `??` dropped like its `*` | `siri + ttha` / `?? siri + *ttha` | 303 |
 
-The other etymology items, the 113 grammar items, the 221 not-found items and the 7 flags were reviewed one by one into `checks/dpd-review.tsv`: 644 items after the last rule, 2 errors and 6 queries (`docs/legacy-migration.md`, "DPD check review"). The review corrected one finding of spike 2: *vattu* `[√vad + tuṁ]` is right. The form *vattu* alone is only *vattar* (√vac) in DPD, but the row means the infinitive *vattuṁ*, which DPD gives as `√vad + tuṁ`. It is a `homonym`.
+The other etymology items, the 113 grammar items, the 221 not-found items and the 7 flags were reviewed one by one into `checks/dpd-review.tsv`: 644 items after the last rule; 2 errors, and 6 questions of analysis that the agent then decided (3 more errors, 3 rows that stand), after the maintainer's direction that such questions are the agent's to decide (`docs/legacy-migration.md`, "DPD check review"). The review corrected one finding of spike 2: *vattu* `[√vad + tuṁ]` is right. The form *vattu* alone is only *vattar* (√vac) in DPD, but the row means the infinitive *vattuṁ*, which DPD gives as `√vad + tuṁ`. It is a `homonym`.
 
-Reviewing needed the verdicts `expected` (a spec rule or a decision makes the row differ on purpose, usually named in its note) and `query` (for the maintainer), beside `notation`, `homonym`, `dpd-gap` and `error`; the planned `other` was not needed.
+Reviewing needed the verdicts `expected` (a spec rule or a decision makes the row differ on purpose, usually named in its note) and `query` (only for a doubt about the Pāli text itself), beside `notation`, `homonym`, `dpd-gap` and `error`; the planned `other` was not needed.
 
 ### Trial (task 9.12, 2026-10-26)
 

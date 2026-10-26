@@ -62,9 +62,11 @@ and read the row in its file, with its line. Then give one verdict:
 | `dpd-gap` | DPD lacks the form, a parse, or a headword in its lookup row, and our row is right on other evidence (the inflection table, a related headword, the source). | `pattiyā`: lookup row lacks *patti 2.1* |
 | `expected` | A spec rule or a maintainer decision makes our row differ on purpose: metrical lengthening, the *antara-* rule, `(trad.)`, "read as a wish", a compound member fragment cut at a sandhi junction. | *munī* `(masc nom sg)`, metre |
 | `error` | Our row is wrong: wrong root, wrong construction, a tag that fits neither DPD nor the line. | *patī* `[pati, no root in DPD]`: DPD *pati* 2.1 is √pat |
-| `query` | You cannot decide: the reading depends on interpretation, or DPD and the source disagree. | |
+| `query` | Only for the Pāli text itself: the item suggests a misprint in the source, or the sources read differently. Questions about the analysis are not queries: decide them (below). | |
 
-Be strict: a verdict other than `error` or `query` needs evidence you can name in the reason (the DPD field, the table cell, the rule, the decision). "Probably fine" is a `query`. One verdict covers all rows sharing the key; if they differ (the same word used differently in two lines), say so and use `query`.
+Be strict: a verdict other than `error` or `query` needs evidence you can name in the reason (the DPD field, the table cell, the rule, the decision). "Probably fine" is not a verdict: look further until you can name the evidence.
+
+**Decide the analysis yourself.** Which sign or suffix to write, how full an etymology must be, whether a tag the line needs stands against DPD's parses: these are decided by the rules of the `pali-word-analysis` skill (§7, "Decide, don't defer"), not put to the maintainer. Write the decision in the reason, starting "decided:" (`decided: follow DPD's single causative sign …`). A decision that the row must change is an `error`. One verdict covers all rows sharing the key; if they differ (the same word used differently in two lines), say so and use `query`.
 
 ## 3. Record the verdict
 
@@ -77,7 +79,7 @@ ety:dhammassavana-kālo#…	notation	members grouped finer than DPD (dhamma + sa
 
 - The reason says what you found, in a few words, with the DPD evidence. It is read by people and by later reviews.
 - Keep rows sorted by key. Never delete a row to make an item come back; change its verdict.
-- A verdict of `error` or `query` hides the item too, so list each one for the maintainer (§5). The ledger is a record of review, not of correctness.
+- A verdict of `error` or `query` hides the item too, so list each one in the report (§5). The ledger is a record of review, not of correctness.
 
 ## 4. Consistency across files
 
@@ -98,4 +100,4 @@ Align only with the maintainer's agreement when the change is to a text, and the
 
 ## 5. Report
 
-Report: the counts by kind and verdict, every `error` and `query` with its place and evidence, and anything the check got wrong (a false flag that a fixed notation rule would remove without hiding errors: propose the rule, don't add it silently). Never edit a text, a changelog or `sources/` without the maintainer's decision.
+Report: the counts by kind and verdict, every `error` with its place, evidence and the corrected row, every `query` (a question about the Pāli text), and anything the check got wrong (a false flag that a fixed notation rule would remove without hiding errors: propose the rule, don't add it silently). Never edit a text, a changelog or `sources/` without the maintainer's decision.

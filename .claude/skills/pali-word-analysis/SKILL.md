@@ -95,7 +95,22 @@ Personal pronouns carry person, number and case, no gender (`(1st pl nom)`). Ind
 2. `lookup --widen WORD` shows what the app's search makes of it, labelled as guesses: a respelling or a related headword. Confirm a guess with `lookup` on the form you believe it is (`lookup --inflections` on the headword, then find the form in the table).
 3. If no headword fits, label from the closest DPD headword's table, and say in the note what DPD lacks (`[form not in DPD]`). `simsapa.py check` will list the row for review.
 
-## 7. In a draft
+## 7. Decide, don't defer
+
+The analysis is yours to decide. Do not leave a question about a row for the maintainer: choose by the rules below, write the row, and put the reason in the row's note or the changelog's "Why" column.
+
+| Situation | Decision |
+| :--- | :--- |
+| Our etymology has a sign, suffix or member DPD does not (`ni + √vid + e + aya + uṁ` where DPD has `ni + √vid + *aya > vedaya`) | Follow DPD: `ni + √vid + aya + uṁ`. |
+| An etymology gives less than a construction (`[√dis]` alone) | Give the construction, in DPD's analysis and in the shape the settled rows of related forms use (`passati` `[√dis > passa + ti]` → `passantu` `[√dis > passa + ntu]`). |
+| DPD's chain has a sign our settled rows leave out (`√yā + nti` / `√yā + a + nti`, open query D17) | In a new row, write DPD's chain in full. Leave settled rows as they are unless you are aligning them anyway. |
+| The source's form, with a tag that fits the line, is not among DPD's parses (*anekā* with masc *antarāyā*; DPD declines *aneka* like a pronoun, masc nom pl *aneke*) | Keep the source's form and the tag the line needs. If the reason is not obvious, add a short note. |
+| DPD parses a form in a number or gender the line rules out (*dvādasaṁ* as singular; cardinals 11–18 are plural) | Tag what the line and the grammar require, and note the sandhi or form if needed. |
+| Two readings fit the line equally | Give both (`(dat/gen)`, or two tag groups), as style spec §5 allows. |
+
+Only the **Pāli text itself** goes to the maintainer: a suspected misprint in the source, a reading that differs between sources, an elision whose expansion is uncertain (`docs/quality-process.md`, "Queries to the maintainer"). Those change the text, not its analysis.
+
+## 8. In a draft
 
 Rows go into the draft (`docs/drafting-workflow.md`, `scripts/draft.py`) as
 
@@ -122,7 +137,7 @@ R|bhagavantaṁ|masc acc sg|the Blessed One|√bhaj > bhag + a + vant
 R|abhivādemi|1st sg pres caus act indic|I bow down to, I pay high respect to|abhi + √vad + e + mi
 ```
 
-## 8. Check
+## 9. Check
 
 ```sh
 python3 scripts/lint.py FILE             # 0 ERROR, 0 STRAY (docs/quality-process.md §1)

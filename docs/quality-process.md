@@ -45,7 +45,7 @@ DPD, through the Simsapa app's localhost API, is the authority for roots, constr
 - **Flags**, likely errors: a root that matches no root of the form's DPD headwords; "no root in DPD" where DPD's headwords of that lemma have one.
 - **Candidates**, for review: an etymology that matches none of DPD's construction forms or splits (after fixed notation rules); tags that match none of DPD's parses of the form; a form DPD does not have.
 
-Review every new flag and candidate with the `dpd-review` skill (`.claude/skills/dpd-review/`), which records a verdict for each in `checks/dpd-review.tsv` (`notation`, `homonym`, `dpd-gap`, `expected`, `error`, `query`). Reviewed items are hidden on later runs; a change to the row or to DPD's data brings an item back. `make dpd-check` fails while a flag is unreviewed. Fix each `error` (with the maintainer's agreement for migrated texts), and put each `query` to the maintainer. A fix made to follow DPD is logged with "DPD" as the reference.
+Review every new flag and candidate with the `dpd-review` skill (`.claude/skills/dpd-review/`), which records a verdict for each in `checks/dpd-review.tsv` (`notation`, `homonym`, `dpd-gap`, `expected`, `error`, `query`). Reviewed items are hidden on later runs; a change to the row or to DPD's data brings an item back. `make dpd-check` fails while a flag is unreviewed. Fix each `error` (with the maintainer's agreement for migrated texts), and put each `query` (a doubt about the Pāli text) to the maintainer. Questions about the analysis are decided by the agent, following the `pali-word-analysis` skill (§7, "Decide, don't defer"), and the decision is written in the verdict's reason. A fix made to follow DPD is logged with "DPD" as the reference.
 
 Variant rows of book 10 are checked like any other row (`dpd-variant-rows`).
 
@@ -90,4 +90,4 @@ The build warns (and does not fail) if lint finds errors in the book's files. Ev
 
 ## Queries to the maintainer
 
-When a rule seems wrong for a text, or a reading is uncertain (a possible misprint, an expansion of an elision, a mistranslation in the source), keep the file as it is and ask the maintainer. Record the answer in `docs/decisions.md` and apply it with a changelog entry that cites it.
+When a rule seems wrong for a text, or the Pāli text is uncertain (a possible misprint, an expansion of an elision, a mistranslation in the source), keep the file as it is and ask the maintainer. Questions about the analysis of a text (which reading, sign or label; how full an etymology) are not queries: the agent decides them by the `pali-word-analysis` skill and records the reason. Record the answer in `docs/decisions.md` and apply it with a changelog entry that cites it.

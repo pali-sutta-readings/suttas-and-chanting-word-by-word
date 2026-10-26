@@ -103,4 +103,6 @@ make book BOOK=<book>
 
 ## Report
 
-Report the new file, its source, any line where you were unsure of the reading (as a query for the maintainer, with the DPD evidence), the DPD verdicts that are `error` or `query`, and the spot-check result.
+Report the new file, its source, the analysis decisions you made where DPD and the line pulled apart (they are also in the row notes or the changelog), any doubt about the Pāli text itself (a possible misprint or a reading that differs between sources: these go to the maintainer), and the spot-check result.
+
+Decide the analysis yourself: which reading, which sign, how full an etymology. The `pali-word-analysis` skill (§7) gives the rules. Only the Pāli text goes to the maintainer.
