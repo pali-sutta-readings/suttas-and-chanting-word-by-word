@@ -37,16 +37,21 @@ Anything else is a fault in the file: fix it. Variant cues are not seen by `comp
 
 ```sh
 make dpd-check                                 # all texts; Simsapa must be running
-python3 scripts/simsapa.py check FILES
+python3 scripts/simsapa.py check FILES         # --strict: fail on unreviewed candidates too
 ```
 
-DPD, through the Simsapa app's localhost API, is the authority for roots, constructions and compound members. `simsapa.py check` flags, for each row: a word not found in DPD; a root that matches no candidate headword; an etymology that matches no line of DPD's `construction`; `comp` members that differ from DPD's construction or the deconstructor split. Fix each flag, or explain it (e.g. `(trad.)`, "no root in DPD", the *antara-* exception, a deliberate reading the maintainer decided). A fix made to follow DPD is logged with "DPD" as the reference.
+DPD, through the Simsapa app's localhost API, is the authority for roots, constructions and compound members, and lists the possible parses of each form. `simsapa.py check` looks every row up exactly (`/lookup_forms`) and reports two levels:
 
-Variant rows (books 09 and 10) are checked like any other row.
+- **Flags**, likely errors: a root that matches no root of the form's DPD headwords; "no root in DPD" where DPD's headwords of that lemma have one.
+- **Candidates**, for review: an etymology that matches none of DPD's construction forms or splits (after fixed notation rules); tags that match none of DPD's parses of the form; a form DPD does not have.
+
+Review every new flag and candidate with the `dpd-review` skill (`.claude/skills/dpd-review/`), which records a verdict for each in `checks/dpd-review.tsv` (`notation`, `homonym`, `dpd-gap`, `expected`, `error`, `query`). Reviewed items are hidden on later runs; a change to the row or to DPD's data brings an item back. `make dpd-check` fails while a flag is unreviewed. Fix each `error` (with the maintainer's agreement for migrated texts), and put each `query` to the maintainer. A fix made to follow DPD is logged with "DPD" as the reference.
+
+Variant rows of book 10 are checked like any other row (`dpd-variant-rows`).
 
 ## 4. Review of grammar labels
 
-`simsapa.py check` does not check grammar tags. Review the tags of every new or changed row with the `pali-word-analysis` skill (`.claude/skills/pali-word-analysis/SKILL.md`): the label must fit the word as it stands in the line (agreement, mood, sandhi), use only the allowed tokens in the canonical order, and agree with the DPD data for that form (its inflection table). Scripts never assign grammar labels.
+`simsapa.py check` compares tags with DPD's parses of the form, but a tag that matches a parse can still be the wrong one for the line (*bhagavantaṁ* is masc acc sg as a noun and nt nom sg as an adjective). Review the tags of every new or changed row with the `pali-word-analysis` skill (`.claude/skills/pali-word-analysis/SKILL.md`): the label must fit the word as it stands in the line (agreement, mood, sandhi), use only the allowed tokens in the canonical order, and be one of DPD's parses of the form, or explain in its note why not. Scripts never assign grammar labels.
 
 ## 5. Independent spot check: 10 units
 

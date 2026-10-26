@@ -148,3 +148,149 @@ Writing `sources/ref-map.tsv` for all 209 texts and classifying the first `make 
 Writing the map also found a build bug: `chantlib.books.folder_files` matched only `NN_*.md`, so the three texts named `NNa_*` (04a/09a and 09b *Ratana-sutta*, 04b/07a *Pacchima-ovāda-gāthā*) were left out of the built books. It now matches `NN*.md`.
 
 Maintainer review (2026-10-23): accepted — "continue with the approach that was reliable": the keyed extractor, the `contain` mode for the Vinaya pages, the word-class tag report and whole-cell alignment. The unlogged 07a/01 *khandhā* fix stays listed for review in `docs/legacy-migration.md`.
+
+## Spike 2: DPD check and gloss (2026-10-24)
+
+### Method
+
+Throwaway code in the session scratchpad, against the live Simsapa app. The first attempt (2026-10-23, Simsapa 1.0.0-alpha.8 and 1.1.0-alpha.2) used `/dict_combined_search` and the default `/gloss_text`. It found that neither answers exactly, and the maintainer added two exact routes to Simsapa: `POST /lookup_forms` and `/gloss_text` with `"options": {"exact": true}` (`docs/simsapa-localhost-api-search-endpoints.md` §18–§19). The spike was then run with these routes, on **1.1.0-alpha.2, DPD `v0.4.20260501`**, over the **whole tree** rather than the planned four-text sample, because a full run takes seconds (see "Cost"). The row words are those `chantlib.parse` finds in every text, unit rows and variant rows alike.
+
+### Results: what the routes return
+
+- **`/dict_combined_search` and the default `/gloss_text` are not exact** (tier 2 in the API doc). Search matches stems and prefixes: `bhagav`, not a word, returns *bhagavant*; `atthañ` gets the split `atthaṁ + ca`. The default gloss also drops a word whose stem already occurred in the text (`bhagav bhagavantaṁ` gives one entry), lists unknown words only in `unrecognized_words`, and cuts an iti form to its base (`bhavissan'ti` → `bhavissaṁ`, iti lost). Its entries cannot be matched to our words by position. A "not found" check built on them would need to fetch every candidate's `word.json` and search its `inflections` list itself.
+- **`/lookup_forms` is exact.** It takes up to 5,000 forms per call and gives one result per form, in input order. Each result has `status` (`found`, `deconstructed`, `not_found`, `invalid`), every headword of the form's DPD lookup row (`lemma_1`, `pos`, `grammar`, `construction` as a list of lines, `root_key`, `meaning_1`, `matched_as` `lemma`/`inflection`), and every split, with each component's own exact uids. It handles our spellings: `cittan'ti` → `cittanti`, found, with the split `cittaṁ + iti`; `c'ānanda` → `ca + ānanda`; `vijjācaraṇa-sampanno` → `vijjācaraṇasampanno`; `sabb'ītiyo` → `sabba + ītiyo`. No apostrophe join is needed in our scripts. The response carries `dpd_version`.
+- **Exact `/gloss_text` keeps every token, in order** (`token_index`), each with its `/lookup_forms` result. On six sample lines, 27 of 27 tokens lined up with our rows by position. Iti forms stay whole (`gacchāmī'ti`).
+
+### Results: cost
+
+All 7,465 distinct row words (22,762 rows) and the 1,826 respellings below go through `/lookup_forms` in six calls in **about 2.6 s**. The PRD's estimate (about 50 ms per word, minutes per run) was for one search per word. No disk cache is needed: a full check costs less than its own parsing.
+
+### Results: not found
+
+673 distinct row words are `not_found`. Two kinds are our own notation, and a fixed, exact respelling resolves them:
+
+| Kind | Words | Rule |
+| :--- | ---: | :--- |
+| Elided compound member, `dhamm'`, `dhaj'` | 129 | look up the stem + each vowel (`dhamma`, `dhammā` …) and keep headwords that are citation forms (`matched_as: lemma`) |
+| Sandhi spelling, `attham-`, `buddhañ`, `aham-` | 135 | strip the hyphens; final `m`/`ñ`/`ṅ`/`n` → `ṁ` |
+
+The elided rule must be applied to **every** form ending in `'`, even when the bare stem is found: `sat'` stripped is `sat`, a form of *sant* (√as), which made a false root flag on a row that means *sati* (√sar).
+
+What is left after the respellings:
+
+| Kind | Rows | Meaning |
+| :--- | ---: | :--- |
+| `comp` row | 154 | DPD has no headword for the compound (`dasa-pāramitānubhāvena`). Expected; its member rows are checked. |
+| `(sandhi)` row | 59 | Its parts are in the note (`[*vuccati* (…) + *ānanda* (…)]`) and can be looked up exactly. |
+| member row | 264 | Mostly fragments cut at a sandhi junction (`bbalā`, `avijj`, `di`, `ek`), plus some real forms (`abhigītiṁ`, `colaṁ`). |
+| plain row | 78 | Mostly forms DPD lacks (`abhipūjayāmi`, `pamuccantu`, `jayassu`, `konāgamanassa`), a few notation (`buddhass'`, `dāso/dāsī`). |
+
+**"Not found" is therefore not an error.** Almost every case is a gap in DPD or our notation, and it would come back on every run. It becomes a reviewed item (below), not a flag.
+
+### Results: flags
+
+| Check | First cut | After the fix | Fix |
+| :--- | ---: | ---: | :--- |
+| "no root in DPD", but DPD has a root | 303 rows | 1 (*patī*) | Compare only the headwords whose `lemma_1` without its number is the lemma the row names (`[agga, no root in DPD]`); other homonyms of the form don't count. |
+| our √root matches no `root_key` | 18 rows, 8 words | 7 words | Read DPD's roots from `root_key` **and** from the `construction` lines; apply the elided rule to `'` forms. |
+| our √root where DPD's headwords have none | 119 rows | — | Not an error: DPD gives compounds and denominatives no `root_key` (*bojjhaṅga*, *bahulīkata*), and the spec adds member roots "where useful" (§6). Dropped. |
+
+Of the 7 root words, a hand check found real candidates (*citto*: DPD gives the form only under *citta 2*, √citt; *vattu*: the infinitive is from √vac, the row says √vad (wrong: see "Implementation"); *candani*: DPD √sand) and one false flag caused by DPD: the lookup row for `pattiyā` lists *patti 1.x* (√ap) but not *patti 2.1* (√pad), although `patti` itself does. **Exact lookup rows can be incomplete**, so flags too are reviewed and kept in the ledger, not treated as certain errors.
+
+### Results: etymology candidates
+
+Comparing each row's etymology with every `construction` line of the form's headwords and with every split, after only spaces, `*` and `>` spacing are normalised, gives **3,709 distinct candidates**: far too many to review. Nearly all are a few systematic notation differences. Each of these fixed rules was measured, and each removes a class without looking at meaning:
+
+| Rule | Example (ours / DPD) |
+| :--- | :--- |
+| (a) a bare lemma is accepted when it is a headword's `lemma_clean` | `[ya]`, `[dasa]`, `[agga, no root in DPD]` |
+| (b) no candidate when DPD gives no construction and no split | *cīvara*, *purisa*, pronouns |
+| (c) DPD's `[y]` brackets and `*` dropped | `ā + √khā + y + ī` / `ā + √khā + [y] + ī` |
+| (d) our nested sub-analyses dropped | `vibhūsana (vi + √bhūs + ana) + ṭhāna (…)` / `vibhūsana + ṭhāna` |
+| (e) each member may match any link of DPD's `>` chain | `adhi > ajjh + …` / `adhi > adhy > ajjh + …`; `√nī + a` / `√nī > nay + *a` (query D17) |
+| (f) DPD's trailing bare ending dropped | `viññāṇa + paccaya` / `viññāṇa + paccaya + ā` |
+| (g) a split's last member may be inflected | `gaja + vara` / split `gaja + varaṁ` |
+| (h) verb stems: the row passes when its root is a `root_key` of the headwords (checked by the root flag). **Dropped**: see "Follow-up" below | `√bhaṇ + a + mase` / `bhaṇa + mase`; `vi + √har + a + nti` / `vi + hara + ti` |
+
+After (a)–(h), **389 distinct candidates** remain. They are judgment cases, the work the `dpd-review` skill was planned for: member grouping (`saḷ + āyatana + nirodha` / `saḷāyatana + nirodha`), *anubhāva* / *ānubhāva*, enclitics in our etymology (`saṅgha… + ca`), real differences (`khippa + abhiñña` / `khippa + ābhiñña`), and absurd DPD splits that must not be followed (`abhisaññūhitvā` → `na + bhisa + ñū + hitvā`). A split is evidence, never the authority.
+
+Rule (h) is the only one that can hide a real error: a wrong stem or suffix chain on the right root (a verb put in the wrong conjugation class) is not seen by the script. Its premise was also wrong: DPD does not write verb stems without the root. It stores the construction from the stem and the root chain in a separate column, `root_base`, which `/lookup_forms` did not return at first (see "Follow-up").
+
+### Results: ledger key
+
+Two runs gave byte-identical output, so the keys are stable. The key is word + our etymology + a short hash of the DPD data compared: each headword's `lemma_1`, `root_key` and `construction` lines, and the split strings. Meanings are left out, so that a DPD edit to a meaning does not bring a reviewed item back. Editing a row's etymology changes only that row's key, because the key contains it.
+
+### Results: gloss
+
+On six lines (01/03, 07a/02, 10/03), composing rows mechanically from the first headword's first construction gave the right etymology for 16 of 27 rows and the right word class for 18 of 27. The misses are judgment cases: *arahaṁ* (the first headword is *araha*, adj; the row is *arahant*), *vā* (the first headword is the letter *va*), *tathāgato* (two analyses, the row gives both), and every finite verb (DPD's construction is the lemma's). Case, number, person and mood are not in the data at all. This confirms PRD FR-20: the script presents the candidates and the agent writes the rows.
+
+### Decision
+
+| Tool | Script does | Skill does | Change from the plan |
+| :--- | :--- | :--- | :--- |
+| `simsapa.py` client | `/lookup_forms`, exact `/gloss_text`, `/word.json` for `--inflections`, `/health` | — | Uses the exact routes; `/dict_combined_search` only to widen a `not_found` form in `lookup`, labelled as guesses. No disk cache. No apostrophe join. |
+| `check` | exact lookup; the two respellings; flags for root and "no root in DPD"; candidates for etymology (DPD's construction forms, rules a–g and the new h–j), grammar (DPD's parses), not-found, and members; ledger keys | `dpd-review` classifies flags and candidates into the ledger | "Not found" is a reviewed item, not a flag. Flags also go through the ledger. `comp` rows that DPD lacks are not reported (their members are). `(sandhi)` rows are checked through the words in their note. |
+| `gloss` | exact `/gloss_text`, tokens zipped with the line's words, `index.py rows` per word | `pali-word-analysis` writes the rows | No apostrophe join or remapping: exact mode keeps our spelling. |
+
+Awaiting maintainer review.
+
+### Follow-up: DPD's displayed construction and parse of the form (2026-10-24 to 2026-10-26)
+
+**What was missing.** DPD's rendered entry for *bhaṇāmase* shows `[√bhaṇ + a + mase]`, our notation, while `/lookup_forms` gave `bhaṇa + mase`. DPD stores a construction from the stem and the root chain in `root_base` (`√bhaṇ + a > bhaṇa`) and `root_sign`; its entry displays the two combined. Rule (h) was compensating for data the route did not return. DPD's `lookup` table also parses each form per lemma (`carissanti`: *carati*, verb, `fut 3rd pl`), and no route returned that either. Simulated from Simsapa's DPD database (read-only): with DPD's display form and the `root_base` substitution in place of rule (h), etymology candidates go from 2,372 rows (863 distinct) to 1,302 (545 distinct); about 170 of those are future or aorist forms under a present-tense headword, which stay judgment cases. The extra distinct candidates over rule (h)'s 389 are the wrong-stem cases rule (h) hid.
+
+**Requested and added to Simsapa** (`docs/simsapa-localhost-api-search-endpoints.md` §19.1): on each headword `root_base`, `root_sign`, `construction_summary` (the construction as DPD's entry displays it) and `form_grammar` (the parses assigned to that headword); on each result `form_grammar_raw` (DPD's triples verbatim); on each split component its own `form_grammar_raw`. A spelling suggestion for `not_found` forms was also suggested, as low value; it was not added and is not needed.
+
+**Checked on the running app (2026-10-26; `app_version` still 1.1.0-alpha.2, DPD `v0.4.20260501`).** Every field is present in `/lookup_forms`, in exact `/gloss_text` tokens, and (`construction_summary`) in `/word.json`:
+
+| Form | Field | Value |
+| :--- | :--- | :--- |
+| *bhaṇāmase* (`49236/dpd`) | `construction` / `construction_summary` | `bhaṇa + mase` / `√bhaṇ + a + mase` |
+| *adesesi* | `construction_summary`, `root_base` | `a + √dis + *e + si`, `√dis + *e > dese (caus)` |
+| *bhagavantaṁ* | `form_grammar` | *bhagavant 1* `masc acc sg`; *bhagavant 2* `nt nom sg`, `masc acc sg`, `nt acc sg` |
+| *carissanti* | `form_grammar` | `fut 3rd pl`, on all four *carati* headwords |
+| *katamo* | `form_grammar_raw` / `form_grammar` | `katama interr masc nom sg` / none (`interr` maps to no `pos`, by design) |
+| *cittan'ti* | result / `cittaṁ` component | no parses / `citta noun nt nom sg` & co. |
+| *magga’’nti* | `maggaṁ` component (`iti_rule`) | `magga noun masc acc sg` & co. |
+
+Two things the scripts must allow for:
+
+- **`construction_summary` is DPD's display, which is short for entries without `meaning_1`**: *bhagavant 2* `√bhaj`, *vicāra 2* `vi + √car`, *carati 2.3* `√car`. The rendered entries show the same. So the summary is one of DPD's forms to compare with, alongside the `construction` lines and the `root_base` substitution, and never replaces them.
+- **The new fields came without an `app_version` change**, so `simsapa.py` and `check-tools.sh` test for `form_grammar_raw` in a response, not for a version. `construction_summary` is `null` when the installed `dpd.sqlite3` predates the column.
+
+**Grammar against the live fields.** A throwaway comparison over the tree (non-member rows; case, number and gender, or person, number and tense): 16,093 rows, 5,531 distinct words, one `/lookup_forms` pass in 2.3 s. 12,286 rows agree with one of DPD's parses, 109 do not (62 distinct words), 405 have no DPD parse, and 3,293 have no case or person tags. Most of the 62 are notation the check maps by a fixed rule (DPD's `imperf` for our `aor`: *āgū*, *ajjhagā*; `dual` for *ubho*; our `instr/loc`), and the rest are review items: metrical lengthening DPD does not list (*sakya-munī*, *lokassā*), DPD gaps (*bahunnaṁ* gen pl), compounds DPD parses under another gender (*dukkhanirodhaṁ*: DPD masc acc sg, ours nt nom sg), and *mahārājā* tagged nom pl (DPD: nom sg). This agrees with the simulation (11,644 of 11,738, before the comparator was fixed).
+
+**Changes.** Rule (h) as first written is dropped. `check` compares a row's etymology with each `construction` line, the `construction_summary`, and each line with its stem replaced by the `root_base` chain, and adds a third kind of candidate: our tags match none of DPD's parses of the form. This compares labels with DPD's; assigning them stays with the agent and the `pali-word-analysis` skill, which now starts from the parses and reads `inflections_html` only for a form DPD gives none. `simsapa_fmt.py` prints `/lookup_forms` and exact `/gloss_text` responses (it treated a `/lookup_forms` response as an empty search before), and `check-tools.sh` reports `dpd_version` and warns when the fields are missing. The fixtures `lookup_forms.json`, `gloss_exact.json`, `health.json` and `word_*.json` were re-recorded with the fields. PRD FR-17–FR-20a and tasks 9.0–9.8 are updated.
+
+### Implementation (task 9.5, 2026-10-26)
+
+`scripts/simsapa.py check` on the whole tree, live API: 22,546 rows (variant rows of book 10 included) in about 5 s. First run: **7 flags**, 6 root (*citto*, *vattu*, *candani*, *pattiyā*, as in the spike, plus *pasutaṁ* `[pa + √su + ta; DPD pasūta]` and *saccañ-* `[√su + ta + ya]`, respelled *saccaṁ*) and 1 no-root (*patī*); **768 distinct candidates**, 434 etymology, 113 grammar and 221 not found. After the review rules below: 7 flags, 303 etymology, 113 grammar, 221 not found (644 items).
+
+Etymology first came out at 806 distinct. A new rule (h) took it to 452: a **verb headword the form inflects** has DPD's construction for the lemma (`anu + √mud + *a + ti`), while our row ends in the form's ending (`anu + √mud + a + tha`, `upa + √ṭhā > ṭhāpe + ssa + nti`). For these the last member on both sides, and our tense sign before it, are left out. This hides nothing that the old rule (h) hid: the stem chain is still compared, and the ending is what the grammar comparison checks against DPD's parses. Further rules are in "Review" below. What is left is the judgment the spike described: member grouping (`dhamma + savana + kāla` / `dhammassavana + kāla`), *ānubhāva* / *anubhāva*, `aṇa` / `ṇa`, absurd splits.
+
+The grammar candidates are review items, nearly all explained by the row's note or its line: a noun as the last member of a possessive compound taking its noun's gender (*manussaṁ* `(fem acc sg)` in *sadeva-manussaṁ pajaṁ*), metrical lengthening (*munī*, *ujū*), eastern nominatives in *-e*, and DPD gaps (*mahārājā* as an a-stem nom pl). Voice is not compared (DPD lists the `reflx` and plain forms separately, and our `mid` labels follow the line).
+
+**Review (task 9.10).** Reviewing the 806 etymology candidates of the first run showed three more notation classes that a fixed rule removes without looking at meaning, and one bug:
+
+| Rule | Example (ours / DPD) | Candidates after |
+| :--- | :--- | ---: |
+| (h) as above: a verb headword's lemma ending, and our tense sign, left out | `anu + √mud + a + tha` / `anu + √mud + *a + ti` | 452 |
+| bug: a string that is both a headword's construction and a split was compared only as a construction | `ta + api` / split `taṁ + api` | 449 |
+| (i) a run of members whose letters join to exactly the other side's member, in either direction; members with a root are never joined | `pubba + bhāga` / `pubbabhāga`; `abyāpāda` / `na > a + byāpāda` | 349 |
+| (g) widened: a split's member may be ours plus an ending of up to four letters, at any position | `muni + rāja` / `muni + rājassa` | |
+| (j) an enclitic we add to the analysis (`ca`, `api`, `pi`, `eva`, `va`, `iti`) when DPD splits it off | `saṁ + √ghaṭ + a + ca` / split `saṅghaṁ + ca` | 306 |
+| (c) extended, found by the trial of task 9.12: DPD's "uncertain" marker `??` dropped like its `*` | `siri + ttha` / `?? siri + *ttha` | 303 |
+
+The other etymology items, the 113 grammar items, the 221 not-found items and the 7 flags were reviewed one by one into `checks/dpd-review.tsv`: 644 items after the last rule, 2 errors and 6 queries (`docs/legacy-migration.md`, "DPD check review"). The review corrected one finding of spike 2: *vattu* `[√vad + tuṁ]` is right. The form *vattu* alone is only *vattar* (√vac) in DPD, but the row means the infinitive *vattuṁ*, which DPD gives as `√vad + tuṁ`. It is a `homonym`.
+
+Reviewing needed the verdicts `expected` (a spec rule or a decision makes the row differ on purpose, usually named in its note) and `query` (for the maintainer), beside `notation`, `homonym`, `dpd-gap` and `error`; the planned `other` was not needed.
+
+### Trial (task 9.12, 2026-10-26)
+
+Following the `draft-new-text` skill, the table for the first line of *Dhp 1*, *Manopubbaṅgamā dhammā, manoseṭṭhā manomayā*, which is in no text of the repo, was drafted in a scratch file (Pāli from Simsapa, `GET /sutta.json?uid=dhp1-20/pli/ms`, segments `dhp1:1–2`). `simsapa.py gloss` gave every word's DPD data: *dhammā* as `masc nom pl` among DPD's parses, and the three compounds as adjectives whose parses include `masc nom pl`, with constructions `mano + pubbaṅgama`, `mano + seṭṭha`, `mano + maya`. The rows, labels and member rows were written with the `pali-word-analysis` skill (4 rows, 6 member rows), and `draft.py build` wrote the file.
+
+- `lint.py`: 0 ERROR, 0 STRAY, 0 WARN.
+- `simsapa.py check --strict`: first 1 candidate, *seṭṭhā* `[siri + ttha]` against DPD's `?? siri + *ttha`. The row follows DPD; only DPD's "uncertain" marker blocked the match. Rule (c) now drops `??` like `*`, and the check passes with 0 flags and 0 candidates.
+- Skill fixes: `index.py overlaps` reads chant files, not drafts, so `draft-new-text` and `docs/drafting-workflow.md` now say to build the draft's `P|` lines into a scratch file first (tried: it found *Namo tassa …* in four texts).
+
+The scratch file was not committed.
+

@@ -138,7 +138,20 @@ fi
 if command -v curl >/dev/null 2>&1 &&
     health=$(curl -s --max-time 2 "http://localhost:$port/health") && [[ -n $health ]]; then
     app_version=$(grep -oE '"app_version" *: *"[^"]*"' <<<"$health" | sed -E 's/.*"([^"]*)"$/\1/' || true)
-    printf '%-10s available on port %s%s\n' simsapa "$port" "${app_version:+ (app $app_version)}"
+    dpd_version=$(grep -oE '"dpd_version" *: *"[^"]*"' <<<"$health" | sed -E 's/.*"([^"]*)"$/\1/' || true)
+    printf '%-10s available on port %s%s%s\n' simsapa "$port" "${app_version:+ (app $app_version)}" "${dpd_version:+, DPD $dpd_version}"
+    # The app version did not change when these fields were added, so probe
+    # /lookup_forms for them: form_grammar_raw (DPD's parses of a form) and
+    # construction_summary (null when dpd.sqlite3 predates the column).
+    lookup=$(curl -s --max-time 5 -X POST "http://localhost:$port/lookup_forms" \
+        -H 'Content-Type: application/json' -d '{"forms":["dhammo"]}' || true)
+    if ! grep -q '"results"' <<<"$lookup"; then
+        echo "    no /lookup_forms route: simsapa.py needs a newer Simsapa (1.1.0-alpha.2 or later)"
+    elif ! grep -q '"form_grammar_raw"' <<<"$lookup"; then
+        echo "    /lookup_forms has no form_grammar_raw: update Simsapa for simsapa.py check and gloss"
+    elif grep -q '"construction_summary" *: *null' <<<"$lookup"; then
+        echo "    construction_summary is null: the installed dpd.sqlite3 predates it; update the DPD database"
+    fi
 else
     printf '%-10s not running on port %s\n' simsapa "$port"
     echo "    start the Simsapa app and enable its localhost API; see docs/simsapa-localhost-api-search-endpoints.md"

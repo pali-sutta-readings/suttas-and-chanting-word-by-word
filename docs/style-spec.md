@@ -178,7 +178,7 @@ Canonical order and examples:
 
 **Auto-fixed synonyms.** `lint.py --fix` maps these, because each has only one meaning: `cmpd`, `compound`, `in cmpd`, `in compound` → `comp`; `inst`, `ins` → `instr`; `ppp` → `pp`; `ppr` → `prp`; `indcl` → `ind`. Other non-canonical tokens (`part`, `particle`, `ptcl`, `conj`, `neg`, `imp`, `pers`, `num`, `in`) are ambiguous or need the word class decided, so they are fixed by hand.
 
-**Who assigns tags.** Scripts never assign grammar labels. They fetch DPD data through Simsapa, and the labels are chosen for the word as it stands in the line, following the `pali-word-analysis` skill (`.claude/skills/pali-word-analysis/SKILL.md`).
+**Who assigns tags.** Scripts never assign grammar labels. `scripts/simsapa.py check` compares a row's labels with DPD's parses of the form and lists a mismatch for review, but never writes one. Scripts fetch DPD data through Simsapa, and the labels are chosen for the word as it stands in the line, following the `pali-word-analysis` skill (`.claude/skills/pali-word-analysis/SKILL.md`).
 
 ## 6. Etymology
 

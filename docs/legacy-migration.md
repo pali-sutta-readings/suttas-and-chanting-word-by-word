@@ -278,3 +278,44 @@ The first full run of `make compare` (2026-10-23), over `sources/ref-map.tsv` at
 | 03/02:21 | no blank line between the rubric *(Men chant)* and the Pāli line after it |
 | 03/03, 03/04, 03/05, 03/06, 03/07, 03/08, 03/10 (after the leader line's table); 07a/02:119, 07a/03:119 (before *Evaṁ me sutaṁ*); 07a/02:1434, 07a/03:999, 07a/03:1025 (before *Idam-avoca bhagavā* and *Imasmiñca pana …*) | no blank line between the last table row and the next Pāli line |
 | 03/02–03/11 | no newline at the end of the file |
+
+## DPD check review
+
+The first full run of `make dpd-check` (2026-10-26), Simsapa 1.1.0-alpha.2 with DPD `v0.4.20260501`, over all 22,546 rows (variant rows of book 10 included). Every flag and candidate was reviewed with the `dpd-review` skill, and its verdict is in `checks/dpd-review.tsv`. No text was changed by the review. The rules of the check and how they were measured are in `docs/script-or-skill.md` (spike 2, "Follow-up", "Implementation").
+
+**Result.** 644 items (one per word, etymology or tags and DPD data; an item can cover several rows): 7 flags, 303 etymology candidates, 113 grammar candidates, 221 not-found candidates. `make dpd-check` now reports 0 unreviewed items.
+
+| Kind | notation | expected | homonym | dpd-gap | error | query |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| root (flag) | | 1 | 4 | 1 | | |
+| no root in DPD (flag) | | | | | 1 | |
+| etymology | 249 | 17 | 13 | 20 | 1 | 3 |
+| grammar | | 88 | 2 | 20 | | 3 |
+| not found | | 164 | | 57 | | |
+
+What the verdicts mean, by kind:
+
+- **Flags.** Four root flags are another word with the same spelling in DPD's lookup row (*pasutaṁ*, *candani*, *saccañ-*, *vattu*: DPD's infinitive *vattuṁ* is √vad, as our row, while the form *vattu* alone is *vattar*, √vac; the spike's note that *vattu* is an error was wrong). *pattiyā* is DPD's incomplete lookup row; *citto* is *citta* 1 with the masculine ending of a bahubbīhi.
+- **Etymology, notation (249).** Our analysis says the same as DPD's in another notation: most often a shortened chain that leaves out a sign DPD writes (`√yā + nti` / `√yā + a + nti`), which is the open query D17; a stem where DPD writes a form (`satthar` / `satthu`); a suffix written differently (`aṇa` / `*ṇa`, `in` / `ī`, `pe` / `āpe`); members grouped differently with a sandhi change; an enclitic or ending added to the analysis; or a DPD summary cut short.
+- **Grammar, expected (88).** The tag fits the line and the row's note says why DPD's parse differs: metrical lengthening or shortening, an eastern nominative in *-e*, a noun as the last member of a possessive compound taking its noun's gender, a DPD gender changed by agreement.
+- **Not found, expected (164).** Mostly compound members cut at a sandhi junction (`ppatto`, `dukkh`, `bojjh'`), vowels lengthened or elided in sandhi, the source's spellings, and slash alternatives in one row. Their parts are DPD words.
+- **dpd-gap (98).** Our row is right, but DPD lacks the form, a parse of it, or a headword (*abhipūjayāmi*, *pamuccantu*, *jayassu*; *bahunnaṁ* as gen pl; *mahārājā* as an a-stem nom pl).
+
+### Errors (for the maintainer)
+
+| Text | Row | Finding |
+| :--- | :--- | :--- |
+| 03/13:102 | *patī* `[pati, no root in DPD]` | DPD *pati* 2.1 (lord, master) is √pat 2, `√pat + i` |
+| 07a/07:2102 | ↳ *asita* `[asita, form not in DPD]` | DPD *asita* 3.1 (adj, black; dark-coloured) is `na > a + √sit + a` |
+
+### Queries (for the maintainer)
+
+| Text | Row | Question |
+| :--- | :--- | :--- |
+| 03/10:211 | *nivedayuṁ* `[ni + √vid + e + aya + uṁ]` | The row has both *e* and *aya*; DPD has only the sign *aya* (`ni + √vid + *aya > vedaya + i`). Drop *e*? |
+| 04a/20:189 | *desayi* `[√dis + e + aya + i]` | The same: DPD `√dis + *aya > desaya + i`. |
+| 04a/11:192 | *passantu* `[√dis]` | The etymology gives only the root; style spec §6 asks for the construction (DPD `√dis + a > disa > passa`). |
+| 04a/05:98; 05/07:58; 05/08:227 | *anekā* `(masc nom pl)` with *antarāyā* | DPD declines *aneka* like a pronoun (masc nom pl *aneke*) and gives *anekā* only as feminine. Keep the tag, with a note on the form? |
+| 04a/05:22 | *dvādasañca* `(card acc pl)` | DPD parses the cardinal only in the singular (`nt nom sg`, `masc acc sg` …). |
+
+The 249 notation verdicts include 43 shortened chains. Whether to write DPD's full chain everywhere is the open query D17; if it is decided, `align.py` rules can apply it, and the changed rows will come back for review on the next run.

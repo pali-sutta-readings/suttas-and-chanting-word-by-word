@@ -1,0 +1,645 @@
+key	verdict	reason	date
+ety:'nukampito#e8cc3a834b	expected	anukampito with a- elided (row note); DPD's splits (nu + kampito) are not the word	2026-10-26
+ety:abhikaṅkhatā#d788f80e38	dpd-gap	DPD lists abhikaṅkhatā only as pp and abstract noun; the row's prp instr sg of abhikaṅkhant is not in DPD's row	2026-10-26
+ety:abhipūjaneyyakaṁ#72cc703f32	notation	suffix written aneyya where DPD writes aṇa + eyya	2026-10-26
+ety:abhisamecca#900d085ed2	notation	shortened chain without DPD's sign a (abhi + saṁ + √i + a + tya); query D17	2026-10-26
+ety:abhisaññūhitvā#e3466f4d83	dpd-gap	form not in DPD, as the row says; DPD's split na + bhisa + ñū + hitvā is absurd	2026-10-26
+ety:abhisaṅkhipitvā#30eaf150e6	dpd-gap	DPD has no headword row for abhisaṅkhipitvā; its split na + bhisaṁ + khipitvā is absurd	2026-10-26
+ety:abhivādana-sīlissa#15326c7cc8	notation	member abhivādana where DPD writes abhivādanā	2026-10-26
+ety:abyāpajjhena#0653524ba0	notation	shortened chain without DPD's *a and the vi > vy > by links (na > a + vi + ā + √pad + *a + ya); query D17	2026-10-26
+ety:abyāpajjho#dcc4fc5990	notation	shortened chain without DPD's *a (na > a + vi + ā + √pad + *a + ya); query D17	2026-10-26
+ety:abyāpajjhā#13cd70cc69	notation	shortened chain without DPD's *a (na > a + vi + ā + √pad + *a + ya); query D17	2026-10-26
+ety:accuṇhāya#9b9abfecb7	notation	member uṇha where DPD writes uṇhā + a	2026-10-26
+ety:adukkham-asukhaṁ#f756542565	notation	stem adukkha where DPD writes adukkhaṁ	2026-10-26
+ety:adukkhamasukhāya#8e81c9180e	notation	member adukkha (stem) where DPD writes adukkhaṁ	2026-10-26
+ety:ahiṁsāya#b668cbf12d	notation	stem in parentheses (hiṁsa) for DPD's sign ṁa (na > a + √his + ṁa > hiṁsa + ā)	2026-10-26
+ety:ajjhatta#91f6819bfd	notation	the adverbial aṁ added to DPD's adhi > adhy > ajjh + atta	2026-10-26
+ety:akiñcano#a55065e03c	notation	DPD analyses kiñcana further (kiñci + ana)	2026-10-26
+ety:amarassa#5a9c2ab8c2	expected	example name (row note: substitute the actual name)	2026-10-26
+ety:amoghavacano#ad360d796b	dpd-gap	DPD has no headword row for amoghavacano; its splits (amoghā + avacano) are not the word	2026-10-26
+ety:amoghaṁ#e64b21e7ae	notation	suffix written a after the chain mogh where DPD writes moh + *gha	2026-10-26
+ety:anabhirata-saññā#45be9f7776	notation	member anabhirata where DPD writes na > a + abhirata	2026-10-26
+ety:anabhiratasaññā#7d5eb566e6	notation	member anabhirata where DPD writes na > a + abhirata	2026-10-26
+ety:anatta-saññā#d2870450a1	notation	member anatta where DPD writes na > a + atta	2026-10-26
+ety:anattasaññaṁ#9380085134	notation	member anatta where DPD writes na > a + atta	2026-10-26
+ety:antarāyāpi#0a37afebd4	notation	members finer than DPD's split antarāya + api	2026-10-26
+ety:apaccavekkhitvā#0cdaacd353	notation	fuller than DPD: DPD splits na > a + paccavekkhitvā and summarises pati + ava + √ikkh	2026-10-26
+ety:appa-matto#0feb02db7f	notation	DPD appa + matta; the row names matta's source mattā	2026-10-26
+ety:araññavanapatthāni#19a1a4ea4e	notation	DPD's ending āni after the members	2026-10-26
+ety:ariya-saccāna-dassanaṁ#0a5a3abcc9	notation	stem sacca where DPD's split keeps saccānaṁ	2026-10-26
+ety:asacchikatassa#df0a7ef389	notation	we analyse DPD's member kata further (√kar + ta)	2026-10-26
+ety:asaṅgaho#cd05d28fcc	notation	our analysis of asaṅgaha; DPD only splits (na + saṅgaho)	2026-10-26
+ety:asita#92d1d88975	error	row says "asita, form not in DPD"; DPD asita 3.1 (adj, black; dark-coloured) is na > a + √sit + a	2026-10-26
+ety:asitātitaṁ#b3817afb33	dpd-gap	Chanting Guide reading (row note); DPD has no headword row, and its splits (asita + iti + taṁ) are not the word	2026-10-26
+ety:assasissāmī'ti#806d8a10e7	notation	shortened chain without DPD's sign a (ā + √sas + a > sasa), future sign and iti added; query D17	2026-10-26
+ety:asukhāya#1bf5d31493	notation	the row gives two analyses separated by ';' (na > a + sukha; √sukh + a); DPD na > a + √sukh + a matches the second	2026-10-26
+ety:atthāro#079eb07d95	notation	DPD's summary is truncated (ā + √thar +); the row's ā + √thar + a	2026-10-26
+ety:avecca#833298c4b5	notation	shortened chain without DPD's sign a (ava + √i + a + tya); query D17	2026-10-26
+ety:aviruḷhi#259ed59460	notation	DPD writes ruh without √ in its chain (na > a + vi + ruh + ta > ruḍha > ruḷha + ī)	2026-10-26
+ety:ayācatha#9d341d1b8b	notation	sign a before the ending where DPD's aorist is a + √yāc + i	2026-10-26
+ety:aññam-añña-paccayo#6b5d879d73	notation	member aññaṁ (as written) where DPD's construction writes aññamañña	2026-10-26
+ety:aṭṭh'aṅga-samannāgataṁ#5c65e96ae6	notation	members aṭṭha + aṅga where DPD writes aṭṭhaṅga	2026-10-26
+ety:bahulīkatā#493a08fa35	notation	we analyse DPD's member kata (√kar + ta)	2026-10-26
+ety:bhassārāmatamanuyuttā#5546e1fcfe	notation	member bhassārāmataṁ where DPD writes bhassa + ārāmataṁ	2026-10-26
+ety:bhedeti#398148512b	dpd-gap	DPD's row for bhedeti gives bheda (√bhid > bhed + *a) and the split bhede + iti, not the causative verb the row means	2026-10-26
+ety:brāhmaṇiyā#008f70ce92	notation	suffix written aṇa where DPD writes *ṇa, feminine ī not written	2026-10-26
+ety:brāhmaṇiṁ#cbb812a712	notation	suffix written aṇa where DPD writes *ṇa (√brah + ma + *ṇa + ī); same derivation	2026-10-26
+ety:brūtha#698ee153e1	notation	shortened chain without DPD's sign a (√brū + a + ti); query D17	2026-10-26
+ety:buddhānubhāvena#b139e97428	notation	member anubhāva where DPD's construction has ānubhāva; sandhi allows either	2026-10-26
+ety:cakkhukaraṇī#562dc96c15	notation	feminine member karaṇī where DPD writes karaṇa + ī	2026-10-26
+ety:candani#77f674c785	homonym	row means a derivative of candana (√cand); DPD's candani is another word (sewer, √sand)	2026-10-26
+ety:carati#79956f7a24	notation	verb ending left out (√car + a) where DPD has √car + a + ti	2026-10-26
+ety:caraṁ#4faf666f54	notation	stem nt (nta) without DPD's ending aṁ; DPD √car + a + nta + aṁ	2026-10-26
+ety:catubbhi#57b9b4156e	notation	ending written ubbhi where DPD's split has ūbhi	2026-10-26
+ety:catur'#fc115309fc	notation	elided catur(o) before a vowel; bare lemma catu, as DPD's catu + [r] + o	2026-10-26
+ety:catur-āsīti-sahassa-dhammakkhandh'ānubhāvena#edeb6820f9	notation	members finer than DPD's split (catu + asīti + sahassa / caturāsītisahassa); anubhāva / ānubhāva	2026-10-26
+ety:caturāsīti-sahassa-dhamma-kkhandhānubhāvena#c357306f02	notation	members finer than DPD's split (caturāsītisahassa + dhammakkhandhā + ānubhāvena)	2026-10-26
+ety:chambhitattaṁ#978f9d24e5	notation	shortened chain without DPD's sign a (√khambh > chambh + a > chambha + ita + tta); query D17	2026-10-26
+ety:citto#fe0bb86936	expected	citta 1 (mind, √cit) with a masc ending at the end of a bahubbīhi (row note); DPD lists citto only under citta 2 (√citt)	2026-10-26
+ety:dade#c067d72df9	notation	reduplication written √dā > dada where DPD writes √dā + dā + a > dadā	2026-10-26
+ety:daman'#a862a30716	notation	DPD's summary is truncated (√dam +); the row's √dam + ana	2026-10-26
+ety:dammi#df50362971	notation	shortened chain without DPD's sign a (√dā + a + āmi > dammi); query D17	2026-10-26
+ety:damāpayanto#52a27cd674	dpd-gap	DPD has no headword row for damāpayanto (prp of the causative of dameti); its splits (dama + apayanto) are not the word	2026-10-26
+ety:dassī#24e0e75ab5	notation	shortened chain without DPD's sign a (√dis + a > disa > dassa + ī); query D17	2026-10-26
+ety:daṭṭhabbaṁ#2061b64c08	notation	shortened chain without DPD's sign a (√dis + a > disa > dassa + tabba); query D17	2026-10-26
+ety:desayi#a7d02fc3f5	query	row has both e and aya (√dis + e + aya + i); DPD has only the sign *aya (√dis + *aya > desaya + i)	2026-10-26
+ety:desissāmi#d804ebbd31	notation	future sign written issā (before mi) where DPD's lemma has no tense sign; DPD √dis + *e > dese	2026-10-26
+ety:dhamma-pahaṁsāna-pāṭhaṁ#f04e349b99	notation	member pahaṁsana is DPD's headword (pa + √haṁs + ana); the text spells pahaṁsāna, which DPD lacks	2026-10-26
+ety:dhammacakkappavattana-suttaṁ#710515a724	notation	members finer than DPD's split dhammacakkappavattana + sutta	2026-10-26
+ety:dhammassavana-kālo#2ad25a00a2	notation	members finer than DPD (dhamma + savana / dhammassavana, with sandhi gemination)	2026-10-26
+ety:dhammomhi#8660c5bcd2	notation	the enclitic amhi added to the base word's construction; DPD splits dhammo + amhi	2026-10-26
+ety:dhammānubhāvena#aff534e1e7	notation	member anubhāva where DPD's construction has ānubhāva; sandhi allows either	2026-10-26
+ety:dharānaṁ#69b18a4b18	notation	DPD dhara (√dhar + a) with the feminine ā added; DPD's other analysis orders the suffixes *ā + a	2026-10-26
+ety:diṭṭhino#fe3e54ca6d	notation	possessive suffix written in where DPD writes ī (√dis + ti + ī)	2026-10-26
+ety:dosagginā#f6934c90c6	notation	member aggi where DPD's construction writes agni	2026-10-26
+ety:duddadaṁ#46c6abf346	notation	shortened chain without DPD's reduplication dā (dur + √dā + dā + a); query D17	2026-10-26
+ety:dukkha-nirodha-gāminiyā#6d896bef20	notation	feminine stem gāminī where DPD gives gāmī	2026-10-26
+ety:dukkha-nirodha-gāminī#01ba57c538	notation	feminine stem gāminī where DPD gives gāmī	2026-10-26
+ety:dukkhanirodhagāminiyā#4c126bc115	notation	feminine stem gāminī where DPD gives gāmī	2026-10-26
+ety:dukkhanirodhagāminī#fddcc0c445	notation	feminine stem gāminī where DPD gives gāmī	2026-10-26
+ety:dullabhapiṇḍaṁ#6541c7b87a	notation	member dullabha where DPD writes dur + labha	2026-10-26
+ety:dunnimittaṁ#e8b0b6415a	notation	prefix written du where DPD writes dur	2026-10-26
+ety:dussupinaṁ#d9142da653	notation	prefix written du where DPD writes dur	2026-10-26
+ety:ekodi#3bb89498df	notation	member udi where DPD writes the sandhi form odi (eka + odi)	2026-10-26
+ety:essanti#550b51371b	notation	future sign written essa where DPD writes a + ssa	2026-10-26
+ety:gabbhinīyā#c59cf9579d	notation	suffix written inī where DPD writes iṇī	2026-10-26
+ety:ggaho#d9984889ca	expected	gaho with the consonant doubled in the compound (row note); DPD: gaho	2026-10-26
+ety:ghātā#7ffdab4d3d	dpd-gap	agent noun ghātar is not a DPD headword, as the row note says; DPD's ghātā is from ghāta (√ghaṭ + a)	2026-10-26
+ety:gimhāna-māse#13ca006560	notation	stem gimha where DPD's split keeps the gen pl gimhānaṁ	2026-10-26
+ety:gire#deff52f956	notation	the bahubbīhi a added to DPD's √gir + ā (row note)	2026-10-26
+ety:gāminiyā#d52b031430	notation	DPD √gam + *ī with the feminine suffix inī added	2026-10-26
+ety:hessatī-ti#1e2023c2fb	notation	shortened chain without DPD's sign a (√hū + a + ssa > hessa); query D17	2026-10-26
+ety:hiṁsi#40f94f9f4d	notation	class sign written as a chain (√his > hiṁs + a) where DPD writes √his + ṁa > hiṁsa	2026-10-26
+ety:hāragajā#f9a06943d4	notation	bare lemma hāragaja (no root in DPD); DPD hāragaja + ā	2026-10-26
+ety:icchitaṁ#837a689a45	notation	shortened chain without DPD's sign a (√is + a > isa > iccha + ita); query D17	2026-10-26
+ety:iddhikā#1d298da6de	notation	we analyse iddhi (√idh + ti) where DPD splits iddhi + kā	2026-10-26
+ety:iddhānubhāvena#05a059ce96	notation	member anubhāva where DPD's split has ānubhāva; sandhi allows either	2026-10-26
+ety:indriyo#d8e1eddc0d	notation	member inda where DPD writes indra (indra + iya)	2026-10-26
+ety:jaho#4fd36b3384	notation	stem in parentheses (jaha) for DPD's reduplication √hā + hā + a > jaha	2026-10-26
+ety:jutindharo#6ff083670f	notation	member juti (stem) where DPD writes jutiṁ	2026-10-26
+ety:kammassakomhi#7cafabe941	notation	the enclitic amhi added to the compound's members; DPD splits kammassako + amhi	2026-10-26
+ety:kareyyāma#f238d509b6	notation	shortened chain without DPD's class sign o (√kar + o); query D17	2026-10-26
+ety:karissāmi#5c5a66e78e	notation	shortened chain without DPD's class sign o (√kar + o + issa); query D17	2026-10-26
+ety:karumhā#030f87674f	notation	bare lemma karumha (no root in DPD); DPD karumha + ā	2026-10-26
+ety:kavitā#2a854c6d93	notation	DPD's summary is only √ku (entry without meaning_1); the row is fuller	2026-10-26
+ety:kevala-kappaṁ#9db78a364d	notation	the accusative ending aṁ added to DPD's kevala + kappa	2026-10-26
+ety:khippābhiñño#1e85ef909a	notation	DPD's construction writes ābhiñña, which is not a DPD headword; abhiñña (adj, abhi + √ñā + ā + a) is, as the row	2026-10-26
+ety:khiḍḍā-padūsikā#22a34c3c7b	notation	DPD's construction text is "khiḍḍāpadosika khiḍḍā"; the row's khiḍḍā + padosika is its analysis	2026-10-26
+ety:kicco#c5a779df46	notation	suffix written ya where DPD writes tya (√kar > kir + tya)	2026-10-26
+ety:kittanaṁ#0901c1ce2f	notation	DPD's summary is only √kitt (entry without meaning_1); the row is fuller	2026-10-26
+ety:kkhandhā#84f08954a6	expected	khandhā with the consonant doubled in the compound (row note); DPD: khandhā	2026-10-26
+ety:kkhayo#9ea6b91005	expected	khayo with the consonant doubled in the compound (row note); DPD: khayo	2026-10-26
+ety:kkhayāya#d7f3d3ed0c	expected	khayāya with the consonant doubled after dukkha (row note); DPD: khayāya	2026-10-26
+ety:lambitakā#33bb2fa5c4	dpd-gap	form not in DPD, as the row says; DPD's splits (lambi + takā) are not the word	2026-10-26
+ety:lokassā#3e01ae9c1f	expected	lokassa with the final a lengthened before 'ti (row note); DPD's split loka + assā is a different reading	2026-10-26
+ety:lāma#0eba7dee18	dpd-gap	form not in DPD, as the row says; DPD's lā rows are other words	2026-10-26
+ety:maha#12aae629a6	homonym	the row means mahā shortened (row note); DPD mahā 1 is √mah + nta + ā as the row; DPD's row for maha lists maha and mahanta	2026-10-26
+ety:mahantaṁ#b48b95b2b2	notation	shortened chain without DPD's sign a (√mah + a + nta); query D17	2026-10-26
+ety:mahantā#43e1f41209	notation	shortened chain without DPD's sign a (√mah + a + nta); query D17	2026-10-26
+ety:mahatā#4497621117	notation	stem (√mah + nta) where DPD adds the instr ending tā	2026-10-26
+ety:mahā-kāruṇiko#c2f18cdeb8	notation	we keep DPD's derivative kāruṇika whole (DPD mahā + karuṇā > kāruṇā + *ika)	2026-10-26
+ety:mahā-senena#5903a1142f	notation	DPD's bahubbīhi senā + a; the row gives the member sena	2026-10-26
+ety:mahākāruṇikā#c20db04043	notation	we keep DPD's derivative kāruṇika whole (DPD mahā + karuṇā > kāruṇā + *ika)	2026-10-26
+ety:mahāsayanā#811e9133ef	notation	the row analyses both parts (mahā; √sī > say + ana); DPD mahā + sayana	2026-10-26
+ety:man'āyatanaṁ#d0b9a21903	notation	member mano where DPD writes manas	2026-10-26
+ety:manasikarotha#dd2353111d	notation	our analysis of karotha; DPD splits manasi + karoti	2026-10-26
+ety:mano-padūsikā#02a5cb8666	dpd-gap	DPD has no headword row for manopadūsikā; its split mano + api + adūsikā is not the word	2026-10-26
+ety:marissāmi#c6e37c0470	notation	shortened chain without DPD's sign a (√mar + a + ti); query D17	2026-10-26
+ety:mattaññutā#7f0497439f	notation	member ññutā where DPD writes ñū + tā	2026-10-26
+ety:mattehi#827bb3ef95	notation	suffix written tta where DPD writes ta (√mā + ta)	2026-10-26
+ety:matto#de2f68871a	notation	the row derives matta from mattā (bahubbīhi); DPD gives the pp homonyms; same word as 65	2026-10-26
+ety:medhaṅkaro#afc5fa659a	notation	member medhā where DPD writes medha	2026-10-26
+ety:moggallānañ-#5ec977a9a0	notation	suffix written āna where DPD writes *yāna (muggala > moggala + *yāna)	2026-10-26
+ety:mātā-pitu-upaṭṭhānaṁ#b8084ad98c	notation	stems mātar + pitar where DPD splits mātāpitu	2026-10-26
+ety:mātā-pitā#534398bfda	notation	stem mātar where DPD writes mātā	2026-10-26
+ety:mātā-pitādayo#c046f39d3b	notation	stems (mātā + pitar + ādi) where DPD's split has forms (mātāpitā + ādayo)	2026-10-26
+ety:n'atthi-paccayo#27483a8635	notation	members finer than DPD's split natthi + paccayo	2026-10-26
+ety:nakulapitu-suttaṁ#dd36c75b31	notation	stem nakulapitar where DPD writes nakulapitu	2026-10-26
+ety:namo-kārānubhāvena#6bb04bbbaa	notation	member anubhāva where DPD's split reads ānubhāvena; sandhi allows either	2026-10-26
+ety:namāmihaṁ#02f11a7fd0	notation	enclitic ahaṁ added to the verb's analysis; DPD splits namāmi + ahaṁ	2026-10-26
+ety:nandi-rāga-sahagatā#c6730a40d7	notation	member nandi where DPD writes nandī	2026-10-26
+ety:nappaṭikaṅkhe#8512617f85	notation	prefix written paṭi where DPD writes pati; verb ending left out as rule h allows	2026-10-26
+ety:nibbānato#7c008239ca	notation	DPD nī + √vā + ana with the ablative ending to added	2026-10-26
+ety:niddārāmatamanuyuttā#e6b0e581b9	notation	member niddārāmataṁ where DPD writes niddā + ārāmataṁ	2026-10-26
+ety:nimmānaratino#f090ea3652	notation	ending written ī where DPD writes ino (nimmāna + rati + ino)	2026-10-26
+ety:nissajjāmi#10c9713219	notation	DPD's summary is only nī + √sajj (entry without meaning_1); the row is fuller	2026-10-26
+ety:nivattissāmi#9cafea1fae	notation	future sign written issā (before mi); DPD's lemma ni + √vatt + a + ti has none	2026-10-26
+ety:nivedayuṁ#f0ef42ff7c	query	row has both e and aya (ni + √vid + e + aya + uṁ); DPD has only the sign *aya (ni + √vid + *aya > vedaya + i)	2026-10-26
+ety:niyyāti#83502f8fbf	notation	shortened chain without DPD's sign a (nī + √yā + a + ti); query D17	2026-10-26
+ety:nāccuṇhāya#063ad68b53	notation	member uṇha where DPD writes uṇhā + a	2026-10-26
+ety:nāmanvayena#62d463594c	notation	DPD's ending ena after the members	2026-10-26
+ety:nāsetun'ti#6c327bfa44	notation	DPD's summary is only √nas (entry without meaning_1); the row is fuller	2026-10-26
+ety:nāsetuṁ#1753d6c91b	notation	DPD's summary is only √nas (entry without meaning_1); the row is fuller	2026-10-26
+ety:nātisītāya#62a5d585a9	notation	DPD analyses sīta further (√sid > sit > sīt + *a)	2026-10-26
+ety:pacchimā-janatānukampa-mānasā#6ce120c54f	notation	members finer than DPD's split, joined by sandhi (pacchimā + janatā / pacchimājanatā; anukampā + mānasa / anukampamānasā)	2026-10-26
+ety:pappontu#74d03e510a	notation	class sign written o where DPD writes ṇo (pa + √ap + ṇo > appo)	2026-10-26
+ety:param#b1f27c50d1	homonym	the row means parama in paramatta (row note); DPD's param row reads paraṁ (para + aṁ)	2026-10-26
+ety:parimita#f50d6607c2	notation	the row analyses aparimita (row note); DPD's parimita is the same word without na	2026-10-26
+ety:parinibbāniko#35c8340866	notation	shortened chain without DPD's sign a (pari + nī + √vā + a + ana + ika); open query D17	2026-10-26
+ety:pariyodapeyya#3de5f5c74d	notation	causative sign written pe where DPD writes āpe > dāpe > dape	2026-10-26
+ety:passa#0c54b35cfa	notation	chain written √dis > pass + a where DPD writes √dis + a > disa > passa + a	2026-10-26
+ety:passa#294c0b0525	notation	DPD √dis + a > disa > passa + a; our row puts the stem (passa) in parentheses	2026-10-26
+ety:passantu#5327c4f1f9	query	etymology gives the root only ([√dis]); DPD √dis + a > disa > passa + ti; style spec §6 asks for the construction	2026-10-26
+ety:passasissāmī'ti#8f82a3cfa0	notation	shortened chain without DPD's sign a (pa + √sas + a > sasa), future sign and iti added; query D17	2026-10-26
+ety:pasutaṁ#e22d1f6435	homonym	metrical short form of pasūta (pa + √su), as the note says; DPD's pasutaṁ row lists pasuta (√si, √sar)	2026-10-26
+ety:pattiyā#66e88cd645	dpd-gap	DPD's lookup row for pattiyā lacks patti 2.1, foot-soldier (√pad + ti), which the row means	2026-10-26
+ety:pavattento#f9770f5e18	notation	DPD's summary is truncated (pa + vatte +); the row follows DPD's chain √vatt + e	2026-10-26
+ety:pavecchanto#10636db7bb	dpd-gap	DPD has no headword for pavecchanto; its splits (pave + icchanto) are not the word	2026-10-26
+ety:paññ'uttarā#d83f221da7	notation	stem paññā where DPD's construction writes pañña	2026-10-26
+ety:paṭibhāna#49febcef45	notation	prefix written paṭi where DPD writes pati; DPD lists paṭibhāna under both pati + √bhaṇ and pati + √bhā	2026-10-26
+ety:paṭibhāṇa#5a40b08375	notation	prefix written paṭi where DPD writes pati	2026-10-26
+ety:paṭibāhāya#709025d9ee	notation	shortened chain without DPD's second a (pati + √bah + a + a); query D17	2026-10-26
+ety:paṭijānanti#231d50632e	notation	stem in parentheses (jānā) for DPD's √ñā + nā > jānā	2026-10-26
+ety:paṭijāni#ad23e02023	notation	chain written √ñā > jān where DPD writes √ñā + nā > jānā	2026-10-26
+ety:paṭipado#cffc26b7de	notation	DPD's bahubbīhi ending a (pati + √pad + ā + a) left out	2026-10-26
+ety:paṭipannako#e723f6e05f	notation	DPD's summary is only pati + √pad (entry without meaning_1); the row is fuller	2026-10-26
+ety:paṭṭhāne#0bb23262d7	homonym	the row means upaṭṭhāna in satipaṭṭhāna (row note); DPD satipaṭṭhāna = sati + upaṭṭhāna; DPD's paṭṭhāne row is paṭṭhāna	2026-10-26
+ety:paṭṭhānā#8d9a5458ff	homonym	the row means upaṭṭhāna in satipaṭṭhāna (row note); DPD satipaṭṭhāna = sati + upaṭṭhāna; DPD's paṭṭhānā row is paṭṭhāna	2026-10-26
+ety:phussita#c3c9bfb8b9	notation	shortened chain without DPD's ya (√phus + ya + ita); query D17	2026-10-26
+ety:piyo#ae0c388293	notation	suffix ya where DPD writes √pī > piy + a	2026-10-26
+ety:piṇḍikassa#f3e5b490d2	dpd-gap	piṇḍika is not a DPD headword, as the row says; DPD's split piṇḍika + assa	2026-10-26
+ety:ppabhavā#da785766b1	expected	pabhava with p- doubled in the compound (row note); DPD: pabhavā	2026-10-26
+ety:ppatto#821150fbed	expected	patto with the consonant doubled in the compound (row note); DPD: patto	2026-10-26
+ety:punaretī'ti#3bb06152c4	notation	DPD's puna + [r] + eti with the root analysed (√i > e), plus iti	2026-10-26
+ety:purakkhitā#40a66e890e	dpd-gap	form not in DPD (Chanting Guide reading, row note); DPD's split pura + akkhi + tā is not the word	2026-10-26
+ety:pālayantu#f0737a2b46	dpd-gap	DPD has no headword row for pālayantu (imperative of pāleti); its splits (pāla + yantu) are not the word	2026-10-26
+ety:pāpūpakilesa-jetā#841ee369ac	notation	stem jetar where DPD writes jetā	2026-10-26
+ety:pāturahaṁsu#e8cb0f7099	notation	the liaison [r] written as a member; DPD pātu + ahaṁsu	2026-10-26
+ety:pāturahosi#2b44a97c66	notation	our analysis of ahosi (a + √hū > ho + si) where DPD splits pātu + [r] + ahosi	2026-10-26
+ety:pāṇa-bhūt'atthi#b4947d22e3	notation	our analysis of both joined words; DPD splits pāṇabhūtā + atthi	2026-10-26
+ety:ratanattaya-paṇāma-gāthāyo#af15ddd0ef	notation	members finer than DPD (ratana + taya / ratanattaya, with sandhi gemination)	2026-10-26
+ety:rattaṁ#8f66b9f045	notation	the adverbial aṁ added to DPD's ratti + a (row note)	2026-10-26
+ety:ratto'ti#bd0b43a5c6	notation	bahubbīhi of ratti written ratti + a; DPD's lines are ratti + o and the split ratto + iti	2026-10-26
+ety:raṇañjaho#8db14b19bf	notation	member raṇa (stem) where DPD writes raṇaṁ	2026-10-26
+ety:rājikā#5f286de3ba	notation	suffix written ika where DPD writes ikā (its headword is feminine)	2026-10-26
+ety:rājubhi#5dd517d912	notation	the instr pl ending ubhi added to DPD's √rāj + a	2026-10-26
+ety:sa-udrayā#daf3ea2917	notation	DPD analyses udraya further (ud + [r] + √i + *a)	2026-10-26
+ety:sabba-saṅgh'ānubhāvena#384674e4a4	notation	members finer than DPD's split sabba + saṅghānubhāvena	2026-10-26
+ety:sabba-saṅghānubhāvena#27d5c743db	notation	members finer than DPD's split sabba + saṅghānubhāvena	2026-10-26
+ety:sabbattham-#77a936dded	dpd-gap	DPD has no headword for sabbatthaṁ; its split sabba + atthaṁ is not the word (sabbattha, ind)	2026-10-26
+ety:sabbaññuta-ñāṇānubhāvena#ceb16cf892	notation	members finer than DPD's split (sabbaññutañāṇa + ānubhāvena)	2026-10-26
+ety:saccañ-#29a9ff0aa2	homonym	member of bāhusacca (DPD bahu > bāhu + suta > sata + ya), from suta as the note says; DPD's saccaṁ row is sacca (√as)	2026-10-26
+ety:sacchikiriyā#281c91d12c	notation	we analyse DPD's member kiriyā further (√kar + iyā)	2026-10-26
+ety:sacchikiriyāya#6a7bde1953	notation	we analyse DPD's member kiriyā further (√kar + iya + ā)	2026-10-26
+ety:sacchikiriyāyā'ti#4da9a5f038	notation	we analyse DPD's member kiriyā (√kar + iya + ā)	2026-10-26
+ety:sad#cff119b0ea	homonym	DPD's sad is hada > sad (heart); the row means sant (√as) before a vowel	2026-10-26
+ety:saddamanussāvesuṁ#714c7194cc	notation	our analysis of anussāvesuṁ where DPD splits saddaṁ + anussāvesi	2026-10-26
+ety:saddhamma-senā#c7f34f0af7	notation	sat + dhamma for DPD's saddhamma (sandhi)	2026-10-26
+ety:sakkarissanti#df4af9992e	notation	our analysis of karissanti; DPD splits sat + karoti	2026-10-26
+ety:sakkatvā#54c311c28b	notation	we analyse DPD's member katvā (√kar + tvā)	2026-10-26
+ety:samaṅgiko#f56cc260da	dpd-gap	DPD has no headword row for samaṅgiko; its splits (samā + aṅgiko) are not the word	2026-10-26
+ety:sambujjhitvā#ebf9377c4b	notation	DPD's summary is truncated (saṁ + bujjha +); the row follows DPD's chain √budh > bujjha	2026-10-26
+ety:samma#75a6af700b	homonym	the row means sammā shortened before pp- (row note); DPD's samma rows are of sammati	2026-10-26
+ety:sammoditvā#059da21fcb	notation	shortened chain without DPD's *a (saṁ + √mud + *a + itvā); query D17	2026-10-26
+ety:sammukhī-bhūto#9982888540	notation	stem sammukha where DPD derives sammukhī from sammukhā	2026-10-26
+ety:sampattito#08b629e542	notation	DPD saṁ + √pad + ti with the ablative ending to added	2026-10-26
+ety:samādh'upekkha-bojjhaṅgā#8e3375f321	notation	members finer than DPD (bodhi + aṅga / bojjhaṅga; upekkhā / upekkha)	2026-10-26
+ety:samānā#8f68b9fc06	notation	shortened chain without DPD's sign a (√as + a + māna); query D17	2026-10-26
+ety:santo#366816f008	notation	shortened chain without DPD's sign a (√as + a + nta); query D17	2026-10-26
+ety:saphalā#4a98d17c52	notation	DPD analyses phala further (√phal + a)	2026-10-26
+ety:sassamaṇa-brāhmaṇiṁ#f6c32df9ed	notation	DPD's members plus the feminine suffix ī of the form	2026-10-26
+ety:sat'ādhipateyyā#9934c81048	notation	member adhipateyya (a DPD headword, adhi + √pat + i + eyya) where DPD's split reads ādhipateyya; sandhi allows either	2026-10-26
+ety:sataṁ#9433bb2dbf	notation	stem santa (√as + nta) where DPD adds the gen pl ending (sa + nta + ataṁ)	2026-10-26
+ety:sattamāsāni#da8f682752	notation	DPD's ending āni after the members	2026-10-26
+ety:satthu-garu#8169d9caad	notation	stem satthar where DPD writes satthu	2026-10-26
+ety:satthu-sāsananti#2d96e323a4	notation	stem satthar where DPD writes satthu	2026-10-26
+ety:satthu-sāsane#76e3a76ea2	notation	stem satthar where DPD's split gives the form satthu	2026-10-26
+ety:savicāraṁ#e64bd0f1d2	notation	DPD analyses vicāra further (vi + √car + *e + a)	2026-10-26
+ety:savitakkaṁ#cd4214d2c5	notation	DPD analyses vitakka further (vi + √takk + a)	2026-10-26
+ety:saññā'ti#5c7a21e544	notation	our analysis of saññā (saṁ + √ñā + ā) with iti; DPD only splits sañña + iti	2026-10-26
+ety:saññāṇaṁ#4f169d296b	expected	-ṇaṁ for -naṁ as BM spells it, gen pl of saññā (decision query 49, 07a CHANGELOG); DPD reads the form as saññāṇa (sign)	2026-10-26
+ety:saṅghānubhāvena#cab10b3eed	notation	member anubhāva where DPD's construction has ānubhāva; sandhi allows either	2026-10-26
+ety:seno#c30f3b4bd4	notation	the row names senā (no root in DPD) for the possessive compound; DPD senā + a	2026-10-26
+ety:sobhito#d3a3770b7d	notation	shortened chain without DPD's sign a (√subh + *a > sobha + ita); query D17	2026-10-26
+ety:ssati#6974c7b321	expected	sati with its consonant doubled after the preceding word (row note); DPD: sati	2026-10-26
+ety:subrahmā#f04901ca3e	notation	DPD analyses brahma further (√brah + ma)	2026-10-26
+ety:suddhāvāsa-kāyikānaṁ#8fbea5fb9b	notation	member suddhāvāsa where DPD writes suddha + āvāsa	2026-10-26
+ety:supaṇṇato#d2cc84b495	notation	the ablative ending to added to DPD's su + paṇṇa	2026-10-26
+ety:supaṭipatti#29db074952	notation	DPD su + paṭipatti; we analyse paṭipatti further (pati + √pad + ti)	2026-10-26
+ety:suppabhā#11dd037872	notation	we analyse DPD's member pabhā (pa + √bhā + ā) and add the bahubbīhi a	2026-10-26
+ety:svākkhātass'eva#51390b9360	notation	enclitic eva added to the base word's construction; DPD splits svākkhātassa + eva	2026-10-26
+ety:svākkhātatā#6e596d0c42	notation	DPD su > sv + ā + √khā + ta + tā; our nested svākkhāta; DPD's other line spells svākhyāta	2026-10-26
+ety:sātthaṁ#4523dae109	notation	our nested sub-analysis attha (√ar + tha) = DPD sa + √ar + tha	2026-10-26
+ety:sīti#3222a1acc6	homonym	the row means asīti with a- dropped (row note); DPD's sīti rows are another word (√sid)	2026-10-26
+ety:tada#80c64cee92	notation	bare lemma ta for tad-, as the note says; DPD analyses tada as ta + dā	2026-10-26
+ety:tamonudo#d6473960e9	notation	member tamas (stem) where DPD writes tamo	2026-10-26
+ety:tasmātiha#24b8309d1e	notation	our analysis by parts (ta + smā; ima + ha) of DPD's tasmā + iha	2026-10-26
+ety:tatra-tatrābhinandinī#51453eb1da	notation	feminine member abhinandinī where DPD writes abhinandī	2026-10-26
+ety:taṅkhaṇika#c821514c54	notation	DPD's construction ends in ikā (its headword's form); the row gives the adjective stem ika	2026-10-26
+ety:taṇhaṅkaro#4d61019a0d	notation	member taṇhā (stem) where DPD writes taṇhaṁ	2026-10-26
+ety:taṇhūpādāna-chedanaṁ#3fe0e720d0	notation	members finer than DPD (taṇhā + upādāna / taṇhūpādāna)	2026-10-26
+ety:tejānubhāvena#6fa01274a3	notation	member tejas (stem) where DPD writes teja	2026-10-26
+ety:tes'#fbdac5cce0	expected	elided tesaṁ (dem pron, row note); the stem + vowel lookup finds tesa and similar, not ta	2026-10-26
+ety:tesottamānubhāvena#76a69781e6	notation	member anubhāva where DPD's split reads ānubhāvena; after uttama the sandhi allows either	2026-10-26
+ety:tumhāka#20c12c5a5a	notation	bare lemma tumha for the pronoun; DPD tumha + ākaṁ > āka	2026-10-26
+ety:tīhamataṁ#6d55563e1d	notation	member tīha (ti + aha in the row's comment) where DPD writes ti + aha	2026-10-26
+ety:uccāsayana#fb6d9b1ea3	notation	the row analyses both parts (ud + ya; √sī > say + ana); DPD uccā + sayana	2026-10-26
+ety:uddhumātakaṁ#72d8144a80	notation	shortened chain without DPD's āya (ud + √dham + āya + ta + ka); query D17	2026-10-26
+ety:uddissana#01781ba737	notation	shortened chain without DPD's ya (ud + √dis + ya + ana); query D17	2026-10-26
+ety:upabhuñjako#3558e922f7	notation	shortened chain without DPD's class sign ṁa (upa + √bhuj + ṁa > bhuñja + aka); query D17	2026-10-26
+ety:upekkhako#e5d62f02ec	notation	shortened chain without DPD's sign a (upa + √ikkh + a + ā + ka); query D17	2026-10-26
+ety:uttarassa#c774dcc6f8	expected	example name (row note: substitute the actual name)	2026-10-26
+ety:uttaro#c8991d4b05	expected	example name (row note: substitute the actual name)	2026-10-26
+ety:uṇṇā-nābhī#42518a96e4	notation	DPD's construction text is "uṇṇā uṇṇanābhi"; the row's uṇṇā + nābhi is its analysis	2026-10-26
+ety:vana-majjha-pattā#f643a744a7	dpd-gap	DPD has no headword row for vanamajjhapattā; its split vanaṁ + ajjhapatta is not the word	2026-10-26
+ety:vattu#b84b376957	homonym	row means the infinitive vattuṁ; DPD vattuṁ (66042/dpd) is √vad + tuṁ, as the row; the form vattu alone is only vattar (√vac)	2026-10-26
+ety:vaṇṇ'#3179912dd4	notation	suffix written ṇa where DPD writes na (√var + na)	2026-10-26
+ety:vedagu#7d5a7b5b75	notation	member vedaṁ (acc) where DPD writes the stem veda	2026-10-26
+ety:veghanasā#4393fb293f	notation	bare lemma veghanasa (no root in DPD); DPD veghanasa + ā	2026-10-26
+ety:viharissāma#d2c196dc76	notation	shortened chain without DPD's sign a (vi + √har + a > hara); query D17	2026-10-26
+ety:viharissāmī'ti#27abf92739	notation	shortened chain without DPD's sign a (vi + √har + a > hara); query D17	2026-10-26
+ety:vihāti#39f9ec891c	dpd-gap	DPD lacks vihāti (short form of viharati, row note); its splits viha + iti are not the word	2026-10-26
+ety:vimocanaṁ#4dddbc7b28	notation	DPD's summary is only vi + √muc (entry without meaning_1); the row is fuller	2026-10-26
+ety:vinodanaṁ#19d6e5bd94	notation	shortened chain without DPD's causative sign *e (vi + √nud + *e + ana); query D17	2026-10-26
+ety:vipassissa#58d653f78f	notation	stem in parentheses, vi + √dis (passa) + ī = DPD vi + √dis + a > disa > passa + ī	2026-10-26
+ety:vipassituṁ#28dcff9db2	notation	DPD's summary is only vi + √dis (entry without meaning_1); the row is fuller	2026-10-26
+ety:viratta-citt'āyatike#c7cd29235a	notation	our analysis of both joined words where DPD splits virattacittā + āyatike	2026-10-26
+ety:viruḷhako#a675f584b7	notation	BM's spelling viruḷhaka, DPD virūḷhaka (row note); analysis of the same word	2026-10-26
+ety:visuddha-sīla-diṭṭhino#5d416a9c2f	notation	members finer than DPD (visuddha + sīla / visuddhasīla); suffix in	2026-10-26
+ety:visūkadassanā#a30d8ecaf2	notation	the row analyses both parts (visūka; √dis > dassa + ana); DPD visūka + dassana	2026-10-26
+ety:vitakka-vicārānaṁ#181c6b4704	notation	DPD splits vitakkavicāra + ā; our members without the ending	2026-10-26
+ety:vitakkavicārānaṁ#2ea1f997ee	notation	DPD splits vitakkavicāra + ā; our members without the ending	2026-10-26
+ety:vivajjantu#a2fd3f0218	notation	sign written a where DPD writes the causative chain *e > vajje > vajja	2026-10-26
+ety:vāsinī#613df01726	notation	DPD √vas > vās + *ī with the feminine suffix inī added	2026-10-26
+ety:vāti#24462f6af8	notation	shortened chain without DPD's sign a (√vā + a + ti); query D17	2026-10-26
+ety:yad'#640fa8d801	expected	elided yaṁ before a vowel as yad' (row note); the stem + vowel lookup finds yada and similar, not the pronoun ya	2026-10-26
+ety:yanti#f3851085a0	notation	shortened chain without DPD's sign a (√yā + a + nti); query D17	2026-10-26
+ety:yasa-vaḍḍhako#6eeb092a0a	notation	member yasas (stem) where DPD writes yasa	2026-10-26
+ety:yathābhūtaṁ#10bb931d93	notation	we analyse DPD's member bhūta (√bhū + ta)	2026-10-26
+ety:yaṅkiñci#5616be1c60	notation	kiñci where DPD's split writes kiṁci	2026-10-26
+ety:yoga#8c16e4bd5a	notation	shortened chain without DPD's causative sign *e (√yuj + *e + a); query D17	2026-10-26
+ety:yogato#0affd543b1	notation	DPD √yuj + *e + a (yoje > yoge) with the ablative ending to added	2026-10-26
+ety:yān'#ca8386c391	homonym	elided yāni (rel pron); the stem + vowel lookup finds yāna and similar, not the pronoun ya the row names	2026-10-26
+ety:ñāṇakaraṇī#7acd2f710b	notation	feminine member karaṇī where DPD writes karaṇa + ī	2026-10-26
+ety:āha#380261d587	notation	shortened chain without the augment a (a + √ah + a + a); query D17	2026-10-26
+ety:āhu#0c1a11a7a1	notation	shortened chain without the augment a and sign a (a + √ah + a + u); query D17	2026-10-26
+ety:ākiṇṇavihāre#6863b6ba79	notation	DPD's construction text is "ākirati ākiṇṇa"; the row's ākiṇṇa + vihāra is its analysis	2026-10-26
+ety:ākiṇṇavihāro#0020267c14	notation	DPD's construction text is "ākirati ākiṇṇa"; the row's ākiṇṇa + vihāra is its analysis	2026-10-26
+ety:ānubhāvena#8768aa6887	notation	shortened chain: one *a where DPD has two (anu > ānu + √bhū > bhāv + *a + *a); query D17	2026-10-26
+ety:ānubhāvo#978e5d5634	notation	shortened chain: one *a where DPD has two (anu > ānu + √bhū > bhāv + *a + *a); query D17	2026-10-26
+ety:ārāma-rukkha-cetyāni#ee89749392	notation	DPD's ending āni after the members	2026-10-26
+ety:āsīti#07fc51670e	homonym	the row means asīti lengthened after catur (row note); DPD's āsīti rows are other words	2026-10-26
+ety:ḍaṁsa-makasa-vātātapa-siriṁsapa-samphassānaṁ#4fbe97145c	notation	members finer than DPD (vāta + ātapa / vātātapa)	2026-10-26
+ety:ṭhātu#0db906d502	notation	shortened chain without DPD's sign a (√ṭhā + a + ti); query D17	2026-10-26
+ety:ṭṭhānaṁ#0c8f7c049d	expected	ṭhāna with ṭ doubled after the first member (row note); DPD: ṭhānaṁ	2026-10-26
+grammar:abhabba#b803925a96	expected	stem form, first part of abhabbaṭhānāni divided by the text (row note)	2026-10-26
+grammar:abhikaṅkhatā#a2439969ec	dpd-gap	prp abhikaṅkhant instr sg; DPD lists this form only under the pp and abstract noun	2026-10-26
+grammar:abhivādana-sīlissa#521da5efed	dpd-gap	sīlin masc dat/gen sg in -issa; DPD lists the form only as nt gen sg	2026-10-26
+grammar:adhipatino#219aea633f	expected	member of maggādhipatino, nom pl in -ino (note on the compound row)	2026-10-26
+grammar:adhipatī#848530e344	expected	member of lokādhipatī, -i lengthened for the metre (note on the compound row)	2026-10-26
+grammar:agge#10ed5e7aab	expected	eastern nominative in -e (row note)	2026-10-26
+grammar:akkharā#ef4efd21ad	expected	last member of a possessive compound with kavitā/kāveyyā, agreeing (adj masc nom pl)	2026-10-26
+grammar:anekā#3df89ee08d	query	anekā with masc antarāyā; DPD declines aneka like a pronoun (masc nom pl aneke) and gives anekā only as fem	2026-10-26
+grammar:anekā#5685ebaaa2	query	anekā with masc antarāyā; DPD declines aneka like a pronoun (masc nom pl aneke) and gives anekā only as fem	2026-10-26
+grammar:añjalī#d7fbc0f8e4	expected	final -i lengthened (row note)	2026-10-26
+grammar:aññā#4f24b12327	expected	irregular dative of aññā (row note)	2026-10-26
+grammar:aṭṭhacattāḷīsa#911eb2d6b8	expected	stem form, for the metre (row note)	2026-10-26
+grammar:bahunnaṁ#9f101100f0	dpd-gap	bahunnaṁ is gen pl as well as dat pl (they share the form); DPD lists only masc dat pl	2026-10-26
+grammar:balā#d0c8027b42	expected	last member of the possessive compound mahabbalā, agreeing (adj masc nom pl)	2026-10-26
+grammar:bhavataṇhā#8bd0da3483	expected	stem form in the sense of the genitive (row note)	2026-10-26
+grammar:bhedeti#e76fef80b0	dpd-gap	DPD's row for bhedeti gives bheda and the split bhede + iti, not the causative verb	2026-10-26
+grammar:bhikkhu-pāṭimokkhaṁ#ee9ffba4bb	expected	nt agreeing with niṭṭhitaṁ (row note)	2026-10-26
+grammar:bhismā#68e844e645	dpd-gap	DPD has bhismā only as the fem noun (row note); the row reads the adjective	2026-10-26
+grammar:bhāgā#c3743eccc3	expected	read with evaṁ as the adjective evaṁbhāga, agreeing (row note); DPD's parses are of the noun bhāga	2026-10-26
+grammar:cakkhū#819177f7cd	expected	last member of a possessive compound (row note)	2026-10-26
+grammar:candani#7042568010	expected	member of tagara-candani, adjective agreeing (note on the compound row); DPD's candani is another word (sewer)	2026-10-26
+grammar:cattāḷīsa#cff2c1b07d	expected	stem form, for the metre (row note)	2026-10-26
+grammar:catuvīsati#0d9cfb3b43	expected	stem form, for the metre (row note)	2026-10-26
+grammar:dhammiṁ#67a1fdd521	dpd-gap	fem acc sg agreeing with kathaṁ (row note); DPD's row for dhammiṁ lists only masc and nt forms	2026-10-26
+grammar:divaṁ#f4546e5413	expected	last member of the dvanda rattin-divaṁ, nt acc sg like the compound; DPD's diva is masc	2026-10-26
+grammar:divā#ea75f88b1d	expected	stem with -n- inserted after ratti (row note); DPD parses diva as masc	2026-10-26
+grammar:dukkhanirodhaṁ#6d3e57beda	expected	masc in DPD; nt here, agreeing with ariyasaccaṁ (row note)	2026-10-26
+grammar:dukkhasamudayaṁ#fd31698d75	expected	masc in DPD; nt here, agreeing with ariyasaccaṁ (row note)	2026-10-26
+grammar:dvādas'ākāraṁ#2ef949d994	expected	DPD lists dvādasākāra as a noun; read here as an adjective (row note)	2026-10-26
+grammar:dvādasañca#0df5d343c2	query	dvādasaṁ (+ ca) tagged acc pl; DPD parses the cardinal only in the singular (nt nom sg, masc acc sg …)	2026-10-26
+grammar:eka-rājā#0543737622	dpd-gap	rājan nom sg rājā in the compound; DPD parses ekarājā as an a-stem (nom pl …)	2026-10-26
+grammar:garuno#3ffc9fd701	expected	member of saddhamma-garuno, -uno as nom pl for the metre (note on the compound row)	2026-10-26
+grammar:ghātā#90aafb01f1	dpd-gap	agent noun ghātar (nom sg ghātā), not a DPD headword (row note); DPD parses ghāta	2026-10-26
+grammar:gire#015c004390	expected	last part of the city's name (row note)	2026-10-26
+grammar:iddhikā#be5bf6e3e6	dpd-gap	iddhika masc nom pl (mahiddhikā devā); DPD lists the form for fem and nt only	2026-10-26
+grammar:iddhiṁ#46fd3abf45	expected	member of the possessive compound visuddhi-jutim-iddhi-bakābhidhāna, agreeing (masc acc sg)	2026-10-26
+grammar:jātarūpappatirūpakaṁ#6828ad1fe0	expected	DPD gives the headword as masc; nt here as the subject (row note)	2026-10-26
+grammar:kammehi#0d465d009d	expected	last member of the possessive compound katakammehi, agreeing (adj masc instr pl)	2026-10-26
+grammar:kavitā#d66d1cedec	dpd-gap	kavita pp masc nom pl; DPD lists the form for fem only	2026-10-26
+grammar:kāveyyā#47a00d964c	expected	DPD lists kāveyya as a nt noun; here an adjective (row note)	2026-10-26
+grammar:lambitakā#8be7b1967f	dpd-gap	form not in DPD (row note); DPD's parses are of its splits	2026-10-26
+grammar:lokassā#57a38bdeea	expected	lokassa with the final a lengthened before 'ti (row note)	2026-10-26
+grammar:lokādhipatī#6a946e5379	expected	final -i lengthened for the metre (row note)	2026-10-26
+grammar:maccharā#e1d36a673d	expected	last member of an adjectival compound (row note)	2026-10-26
+grammar:maggādhipatino#1a28c89a61	expected	nom pl in -ino, as of an -in stem (row note)	2026-10-26
+grammar:mahārājā#8236b744cb	dpd-gap	mahārāja declined as an a-stem, nom pl mahārājā (cattāro mahārājā); DPD parses only the rājan forms nom/voc sg	2026-10-26
+grammar:manussaṁ#73ece2faf4	expected	last member of the possessive compound sadeva-manussa, agreeing with pajaṁ (fem acc sg)	2026-10-26
+grammar:manussāya#b82f38184c	expected	noun as the last member of an adjectival compound (row note)	2026-10-26
+grammar:maraṇa-dhammomhi#c801cd4cd0	expected	maraṇa-dhammo + amhi (row note); DPD's parses are of the joined form	2026-10-26
+grammar:mekhalaṁ#391870b8b4	expected	part of the elephant's name Girimekhala (masc, row meaning); DPD's mekhalā is fem	2026-10-26
+grammar:mohaṁ#58ca823128	expected	noun moha in a possessive compound (row note)	2026-10-26
+grammar:mohaṁ#59a91dcb8d	expected	noun moha in a possessive compound (row note)	2026-10-26
+grammar:munī#0154c7c179	expected	muni with -ī lengthened for the metre (row note)	2026-10-26
+grammar:mātali#ad8f743b92	expected	mātalī metrically shortened (row note)	2026-10-26
+grammar:nighaṇḍu#94b464c147	expected	as a name; DPD has only the nt noun nighaṇḍu (row note)	2026-10-26
+grammar:nirodhaṁ#f46a30e2da	expected	masc in DPD (row note); member of dukkhanirodhaṁ, nt by agreement	2026-10-26
+grammar:nābhī#b0500fbf0c	expected	last member of the possessive compound uṇṇā-nābhī (masc nom pl)	2026-10-26
+grammar:padassa#cf3a1da0b4	expected	last member of the possessive compound diṭṭha-padassa, agreeing (adj masc dat sg)	2026-10-26
+grammar:padehi#15d7f3f00b	expected	last member of the possessive compound catuppadehi, agreeing (adj masc instr pl)	2026-10-26
+grammar:pakkhi#52110ba605	expected	pakkhī metrically shortened (row note)	2026-10-26
+grammar:paññattī#946d4009a9	expected	final -i lengthened before iti (row note)	2026-10-26
+grammar:paṭṭhāne#7a824f50d0	homonym	upaṭṭhāna in satipaṭṭhāna (row note), which DPD has as masc (satipaṭṭhāna 1); DPD's paṭṭhāna is nt	2026-10-26
+grammar:paṭṭhānā#659270f54c	homonym	upaṭṭhāna in satipaṭṭhāna (row note), which DPD has as masc (satipaṭṭhāna 1); DPD's paṭṭhāna is nt	2026-10-26
+grammar:phussitagge#863b481f8e	expected	eastern nominative in -e (row note)	2026-10-26
+grammar:pitā#139787b7ed	expected	dvanda ending, plural (row note); DPD parses pitā as sg	2026-10-26
+grammar:piṇḍaṁ#62d8f2bdf4	expected	last member of the possessive compound dullabhapiṇḍaṁ (adj nt nom sg)	2026-10-26
+grammar:pāricariyānaṁ#86f5a0886f	expected	noun as the last member of an adjectival compound (row note)	2026-10-26
+grammar:pārisuddhiṁ#72d6ac38d7	expected	last member of a possessive compound (row note)	2026-10-26
+grammar:pāṭimokkhaṁ#7cdce36545	expected	member of bhikkhu-pāṭimokkhaṁ, nt by agreement (note on the compound row)	2026-10-26
+grammar:rajjaṁ#2b371a3dc2	expected	member of sarajjaṁ, agreeing with a masc noun; DPD parses rajja as the nt noun	2026-10-26
+grammar:rattiṁ#67a3162230	expected	ratti (fem) as last member of a possessive compound (row note)	2026-10-26
+grammar:ratī#c6d21a52c7	expected	last member of the possessive compound nimmānaratī, agreeing with devā (adj masc nom pl)	2026-10-26
+grammar:ratīnaṁ#3e6baa4c26	expected	last member of the possessive compound nimmānaratīnaṁ, agreeing with devānaṁ (adj masc gen pl)	2026-10-26
+grammar:rāgaṁ#cc67b8c3b7	expected	noun rāga in a possessive compound (row note)	2026-10-26
+grammar:rāgaṁ#ceeea86f95	expected	noun rāga in a possessive compound (row note)	2026-10-26
+grammar:rājikā#f0fdcc5779	dpd-gap	cātummahārājika masc nom pl (devā); DPD lists rājikā only as fem	2026-10-26
+grammar:sabbe#af9f26341d	dpd-gap	vocative plural of sabba (sabbe, same as nom pl); DPD lists no vocative for the pronoun	2026-10-26
+grammar:saddhamma-garuno#f471c6998b	expected	-uno as nom pl, for the metre (row note)	2026-10-26
+grammar:saddhammappatirūpakaṁ#b7c1b6fde8	expected	DPD gives the headword as masc; nt here as the subject (row note)	2026-10-26
+grammar:sakya-munī#fa3fbe5396	expected	muni with -ī lengthened for the metre (note on the member row)	2026-10-26
+grammar:samudayaṁ#a428da8604	expected	masc in DPD (row note); member of dukkhasamudayaṁ, nt by agreement	2026-10-26
+grammar:santuṭṭhī#2e89c70a07	expected	santuṭṭhi with -ī lengthened for the metre (row note)	2026-10-26
+grammar:sarabhū#de6883e4a6	expected	DPD spells the word sarabū (masc), as the row note says; DPD's sarabhū is fem	2026-10-26
+grammar:sarajjaṁ#27a835ba7a	expected	possessive compound sarajja agreeing with a masc noun; DPD parses rajja as the nt noun	2026-10-26
+grammar:saññā'ti#b1e695650c	dpd-gap	DPD splits saññā'ti only as sañña + iti (vocatives); the row reads saññā (fem nom sg) + iti	2026-10-26
+grammar:saññāṇaṁ#3c655c8432	expected	-ṇaṁ for -naṁ as BM spells it, gen pl of saññā (decision query 49); DPD reads saññāṇa	2026-10-26
+grammar:saṅgahā#1e51982768	expected	form in -ā used as the object of samavekkhanti (row note)	2026-10-26
+grammar:suhujū#6cf73f066a	expected	suhuju with -ū lengthened for the metre (row note)	2026-10-26
+grammar:sīlissa#975b85bdf3	dpd-gap	sīlin masc dat/gen sg in -issa; DPD lists the form only as nt gen sg	2026-10-26
+grammar:tagara-candani#db27e5220c	expected	Ṭhānissaro's spelling, DPD tagaracandanī (row note); adjective agreeing with its noun	2026-10-26
+grammar:tathārūpāya#2e91bc3d71	dpd-gap	tathārūpā fem instr/loc sg (row note: parallel to tathārūpesu sīlesu); DPD lists only the masc and nt dat sg	2026-10-26
+grammar:taṇhā#e4b2461415	expected	member of bhavataṇhā, stem in the sense of the genitive (note on the compound row)	2026-10-26
+grammar:thullaccayaṁ#40bd1f4968	expected	agrees with āpattiṁ; DPD has the noun (row note)	2026-10-26
+grammar:ujū#d5636e3da5	expected	uju with -ū lengthened for the metre (row note)	2026-10-26
+grammar:upaṭṭhāne#20253f2c54	expected	u dropped after sati; upaṭṭhāna alone is nt (row note)	2026-10-26
+grammar:upaṭṭhānā#8ce2e6490b	expected	u dropped after sati; upaṭṭhāna alone is nt (row note)	2026-10-26
+grammar:upaṭṭhānāti#4ff973eecb	expected	u dropped after sati; upaṭṭhāna alone is nt (row note)	2026-10-26
+grammar:vanappagumbe#4ae868d4b2	expected	eastern nominative in -e (row note)	2026-10-26
+grammar:vattabbe#cb9151978c	expected	eastern nominative in -e (row note)	2026-10-26
+grammar:vaṇṇā#c3e6ebc621	expected	last member of the possessive compound abhikkanta-vaṇṇā, agreeing with devatā (fem nom sg)	2026-10-26
+grammar:vessabhussa#6d2283b407	dpd-gap	u-stem dat sg (same form as gen sg); DPD lists only gen sg	2026-10-26
+grammar:vicāraṁ#5ecd4028f9	expected	last member of the possessive compound savicāraṁ, agreeing (adj nt acc sg)	2026-10-26
+grammar:vihāti#780b11dada	dpd-gap	short form of viharati (row note), not in DPD	2026-10-26
+grammar:vinayaṁ#f687e2cfe7	dpd-gap	present participle of vineti, form not in DPD (row note)	2026-10-26
+grammar:viratī#6001f4b134	expected	virati with -ī lengthened for the metre (row note)	2026-10-26
+grammar:visuddhi-jutim-iddhi-bakābhidhānaṁ#11fe285698	expected	possessive compound naming Baka; DPD has no headword, its parses are of its split's parts	2026-10-26
+grammar:vutti#01579bc5bd	expected	last member of the possessive compound sallahuka-vutti, agreeing (adj masc nom sg)	2026-10-26
+grammar:yasassi#bb40ef9b2d	expected	yasassī metrically shortened (row note)	2026-10-26
+grammar:ādhipateyyā#b675605dee	expected	a- lengthened in sandhi, adjective in a possessive compound (row note)	2026-10-26
+grammar:ākāraṁ#4e96a43b21	expected	noun as the last member of an adjectival compound (row note)	2026-10-26
+grammar:āratī#51c6735b50	expected	ārati with -ī lengthened for the metre (row note)	2026-10-26
+grammar:āyu#431d819ce6	expected	last member of an adjectival compound (row note)	2026-10-26
+grammar:āyū#640db191c4	expected	-u lengthened for the metre (row note)	2026-10-26
+noroot:patī#913f452923	error	row says pati has no root in DPD; DPD pati 2.1 (lord, master) is √pat 2, construction √pat + i	2026-10-26
+notfound:'ndriyaṁ#8485192529	expected	indriyaṁ with its initial i elided (row note)	2026-10-26
+notfound:'ṭṭhabbidho#5144d0fabe	expected	aṭṭhavidho with a- elided and bb for v in the metre (row note)	2026-10-26
+notfound:abhigītiṁ#b84384e2d7	dpd-gap	abhigīti not in DPD	2026-10-26
+notfound:abhipūjayāmi#b2e721a8de	dpd-gap	present of abhipūjeti, not in DPD	2026-10-26
+notfound:abhirakkhituṁ#78a23c4ef5	dpd-gap	abhirakkhituṁ (inf) not in DPD	2026-10-26
+notfound:abhiñāṇa#9cb12e7158	expected	read as abhi + ñāṇa, logged in the 02 CHANGELOG (DPD's abhiññāṇa means a distinctive mark)	2026-10-26
+notfound:abhyati#5408066fbf	expected	prefix abhi before ati written abhy- by sandhi; abhi and ati are DPD words	2026-10-26
+notfound:accayāyo#1824ad4476	expected	noun accaya used adjectivally (row note), fem acc pl	2026-10-26
+notfound:anara#7f981477dc	dpd-gap	anara (non-human) not in DPD	2026-10-26
+notfound:apariyuṭṭha#99ec637fb5	dpd-gap	apariyuṭṭha not in DPD	2026-10-26
+notfound:app#e4f5df8905	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:asīty'#52c7ccb6a6	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:atisītāya#e322063565	dpd-gap	atisīta not in DPD	2026-10-26
+notfound:avijj#05d7b50091	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:ayogakkhema#9a5ac0fb9e	dpd-gap	ayogakkhema not in DPD	2026-10-26
+notfound:aṭṭh#9903419f0d	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:bbalā#efe7920164	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:bbataṁ#cd8577b201	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:bbhavanti#e77ff05250	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:bhass#6207fc27e1	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:bhav#b3de882513	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:bhavatv-#b23a5b5ca3	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:bhesakaḷā#b320e87dda	dpd-gap	not in DPD, as the row says	2026-10-26
+notfound:bhāvanīyānañ#0f7c30b59a	dpd-gap	ṁ written ñ before the next word; the respelled bhāvanīyānaṁ is not in DPD either	2026-10-26
+notfound:bojjh#a9705c23d8	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:buddh'v-#e1b360cdd9	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:buddhass'#eb1d48e612	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:cakkhv-#e542954d0d	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:caṇḍehi#7a10df6aa9	dpd-gap	caṇḍa instr pl not in DPD's lookup table	2026-10-26
+notfound:chabyā#06f67a8cfa	dpd-gap	name Chabyā not in DPD	2026-10-26
+notfound:chuḍḍho#9b1e3376b9	dpd-gap	chuḍḍha nom sg not in DPD	2026-10-26
+notfound:ciñcāya#3d3b1422a1	dpd-gap	name Ciñcā not in DPD	2026-10-26
+notfound:cārisu#451002919b	expected	cārīsu with the vowel shortened for the metre; DPD: cārīsu	2026-10-26
+notfound:cātum#3a510ff912	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:dhamm#a8de15a24e	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:dhammass'#cd3974f5e8	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:dhammāmhi#0bc2877156	expected	dhammā + amhi joined (row note); the parts are DPD words	2026-10-26
+notfound:dhānasmiṁ#a94399216d	dpd-gap	dhāna loc sg (dhānasmiṁ) not in DPD	2026-10-26
+notfound:di#e57f20a310	dpd-gap	di-, compound form of dvi, not in DPD	2026-10-26
+notfound:diṭṭh#f96fac30d2	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:dukkh#9c04219daa	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:dāso/dāsī#5a69a9fb95	expected	slash alternative in one row (dāso / dāsī); each form is a DPD word	2026-10-26
+notfound:dāv'#b6350f313a	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:ek#f7c6a864d3	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:ekī#d9c31c67ef	dpd-gap	ekī-, compound form of eka (row note), not in DPD	2026-10-26
+notfound:erāvaṇṇo#5441c45053	expected	the source's spelling (row note)	2026-10-26
+notfound:ggaha#551ac09a1f	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:gotamakehi#28ebf35a28	dpd-gap	DPD gives gotamaka (row note), but not this form	2026-10-26
+notfound:grī#63ea69d343	expected	giri contracted for the metre (row note)	2026-10-26
+notfound:harit#fb8bc15926	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:iddhī'#782154a9a3	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:idham-#aaa13c8c89	expected	idha with m inserted before ā- (row note)	2026-10-26
+notfound:jayassu#173822166a	dpd-gap	middle imperative jayassu of jayati not in DPD	2026-10-26
+notfound:jivh#8e57c640ba	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:jjano#0373b1df18	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:kamm#3c1211a6d0	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:kamma-kubbataṁ#cc0f3f319e	expected	note word kamma(ṁ) is kamma with its nasal dropped for the metre (row note); kubbataṁ is DPD's	2026-10-26
+notfound:khīrodakī#beb1bba5a5	expected	khīrodaka with -ī before bhūta (row note)	2026-10-26
+notfound:kitāni#857402d6b7	expected	kata written kita, as the text spells it (row note)	2026-10-26
+notfound:kkhamāya#1285004090	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:kkhandh'#0f49edf466	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:kkhandhesu#cac934d1c8	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:kkhandho#3fc36cb136	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:kkhette#a93ab2356d	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:konāgamanassa#366b7755b0	expected	the text's spelling Konāgamana; DPD spells koṇāgamana (row note)	2026-10-26
+notfound:koṭayo#96c81c6260	dpd-gap	koṭi nom pl koṭayo not in DPD	2026-10-26
+notfound:kām#af81d44af2	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:kūlikattaṁ#14d0c1d2a4	dpd-gap	abstract noun in -ikatta not in DPD	2026-10-26
+notfound:kūṭ#dfb8094120	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:mah#0df30ccf3c	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:migāni#c2925b1f8c	dpd-gap	the text's neuter plural vāḷamigāni; DPD has miga only as masc	2026-10-26
+notfound:māhesuṁ#828f55f437	expected	mā + ahesuṁ joined (row note); both parts are DPD words	2026-10-26
+notfound:mānus#520e3680e1	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:mūlikattaṁ#5e1a57626d	dpd-gap	abstract noun in -ikatta not in DPD	2026-10-26
+notfound:nidd#778ad6410b	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:nissaraṇass'#67f4b6dcae	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:nām#19e1b307b6	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:nātimaññetha#ed88c045d9	dpd-gap	note word atimaññetha (opt of atimaññati) not in DPD	2026-10-26
+notfound:omāty-#f954e2ce16	expected	oṁ + iti (trad.), decision query 25; DPD omāti	2026-10-26
+notfound:opāyaṁ#6f826b8bcf	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:opāye#946a6279fc	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:osabho#de3f8f3e7a	dpd-gap	osabha, variant of usabha, not in DPD	2026-10-26
+notfound:oṇojayāma#d2da335ff7	dpd-gap	oṇojeti (1st pl) not in DPD	2026-10-26
+notfound:pabodhā#e888dceb98	dpd-gap	pabodha abl sg not in DPD	2026-10-26
+notfound:padesū#619f757f8f	expected	padesu with the final u lengthened before 'ti; DPD: padesu	2026-10-26
+notfound:pado#14e7ed9d13	expected	last member of a possessive compound (catuppado), masc of pada; DPD has pada as nt	2026-10-26
+notfound:padūsikā#2a944bdeac	expected	the source's spelling (row note)	2026-10-26
+notfound:pahaṁsāna#fca3ab6cce	expected	the source's spelling (row note)	2026-10-26
+notfound:pahit#742a469add	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:pajunno#0ca2266bfc	expected	the source's spelling (row note)	2026-10-26
+notfound:palīghaṁ#d9204f8492	expected	metrical lengthening of paligha (row note)	2026-10-26
+notfound:pamuccantu#13910d0973	dpd-gap	imperative of the passive pamuccati, not in DPD	2026-10-26
+notfound:pamuccaye#afe21e06e7	dpd-gap	not in DPD, as the row says	2026-10-26
+notfound:paramatthenā#d1edca3249	expected	paramatthena with the final a lengthened before iti (row note)	2026-10-26
+notfound:pavuttha-jātim-akkhīlaṁ#6823f955c0	dpd-gap	note word akkhīlaṁ not in DPD	2026-10-26
+notfound:paṭikkarissati#791d5673c5	expected	paṭi- with k doubled, as the text spells it; DPD paṭikaroti (row note)	2026-10-26
+notfound:paṭikkarissāmi#43be250581	expected	paṭi- with k doubled, as the text spells it; DPD paṭikaroti (row note)	2026-10-26
+notfound:paṭikkulo#d504b1db07	expected	the source's spelling (row note)	2026-10-26
+notfound:petāna'pūjā#d4965ebad8	expected	note word petāna' is petānaṁ with -ṁ elided (row note)	2026-10-26
+notfound:ppabhāvena#9b2aa329e8	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ppadālaṁ#e0b33a5c4f	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ppagumbe#6e9940e0db	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ppakārassa#ea6e3f1744	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ppalāpā#1875e412d3	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ppamattā#b06bfb728f	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ppamukhā#eab6a5af3f	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ppatirūpakaṁ#b1bbcb086b	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ppattā#26f517293d	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ppavattana#685df58fae	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ppavattanaṁ#eb92ebacb6	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ppavesanaṁ#38d7e933af	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ppaññāya#41f455b2ac	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ppaṭisaṁyuttā#7d4e4c3d99	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:pphalan#b390814456	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:pphalaṁ#a8cab29551	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:pphalo#7844aebe79	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:pphalā#a9c1a970cf	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:pphalāni#fe99bf8104	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:purakkhitvā#9ac01543cc	dpd-gap	not in DPD, as the row says	2026-10-26
+notfound:puññ#c5af1f99d9	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:puññass'#759d804861	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:puññatā#f9fb430794	dpd-gap	puññatā (abstract) not in DPD	2026-10-26
+notfound:pādakehi#2091594c60	dpd-gap	pādaka instr pl not in DPD	2026-10-26
+notfound:pāp#17a99b4387	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:pātikattaṁ#97258cc85f	dpd-gap	abstract noun in -ikatta not in DPD	2026-10-26
+notfound:ras#84d33a54b5	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:ratino#985893cd61	dpd-gap	nom pl in -ino of rati(n) not in DPD	2026-10-26
+notfound:raṁsiy'#f78c3e50b9	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:raṭṭho#1d90dedd51	expected	nt raṭṭha as the last member of a masculine name (row note)	2026-10-26
+notfound:rājikānaṁ#c699b8a551	dpd-gap	rājika gen pl not in DPD	2026-10-26
+notfound:sabb#1b8d1c012f	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:sakomhi#673a333684	expected	sako + amhi joined, s doubled after kamma (row note); the parts are DPD words	2026-10-26
+notfound:sakāmhi#edc1432459	expected	sakā + amhi joined (row note); the parts are DPD words	2026-10-26
+notfound:sambhav#3966989037	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:sambodhiy-#44f57ee5dc	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:sambojjh'#ed1bb3b306	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:sammad-#ef5a2eec9b	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:samāpattiy'#89c9fbcb1d	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:sandoso#03b2d2c066	dpd-gap	sandosa not in DPD	2026-10-26
+notfound:sandosā#49a6d08708	dpd-gap	sandosa not in DPD	2026-10-26
+notfound:sap#87083b445d	expected	sa- with the next consonant doubled (row note)	2026-10-26
+notfound:saparivārāni#ba7a66844d	dpd-gap	saparivāra nt acc pl not in DPD	2026-10-26
+notfound:saratem-#f098666a90	expected	sarate with m inserted before a vowel (row note)	2026-10-26
+notfound:sariṁsape#0ec75ecd50	expected	the source's spelling (row note)	2026-10-26
+notfound:saṁrakkhetabbā'ti#69a337bf1c	dpd-gap	note word saṁrakkhetabbā (ptp of saṁrakkhati) not in DPD	2026-10-26
+notfound:saṅgaṇik#016aeec35e	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:saṅghass'#84cfc9dbf7	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:saṅghassopaṭipannataṁ#cfd345fed5	dpd-gap	note word supaṭipannataṁ (abstract of supaṭipanna) not in DPD	2026-10-26
+notfound:sen#af078c6155	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:sikho#989c7629ae	expected	sikhā as the last member of a possessive compound, masc (row note)	2026-10-26
+notfound:siren'#6af494ec5f	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:sotavantā#78bb76ab35	dpd-gap	sotavant nom pl not in DPD	2026-10-26
+notfound:ssamaṇa#2f17261e06	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ssaraṁ#3d63135f4a	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ssatī#3d688ca70b	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ssavana#874df9cd6d	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ssavanaṁ#108930faa0	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ssute#8a59d74453	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ssutā#8700518ad6	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:subodhitaṁ#ee2e80d989	dpd-gap	subodhitā not in DPD	2026-10-26
+notfound:sulabhe#79f3c79cfa	dpd-gap	su + labhe (opt of labhati) joined; DPD has no row for the joined form	2026-10-26
+notfound:sādh'āyasmantehi#0f3e7b8922	dpd-gap	note word saṁrakkhetabbā (ptp of saṁrakkhati) not in DPD	2026-10-26
+notfound:sāmaññagatā#c7bab95c00	dpd-gap	sāmaññagata not in DPD	2026-10-26
+notfound:sūleyya#ad5ab145f0	dpd-gap	not in DPD, as the row says	2026-10-26
+notfound:tacatā#9bcf11dfbd	dpd-gap	tacatā (abstract) not in DPD	2026-10-26
+notfound:tak#bd74277822	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:tassannam#4e7ef5d2f2	dpd-gap	not in DPD, as the row says	2026-10-26
+notfound:te/me#a246a4cb65	expected	slash alternative in one row (te / me); each form is a DPD word	2026-10-26
+notfound:tero#c490483c06	expected	tiro written tero, as the text spells it (row note)	2026-10-26
+notfound:ttayena#ea144bf34c	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:tumhe/amhe#cc3c9f6fae	expected	slash alternative in one row (tumhe / amhe); each form is a DPD word	2026-10-26
+notfound:uddh#f717460669	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:uddissena#b73c9c2aae	dpd-gap	uddissa (nt) instr sg not in DPD	2026-10-26
+notfound:udrayā#b7efd96e09	dpd-gap	udraya (fem nom sg udrayā) not in DPD	2026-10-26
+notfound:upapāramit'#40976c9a5d	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:upāyāsāpi#f6e5c4a109	dpd-gap	upāyāsā + pi joined; DPD has no row for the joined form	2026-10-26
+notfound:vacano#a62ddf409c	expected	noun vacana as the last member of an adjectival compound (row note); DPD has vacana as nt	2026-10-26
+notfound:vacchasā#de13ba347e	dpd-gap	not in DPD, as the row says	2026-10-26
+notfound:valit#8d6a834812	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:vandamānena/vandamānāya#9f85936c87	expected	slash alternative in one row (vandamānena / vandamānāya); each form is from DPD's vandati	2026-10-26
+notfound:vandām'#763f44f1e6	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:varatā#12b91a7b2d	dpd-gap	varatā (abstract of vara) not in DPD	2026-10-26
+notfound:viddhām-#836da13806	expected	the source's spelling (row note)	2026-10-26
+notfound:vihārinaṁ#40fdf81841	dpd-gap	vihārin gen pl not in DPD	2026-10-26
+notfound:vinimocayanto#fb32d43cba	dpd-gap	causative prp vinimocayant not in DPD	2026-10-26
+notfound:vipariṇām#f142c9fef4	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:viriy#ca8ac5edb1	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:virāg#8f5749e367	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:viññāpitāni#f00aba4d3f	dpd-gap	viññāpita nt pl not in DPD	2026-10-26
+notfound:viññūhī#9d3a5a9759	expected	viññūhi with the final i lengthened before 'ti (row note)	2026-10-26
+notfound:viññūṇaṁ#a636f380e4	expected	-ṇaṁ for -naṁ as BM spells it (decision query 49, 07a CHANGELOG)	2026-10-26
+notfound:ñassāmī#f364e812bd	expected	ñassāmi with the final i lengthened before iti (row note)	2026-10-26
+notfound:ñeva#3997279bc5	expected	eva with ñ from the sandhi (row note)	2026-10-26
+notfound:ññutā#8510d690f8	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ññū#a2605d60cd	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ābhidhānaṁ#876cb3bca8	expected	abhidhāna with a- lengthened after baka- in sandhi	2026-10-26
+notfound:ābhinandinī#982f9776f3	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:ādhikarassa#de3d1f3fa9	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:āggi#e02e2ad686	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:āgāra#617bf16e8c	expected	agāra with a + a > ā in sandhi (row note)	2026-10-26
+notfound:āgāre#7d213c3ab3	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:āhaṁ#d385f4d628	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:ānubyañjan'#fa3ecec554	expected	compound member or word cut before a vowel at a sandhi junction (final vowel elided or changed)	2026-10-26
+notfound:ānugatiṁ#3151402255	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:ānurūpato#fc10992ba9	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:ānussārena#298e84433c	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:ānuvattino#8f49a363ae	expected	anuvattin with a- lengthened after dhamma- in sandhi	2026-10-26
+notfound:āpacāyino#f579494936	expected	apacāyin with a- lengthened in sandhi	2026-10-26
+notfound:āpanūdanaṁ#a83bf83ed1	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:āraha#e8884af6cc	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:ārahanta#b8db96e1c8	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:āsabhaṇṭhānamuttamaṁ#d291f64ced	dpd-gap	note word āsabhaṇṭhānaṁ not in DPD	2026-10-26
+notfound:ātitaṁ#305ab5e9ff	expected	the source's spelling (row note)	2026-10-26
+notfound:ūpago#5b790f4de9	expected	upaga with u- lengthened in the compound; DPD: upaga	2026-10-26
+notfound:ūpamaṁ#797b435fe3	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:ūpasama#e5907a5959	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:ūpasame#dd81bc5a70	expected	initial vowel lengthened or merged in sandhi (row note)	2026-10-26
+notfound:ṭṭhitiko#594e4c5222	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ṭṭhā#b7ac3075b8	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ṭṭhāyino#bcd8abe203	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+notfound:ṭṭhāyī#5d1c812eb3	expected	compound member written from a sandhi junction, its first consonant doubled	2026-10-26
+root:candani#9fd62cf778	homonym	row means a derivative of candana (DPD √cand + ana, sandalwood); DPD's candani is another word (fem, sewer, √sand)	2026-10-26
+root:citto#a5fa980be9	expected	citta 1 (mind, √cit) with a masc ending at the end of a bahubbīhi, as the note says; DPD lists the form citto only under citta 2 (√citt, decorated)	2026-10-26
+root:pasutaṁ#e0913d9f8c	homonym	metrical short form of pasūta (DPD pa + √su, √su 2), as the row note says; DPD's lookup row for pasutaṁ lists other words (pasuta, √sar/√si)	2026-10-26
+root:pattiyā#7c25fa6dc1	dpd-gap	DPD's lookup row for pattiyā lists patti 1.x (√ap) but not patti 2.1, foot-soldier (√pad + ti), which the row means	2026-10-26
+root:saccañ-#3e2eda22a8	homonym	member of bāhusacca; DPD bāhusacca = bahu > bāhu + suta > sata + ya, so √su as the row says; DPD's saccaṁ row is sacca, truth (√as)	2026-10-26
+root:vattu#b143f44f3f	homonym	row means the infinitive vattuṁ in vattukāmo; DPD vattuṁ (66042/dpd) is √vad + tuṁ, as the row; the form vattu alone is only vattar (√vac)	2026-10-26

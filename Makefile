@@ -139,5 +139,7 @@ compare:
 index:
 	@$(PYTHON) scripts/index.py index
 
+# Word tables against DPD via the Simsapa API (docs/quality-process.md §3):
+# fails on unreviewed flags; reviewed items are in checks/dpd-review.tsv.
 dpd-check:
-	@echo "make $@: not implemented yet"
+	@$(PYTHON) scripts/simsapa.py check $(TEXTS)

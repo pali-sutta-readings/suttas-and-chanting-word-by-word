@@ -4,7 +4,7 @@
 This is a *formatter only*: it reads a response on stdin (piped from `curl`)
 and prints a compact, grep-friendly summary. The request is done by `curl`,
 so both `curl` and this script can be allow-listed to avoid permission
-prompts (see docs/localhost-api-search-endpoints.md for the API itself).
+prompts (see docs/simsapa-localhost-api-search-endpoints.md for the API itself).
 
 It auto-detects the response shapes the API returns:
 
@@ -18,10 +18,15 @@ It auto-detects the response shapes the API returns:
   3. Word envelope   -- the /word.json?...&verbose=1 diagnostic object
                         ({found, canonical_uid, result|hint}); prints the
                         resolved uid (or the miss hint).
-  4. Health snapshot -- the /health object (app_version, counts,
+  4. Health snapshot -- the /health object (app_version, dpd_version, counts,
                         dict_sources, fulltext_searcher_ready) and the
                         /sutta_and_dict_search_options filter lists.
-  5. Rendered HTML   -- anything that is not JSON (get_sutta_html_by_uid,
+  5. Exact lookups  -- /lookup_forms ({dpd_version, results[]}) and
+                        /gloss_text with "exact": true (paragraphs[].tokens[]).
+                        Prints each form's status, every headword (construction
+                        lines, construction_summary, root_key, root_base, DPD's
+                        parses of the form) and every split, nothing chosen.
+  6. Rendered HTML   -- anything that is not JSON (get_sutta_html_by_uid,
                         get_word_html_by_uid). The interactive reader chrome
                         (find bar, selection menu, modal dialogs) is removed and
                         the remaining tags are stripped to plain text.
@@ -44,7 +49,12 @@ Typical use (PORT from <SIMSAPA_DIR>/api-port.txt, default 4848):
     -d '{"query_text":"mindfulness of breathing"}' \\
     | python3 scripts/simsapa_fmt.py --max 15 --snippet-len 300
 
-  # Dictionary lookup (gender / part of speech / meaning)
+  # Exact DPD lookup of word forms: DPD's parses, constructions, splits (§19.1)
+  curl -s -X POST "localhost:$PORT/lookup_forms" \\
+    -H 'Content-Type: application/json' \\
+    -d '{"forms":["bhagavantaṁ","atthaññe"]}' | python3 scripts/simsapa_fmt.py
+
+  # Dictionary search, with the app's respellings and guesses (§19.3)
   curl -s -X POST "localhost:$PORT/dict_combined_search" \\
     -H 'Content-Type: application/json' \\
     -d '{"query_text":"kaññā","dict_dict":"DPD"}' | python3 scripts/simsapa_fmt.py
@@ -72,10 +82,11 @@ RESULT_REF_FIELDS = ("sutta_ref", "title", "uid")
 WORD_FIELDS = (
     "word", "lemma_1", "lemma_clean", "dpd_lemma_clean",   # headword
     "pos", "grammar", "stem", "pattern",                   # grammar
-    "root", "root_meaning", "root_sign",                   # roots
+    "root", "root_key", "root_meaning", "root_sign",       # roots
+    "root_base",
     "meaning_1", "meaning_2", "meaning_lit",               # DPD meanings
     "definition_plain", "definition_html",                 # dict_words
-    "construction", "sanskrit", "example_1",
+    "construction", "construction_summary", "sanskrit", "example_1",
 )
 
 
@@ -223,6 +234,80 @@ def fmt_search(data, args, out):
                 print(f"    {snip}", file=out)
 
 
+def _triple(t):
+    """A DPD form-grammar triple [lemma, class, parse] as one string."""
+    return " ".join(str(x) for x in t)
+
+
+def fmt_form(res, args, out, indent="    "):
+    """Format one exact lookup result (a /lookup_forms result, docs §19.1).
+
+    Prints every headword and split as returned: nothing is chosen or ranked.
+    """
+    head = f"{res.get('input', '')} — {res.get('status', '?')}"
+    if res.get("lookup_key") and res.get("lookup_key") != res.get("input"):
+        head += f" (key {res['lookup_key']})"
+    if res.get("note"):
+        head += f": {res['note']}"
+    print(head, file=out)
+    raw = res.get("form_grammar_raw") or []
+    if raw:
+        print(f"{indent}DPD parses: {'; '.join(_triple(t) for t in raw)}", file=out)
+    for h in res.get("headwords") or []:
+        root = f" {h['root_key']}" if h.get("root_key") else ""
+        print(f"{indent}{h.get('uid', '')} {h.get('lemma_1', '')} "
+              f"({h.get('pos', '')}; {h.get('matched_as', '')}){root}", file=out)
+        sub = indent * 2
+        if h.get("construction"):
+            print(f"{sub}construction: {' | '.join(h['construction'])}", file=out)
+        # null = the installed dpd.sqlite3 predates the column; "" = none shown.
+        summary = h.get("construction_summary")
+        if summary is None:
+            print(f"{sub}summary: (not in this DPD)", file=out)
+        elif summary and summary not in h.get("construction", []):
+            print(f"{sub}summary: {summary}", file=out)
+        if h.get("root_base"):
+            print(f"{sub}root base: {h['root_base']}", file=out)
+        if h.get("form_grammar"):
+            print(f"{sub}form grammar: {'; '.join(h['form_grammar'])}", file=out)
+        if h.get("grammar"):
+            print(f"{sub}grammar: {h['grammar']}", file=out)
+        if h.get("meaning_1") and not args.no_snippet:
+            print(f"{sub}meaning: {clip(h['meaning_1'], args.snippet_len)}", file=out)
+    for d in res.get("deconstructions") or []:
+        print(f"{indent}split {d.get('split', '')} "
+              f"({d.get('kind', '')}, {d.get('source', '')})", file=out)
+        for c in d.get("components") or []:
+            uids = ", ".join(c.get("uids") or []) or "not found"
+            line = f"{indent * 2}{c.get('word', '')}: {uids}"
+            parses = c.get("form_grammar_raw") or []
+            if parses:
+                line += f"; DPD parses: {'; '.join(_triple(t) for t in parses)}"
+            print(line, file=out)
+
+
+def fmt_lookup(data, args, out):
+    """Format a /lookup_forms response: {dpd_version, results[]} (docs §19.1)."""
+    results = data.get("results") or []
+    print(f"# dpd {data.get('dpd_version', '?')}; {len(results)} form(s)", file=out)
+    for i, res in enumerate(results, 1):
+        print(file=out)
+        print(f"[{i}] ", end="", file=out)
+        fmt_form(res, args, out)
+
+
+def fmt_gloss_exact(data, args, out):
+    """Format an exact /gloss_text response: every token in order (docs §19.2)."""
+    paras = data.get("paragraphs") or []
+    print(f"# dpd {data.get('dpd_version', '?')}; {len(paras)} paragraph(s)", file=out)
+    for p in paras:
+        for t in p.get("tokens") or []:
+            print(file=out)
+            print(f"[{p.get('paragraph_index', 0)}.{t.get('token_index', 0)}] ",
+                  end="", file=out)
+            fmt_form(t.get("lookup") or {"input": t.get("original_word")}, args, out)
+
+
 def fmt_words(records, args, out):
     """Format a /words/<uid>.json response: a list of DB-row dicts."""
     if not records:
@@ -271,6 +356,8 @@ def fmt_health(data, out):
     """Format a /health snapshot (docs §10): the fields an agent probes first."""
     print(f"# health: simsapa {data.get('app_version', '?')} "
           f"on port {data.get('api_port', '?')}", file=out)
+    if "dpd_version" in data:
+        print(f"# dpd_version: {data.get('dpd_version')}", file=out)
     print(f"# fulltext_searcher_ready: {data.get('fulltext_searcher_ready')}", file=out)
     counts = data.get("counts") or {}
     if counts:
@@ -343,7 +430,11 @@ def main(argv=None):
         print(file=out)
         return 0
 
-    if isinstance(data, dict) and "results" in data:
+    if isinstance(data, dict) and "results" in data and "dpd_version" in data:
+        fmt_lookup(data, args, out)                   # /lookup_forms (§19.1)
+    elif isinstance(data, dict) and data.get("exact") and "paragraphs" in data:
+        fmt_gloss_exact(data, args, out)              # exact /gloss_text (§19.2)
+    elif isinstance(data, dict) and "results" in data:
         fmt_search(data, args, out)
     elif isinstance(data, dict) and "found" in data:
         fmt_word_envelope(data, args, out)            # word.json?verbose=1 (§13.3)
