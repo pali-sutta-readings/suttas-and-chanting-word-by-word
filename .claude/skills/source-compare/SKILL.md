@@ -1,6 +1,6 @@
 ---
 name: source-compare
-description: Compare the Pāli lines of texts in books/ with their source (Bhikkhu Manual, Chanting Guide, SuttaCentral, the Vinaya originals), map a text to its reference passage in sources/ref-map.tsv, and classify the differences. Use when checking a text against its source, adding or fixing a ref-map.tsv entry, after `make fetch-sources` re-pins the upstream sources, or when `make compare` reports a map error or a difference.
+description: Compare the Pāli lines of texts in books/ with their source (Bhikkhu Manual, Chanting Guide, SuttaCentral through the Simsapa app, the Vinaya originals), map a text to its reference passage in sources/ref-map.tsv, and classify the differences. Use when checking a text against its source, adding or fixing a ref-map.tsv entry, after `make fetch-sources` re-pins the upstream sources or a Simsapa update changes its SuttaCentral data, or when `make compare` reports a map error or a difference.
 ---
 
 # Source compare
@@ -26,7 +26,14 @@ python3 scripts/compare.py extract --ref TEXT        # the mapped passage, norma
 python3 scripts/compare.py extract --ref TEXT --plain  # the same, as text
 ```
 
-For SuttaCentral texts not in `sources/`, use the Simsapa sutta routes (`docs/simsapa-localhost-api-search-endpoints.md`); fulltext search ignores diacritics, so check a hit by fetching the text.
+SuttaCentral texts come from the Simsapa app, not from files in `sources/` (`docs/simsapa-localhost-api-search-endpoints.md` §13.4–§13.5). `compare.py` reads an `sc` entry's segments from `GET /sutta.json`, so Simsapa must be running; without it, those entries are reported as skipped. To read a text or its variant readings yourself:
+
+```sh
+curl -s -G localhost:4848/sutta.json --data-urlencode uid=dn22/pli/ms | jq .            # segment id → text, in order
+curl -s -G localhost:4848/sutta_bilara.json --data-urlencode uid=dn22/pli/ms | jq .variants.content   # reading → alternative (editions)
+```
+
+Never re-sort the segments: their order is the text's (`jq` without `-S`). To find a text, use the search routes; fulltext search ignores diacritics, so check a hit by fetching the text. Simsapa's SuttaCentral data changes only with a Simsapa update; run `make compare` again after one.
 
 ## 1. Write or fix a map entry
 
@@ -37,14 +44,14 @@ For SuttaCentral texts not in `sources/`, use the Simsapa sutta routes (`docs/si
 | `bm` | `sources/upstream/bhikkhu-manual/manuscript/markdown/chants/<file>.md` | `anchor`, `anchor..end` or `anchor..END` | `diff` |
 | `ccb` | `sources/upstream/community-chanting-book/chapters/english/markdown-vol1/<file>.md` (also `-vol2`, `-satipatthana`); same markup as BM | as `bm` | `diff` |
 | `original` | `sources/originals/09x_…/00_original_….md` (BM's Vinaya pages, frozen) | as `bm` | `contain` |
-| `sc` | `sources/suttacentral/<sutta>_root-pli-ms.json` | `seg..seg`, inclusive | `diff` |
-| `supplement` | `sources/reference-pali-supplement.md` | `id..id`, inclusive | `diff` |
+| `sc` | the Simsapa uid of the Pāli text, `<code>/pli/ms` (`dn22/pli/ms`) | `seg..seg`, inclusive; title (`:0.n`) and heading (`.0`) segments are skipped | `diff` (or `contain` for an extract) |
 | `chanting-guide` | `sources/upstream/chanting-guide-thanissaro.md` (optional, not committed) | `Start heading..End heading` (exact heading texts; the end heading is excluded; without `..End heading` the passage runs to the end of the file) | `contain` |
 | `none` | empty | empty | empty; the `note` says why |
 
 - `anchor` is the `<a id="…">` on a BM heading. The passage runs to the next heading that carries any anchor. Use `anchor..end` when the text goes on past that heading (e.g. 07a/01 `dhammacakkappavattana..setting-in-motion` runs over the Pāli sub-section *Bhummānaṁ devānaṁ*), or stops before a later one. `end` is excluded.
 - Never use line numbers. If no anchor fits, report it rather than inventing a key.
 - Locate the passage: `grep -n '<a id=' <file>` lists the anchors; grep for a distinctive word of the text's first and last Pāli lines. The same words often occur in more than one passage (the closing homage is inside the morning dedication; *Namo tassa* is in four places). Choose the passage that the text's own CHANGELOG or citation names, or the BM chant of the same name, not the first hit.
+- An `sc` uid is the code of its segment ids with `/pli/ms` (`an11.15:2.1` → `an11.15/pli/ms`). A text stored as a range is named as stored: `GET /sutta.json` answers `dhp1` from `dhp1-20/pli/ms` and names it in the `X-Simsapa-Sutta-Uid` header (`curl -sD - …`); write that uid. A uid Simsapa does not have is a map error.
 - Starting points: book 10 texts give their SC range in their citation (`*DN 22:3.1–3.7*` → `dn22:3.1..dn22:3.7`); the 09 changelogs give each file's BM line range (turn it into the anchors at its ends); 07a/07–12 and others not in BM name their source in their changelog.
 - Mode `diff` compares the whole stream. Mode `contain` checks that each of our Pāli lines occurs, in order, in the raw passage, English included. Use `contain` where no markup separates Pāli from English (the BM Vinaya pages, the Chanting Guide conversion).
 - Each text has exactly one entry. Run `compare.py diff TEXT` after writing it: a map error means the key is wrong.
@@ -72,7 +79,8 @@ Containment cannot see a source formula that is missing from our text. For each 
 `compare` never sees the words inside `**Variant:**` cues. Check them as the style spec says:
 
 - **09 (Vinaya):** each cue against BM's substitution lines (`'imaṁ' → 'etaṁ'`) and lists in the passage, in order. Every substitution in BM has a cue, and every cue has a BM substitution or a logged decision.
-- **10 (DN 22):** rebuild each list (style spec §12.2, "Checking variant lists"): apply each cue's `*old* → *new*` pairs in turn to the base line, expand SC's elisions from the discourse's own wording, normalise with `chantlib.text.norm_line`, and compare with the JSON segments in order. Every item must match.
+- **10 (DN 22):** rebuild each list (style spec §12.2, "Checking variant lists"): apply each cue's `*old* → *new*` pairs in turn to the base line, expand SC's elisions from the discourse's own wording, normalise with `chantlib.text.norm_line`, and compare with the `/sutta.json` segments in order. Every item must match.
+- When a reading of ours differs from SuttaCentral's, look up the segment in `/sutta_bilara.json` `.variants.content`: the other editions' readings are evidence for the maintainer, not a reason to change the text.
 
 Throwaway code for these checks goes in the scratchpad, not in `scripts/`.
 

@@ -130,7 +130,7 @@ echo "Optional tools:"
 check jq no "" jq --version
 
 echo
-echo "Simsapa API (needed only for dpd-check, lookup and gloss):"
+echo "Simsapa API (needed only for dpd-check, lookup, gloss and the SuttaCentral texts of compare):"
 port=4848
 if [[ -n ${SIMSAPA_DIR:-} && -r "$SIMSAPA_DIR/api-port.txt" ]]; then
     port=$(tr -d '[:space:]' <"$SIMSAPA_DIR/api-port.txt")

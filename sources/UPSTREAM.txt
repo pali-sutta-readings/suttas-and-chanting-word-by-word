@@ -5,6 +5,7 @@
 # fetch-sources) into sources/upstream/<name>/, checked out at `commit`.
 # `fetch-sources.sh --update` moves `commit` to the head of `branch`.
 # `type: location-only` sources are recorded here and never downloaded.
+# SuttaCentral is served by the Simsapa app, so it is location-only here.
 
 name: bhikkhu-manual
 type: git
@@ -36,3 +37,12 @@ legacy-copy: $BACKUP/_tools/refs/ChantingGuide_Thanissaro.md (see docs/legacy-mi
 local-copy: sources/upstream/chanting-guide-thanissaro.md (optional, not committed)
 licence: CC BY-NC 4.0
 use: source of the legacy chants not in BM; `compare` skips these chants when the local copy is absent
+
+name: suttacentral
+type: location-only
+title: SuttaCentral, Mahāsaṅgīti edition of the Pāli canon (root texts `<code>/pli/ms`) with its variant readings
+url: https://suttacentral.net
+data: https://github.com/suttacentral/sc-data
+served-by: the Simsapa app's localhost API, GET /sutta.json and GET /sutta_bilara.json (docs/simsapa-localhost-api-search-endpoints.md §13.4-§13.5); updated with Simsapa, never downloaded
+licence: CC0 (root texts)
+use: reference for `make compare`, source `sc`: book 10 and the texts in none of BM, the CCB and the Chanting Guide

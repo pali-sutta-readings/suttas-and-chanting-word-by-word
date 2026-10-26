@@ -3,6 +3,6 @@ homage.md	bm	bm.md	homage..homage-english	diff
 homage-short.md	bm	bm.md	homage	diff	
 vinaya.md	bm	bm.md	vinaya	contain	
 vinaya-bad.md	bm	bm.md	vinaya	contain	
-sc-text.md	sc	sc.json	xx1:0.1..xx1:1.2	diff	
-supp-text.md	supplement	supplement.md	xx2:1.1..xx2:1.3	diff	
+sc-text.md	sc	xx1/pli/ms	xx1:0.1..xx1:1.2	diff	
+sc-diff.md	sc	xx2/pli/ms	xx2:1.1..xx2:1.3	diff	
 homage-short.md	none				not in any source

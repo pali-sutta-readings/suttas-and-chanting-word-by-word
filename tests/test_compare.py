@@ -1,5 +1,6 @@
 import contextlib
 import io
+import os
 import shutil
 import sys
 import tempfile
@@ -11,6 +12,22 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 import compare
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures" / "compare"
+# The sc entries' /sutta.json answers (sutta_xx1_pli_ms.json, …).
+SIMSAPA_FIXTURES = FIXTURES.parent / "simsapa"
+_saved_env = {}
+
+
+def setUpModule():
+    for k in ("SIMSAPA_FIXTURES", "SIMSAPA_DIR"):
+        _saved_env[k] = os.environ.pop(k, None)
+    os.environ["SIMSAPA_FIXTURES"] = str(SIMSAPA_FIXTURES)
+
+
+def tearDownModule():
+    for k, v in _saved_env.items():
+        os.environ.pop(k, None)
+        if v is not None:
+            os.environ[k] = v
 
 
 def entries(**changes):
@@ -100,10 +117,30 @@ class TestSegments(unittest.TestCase):
                          ["Evaṁ me sutaṁ—", "ekaṁ samayaṁ bhagavā. "])
         self.assertEqual(compare.compare_entry(entry("sc-text.md"), FIXTURES)[0], "identical")
 
-    def test_supplement_range(self):
-        status, lines = compare.compare_entry(entry("supp-text.md"), FIXTURES)
+    def test_sc_difference(self):
+        status, lines = compare.compare_entry(entry("sc-diff.md"), FIXTURES)
         self.assertEqual(status, "1 difference")
         self.assertIn("⟦pañcamaṁ⟧", lines[0])
+
+    def test_uid_not_in_simsapa(self):
+        e = entry("sc-text.md")
+        e.file = "xx9/pli/ms"
+        with self.assertRaisesRegex(compare.MapError, r"\(sc-text.md\): Simsapa has no SuttaCentral text 'xx9/pli/ms' \(not_found\)"):
+            compare.ref_lines(e, FIXTURES)
+
+    def test_skipped_when_simsapa_is_not_running(self):
+        e = entry("sc-text.md")
+        e.file = "xx8/pli/ms"
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "api-port.txt").write_text("1\n")
+            del os.environ["SIMSAPA_FIXTURES"]
+            os.environ["SIMSAPA_DIR"] = tmp
+            try:
+                status, lines = compare.compare_entry(e, FIXTURES)
+            finally:
+                del os.environ["SIMSAPA_DIR"]
+                os.environ["SIMSAPA_FIXTURES"] = str(SIMSAPA_FIXTURES)
+        self.assertRegex(status, r"^skipped: Simsapa is not running on port 1")
 
     def test_missing_segment(self):
         with self.assertRaisesRegex(compare.MapError, r"ref-map.tsv:6 \(sc-text.md\): segment 'xx1:9.9' not found"):

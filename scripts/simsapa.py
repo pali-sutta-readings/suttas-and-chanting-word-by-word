@@ -171,6 +171,7 @@ class FixtureClient(Client):
 
     /lookup_forms answers each form from the results in lookup_forms.json
     (matched on `input`); a form not recorded there is `not_found`.
+    /sutta.json (used by compare.py) answers uid `a/b/c` from sutta_a_b_c.json.
     """
 
     def __init__(self, folder):
@@ -199,6 +200,9 @@ class FixtureClient(Client):
         if path == "/word.json":
             f = self.folder / f"word_{params['uid'].split('/')[0]}.json"
             return (200, f.read_bytes()) if f.is_file() else (404, b"[]")
+        if path == "/sutta.json":
+            f = self.folder / f"sutta_{params['uid'].replace('/', '_')}.json"
+            return (200, f.read_bytes()) if f.is_file() else (404, b'{"reason": "not_found"}')
         raise SimsapaError(f"no fixture for {path}")
 
 

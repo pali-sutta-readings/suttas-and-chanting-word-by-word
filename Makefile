@@ -35,7 +35,7 @@ help:
 	@echo "  covers         render all covers"
 	@echo "  epubcheck      validate all built EPUBs with epubcheck"
 	@echo "  lint           lint all texts (lint-fix applies safe fixes)"
-	@echo "  compare        check Pāli lines against sources/"
+	@echo "  compare        check Pāli lines against their sources"
 	@echo "  index          cross-file consistency report"
 	@echo "  dpd-check      check word tables against DPD via Simsapa"
 	@echo "  fetch-sources  clone/update sources/upstream/ at pinned commits"
@@ -131,7 +131,8 @@ build/pdf/%.pdf: build/tmp/%.typ build/covers/%.json $(TYPST_TEMPLATES) $(FONTS)
 	$(TYPST) compile $(TYPST_FLAGS) $< $@
 
 # Pāli check against sources/ref-map.tsv: a report, failing only on a broken
-# map entry (docs/quality-process.md §2).
+# map entry (docs/quality-process.md §2). SuttaCentral entries are read from
+# the Simsapa app, and skipped when it is not running.
 compare:
 	@test -d sources/upstream/bhikkhu-manual || \
 		{ echo "sources/upstream/ is missing: run make fetch-sources first" >&2; exit 1; }

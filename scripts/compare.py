@@ -15,9 +15,14 @@ docs/quality-process.md §2:
     bm, ccb,        anchor | anchor..end | anchor..END
     original
     sc              segment..segment          (inclusive)
-    supplement      segment..segment          (inclusive)
     chanting-guide  heading | heading..end heading  (contain mode only)
     none            no reference; the note says why
+
+An `sc` entry names a SuttaCentral text by its Simsapa uid (`dn22/pli/ms`)
+in the file column; its segments come from the Simsapa app, GET /sutta.json
+(docs/simsapa-localhost-api-search-endpoints.md §13.4). When Simsapa is not
+running, those entries are skipped and listed; SIMSAPA_FIXTURES answers them
+from recorded responses, as for simsapa.py.
 
 Mode `diff` compares our stream with the extracted reference stream.
 Mode `contain` checks that each of our Pāli lines occurs, in order, in the
@@ -43,10 +48,12 @@ from chantlib import books
 from chantlib.parse import parse_file
 from chantlib.text import norm_line
 
+import simsapa
+
 ROOT = Path(__file__).resolve().parents[1]
 MAP = ROOT / "sources" / "ref-map.tsv"
 COLUMNS = ("text", "source", "file", "key", "mode", "note")
-SOURCES = ("bm", "ccb", "original", "sc", "supplement", "chanting-guide", "none")
+SOURCES = ("bm", "ccb", "original", "sc", "chanting-guide", "none")
 MODES = ("diff", "contain")
 CONTEXT = 40
 
@@ -56,7 +63,6 @@ DIV_RE = re.compile(r'^<div class="(english|instr)">')
 ITALIC_LINE_RE = re.compile(r"^\*(?!\*)[^*].*\*$")
 LINK_RE = re.compile(r"\]\(https?://")
 TAG_RE = re.compile(r"<[^>]+>")
-SEGMENT_LINE_RE = re.compile(r"^\[([^\]\s]+)\]\s*(.*)$")
 # SuttaCentral title (`:0.n`) and heading (`.0`, `.0.n`) segments.
 SC_HEADING_RE = re.compile(r":0\.|\.0(\.\d+)?$")
 
@@ -208,21 +214,30 @@ def segment_range(ids, key, where):
     return ids[i:j + 1]
 
 
-def sc_lines(path, key, where):
-    segs = json.loads(path.read_text(encoding="utf-8"))
+_suttas = {}
+
+
+def sutta_segments(uid, where):
+    """{segment id: text} of a SuttaCentral text, in the text's order, from Simsapa."""
+    if uid not in _suttas:
+        try:
+            status, data = simsapa.client().get("/sutta.json", uid=uid)
+        except simsapa.SimsapaError as err:
+            raise Skipped(err) from None
+        if status != 200:
+            try:
+                reason = json.loads(data).get("reason")
+            except ValueError:
+                reason = f"HTTP {status}"
+            raise MapError(f"{where}: Simsapa has no SuttaCentral text {uid!r} ({reason})")
+        _suttas[uid] = json.loads(data)  # keeps the key order, which is the text's
+    return _suttas[uid]
+
+
+def sc_lines(uid, key, where):
+    segs = sutta_segments(uid, where)
     ids = segment_range(list(segs), key, where)
     return [segs[k] for k in ids if not SC_HEADING_RE.search(k)]
-
-
-def supplement_lines(path, key, where):
-    segs = {}
-    for s in path.read_text(encoding="utf-8").splitlines():
-        m = SEGMENT_LINE_RE.match(s.strip())
-        if m:
-            if m.group(1) in segs:
-                raise MapError(f"{where}: segment {m.group(1)!r} occurs twice in {path.name}")
-            segs[m.group(1)] = m.group(2)
-    return [segs[k] for k in segment_range(list(segs), key, where)]
 
 
 def heading_passage(lines, key, where):
@@ -252,6 +267,8 @@ class Skipped(Exception):
 
 def ref_lines(e, root=ROOT):
     """The reference passage of an entry: cleaned lines (diff mode) or raw lines (contain)."""
+    if e.source == "sc":
+        return sc_lines(e.file, e.key, e.where())
     path = root / e.file
     if not path.is_file():
         if e.source == "chanting-guide":
@@ -262,10 +279,6 @@ def ref_lines(e, root=ROOT):
         return raw_text(sec) if e.mode == "contain" else bm_clean(sec)
     if e.source == "chanting-guide":
         return raw_text(heading_passage(path.read_text(encoding="utf-8").splitlines(), e.key, e.where()))
-    if e.source == "sc":
-        return sc_lines(path, e.key, e.where())
-    if e.source == "supplement":
-        return supplement_lines(path, e.key, e.where())
     raise MapError(f"{e.where()}: source {e.source} has no reference")
 
 

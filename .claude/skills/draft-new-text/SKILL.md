@@ -27,9 +27,10 @@ Agree with the maintainer which book the text goes into, its file name (`NN_name
 
 ## 1. The Pāli and its source
 
-- Take the Pāli from the source the style spec names (§2: BM, then the Community Chanting Book, then the *Chanting Guide*, then SuttaCentral; DN 22 is SuttaCentral only; Vinaya is BM only). For SuttaCentral use Simsapa: `GET /sutta.json?uid=<uid>/pli/ms` gives the segments in order (`docs/simsapa-localhost-api-search-endpoints.md` §13.4).
+- Take the Pāli from the source the style spec names (§2: BM, then the Community Chanting Book, then the *Chanting Guide*, then SuttaCentral; DN 22 is SuttaCentral only; Vinaya is BM only). For SuttaCentral use Simsapa: `GET /sutta.json?uid=<uid>/pli/ms` gives the segments in order (`docs/simsapa-localhost-api-search-endpoints.md` §13.4), and `GET /sutta_bilara.json` the same text with its variant readings (§13.5). Nothing is downloaded from SuttaCentral or saved in `sources/`.
 - Write it in our form: ṁ, ASCII `'`, leader brackets removed, `(×3)`, elisions written out (§2). Note every change from the source for the changelog.
-- Add the `sources/ref-map.tsv` entry with the `source-compare` skill, and run `python3 scripts/compare.py extract --ref FILE` once the file exists.
+- Where the editions differ on a word of the line (`.variants.content` of that segment), keep SuttaCentral's reading and put the doubt to the maintainer if the variant looks better.
+- Add the `sources/ref-map.tsv` entry with the `source-compare` skill (for SuttaCentral: source `sc`, the uid, the segment range), and run `python3 scripts/compare.py extract --ref FILE` once the file exists.
 
 ## 2. Reuse what is settled
 

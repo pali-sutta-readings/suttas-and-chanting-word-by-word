@@ -1,5 +1,0 @@
-# Supplement
-
-[xx2:1.1] Sukhaṁ supati.  
-[xx2:1.2] Sukhaṁ paṭibujjhati.  
-[xx2:1.3] Pañcamaṁ.  

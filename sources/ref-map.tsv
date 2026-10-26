@@ -34,8 +34,8 @@ books/03_reflections/texts/16_the_guardian_meditations.md	bm	sources/upstream/bh
 books/03_reflections/texts/17_yan_dani_me_katam_punnam.md	bm	sources/upstream/bhikkhu-manual/manuscript/markdown/chants/reflections.md	yan-dani	diff	
 books/03_reflections/texts/18_dhamma_garav_adi_gatha.md	chanting-guide	sources/upstream/chanting-guide-thanissaro.md	Dhamma-gārav’ādi Gāthā..Paṭicca Samuppāda	contain	longer than BM's version (04b/06); separate chants (2026-10-01)
 books/03_reflections/texts/19_the_teaching_on_the_noble_eightfold_path.md	ccb	sources/upstream/community-chanting-book/chapters/english/markdown-vol1/reflections-and-recollections.md	the-teaching-on-the-noble-eightfold-path	diff	the CCB edition (maintainer, 2026-10-23)
-books/03_reflections/texts/20_mettanisamsa_sutta.md	supplement	sources/reference-pali-supplement.md	an11.15:1.1..an11.15:2.4	diff	
-books/03_reflections/texts/21_mulaka_sutta.md	supplement	sources/reference-pali-supplement.md	an10.58:1.1..an10.58:3.6	contain	the chanted extract of AN 10.58 (questions and answers)
+books/03_reflections/texts/20_mettanisamsa_sutta.md	sc	an11.15/pli/ms	an11.15:1.1..an11.15:2.4	diff	
+books/03_reflections/texts/21_mulaka_sutta.md	sc	an10.58/pli/ms	an10.58:1.1..an10.58:3.6	contain	the chanted extract of AN 10.58 (questions and answers)
 books/04a_parittas/texts/01_invitation_for_paritta_chanting.md	bm	sources/upstream/bhikkhu-manual/manuscript/markdown/chants/parittas.md	invitation	diff	
 books/04a_parittas/texts/02_invitation_to_the_devas.md	bm	sources/upstream/bhikkhu-manual/manuscript/markdown/chants/parittas.md	devas	contain	BM's English notes on Thai custom are not marked off
 books/04a_parittas/texts/03_pubba_bhaga_nama_kara_patha.md	bm	sources/upstream/bhikkhu-manual/manuscript/markdown/chants/parittas.md	namo-tassa	diff	
@@ -109,21 +109,21 @@ books/07a_suttas/texts/07_maha_samaya_sutta.md	chanting-guide	sources/upstream/c
 books/07a_suttas/texts/08_bhikkhu_aparihaniya_dhamma.md	chanting-guide	sources/upstream/chanting-guide-thanissaro.md	Bhikkhu-aparihāniya-dhamma Sutta..Gotamī Sutta	contain	
 books/07a_suttas/texts/09_gotami_sutta.md	chanting-guide	sources/upstream/chanting-guide-thanissaro.md	Gotamī Sutta..Dhajagga Sutta	contain	
 books/07a_suttas/texts/10_saraniya_dhamma_sutta.md	chanting-guide	sources/upstream/chanting-guide-thanissaro.md	Sārāṇīya-dhamma Sutta..Bhikkhu-aparihāniya-dhamma Sutta	contain	
-books/07a_suttas/texts/11_nakulapitusutta.md	supplement	sources/reference-pali-supplement.md	sn22.1:1.1..sn22.1:19.3	diff	
-books/07a_suttas/texts/12_itivuttaka_49_ditthigatasutta.md	supplement	sources/reference-pali-supplement.md	iti49:1.1..iti49:10.7	diff	
-books/07b_anagatabhaya_suttas/texts/01_pathamaanagatabhayasutta.md	supplement	sources/reference-pali-supplement.md	an5.77:1.1..an5.77:7.2	diff	
-books/07b_anagatabhaya_suttas/texts/02_dutiyaanagatabhayasutta.md	supplement	sources/reference-pali-supplement.md	an5.78:1.1..an5.78:6.2	diff	
-books/07b_anagatabhaya_suttas/texts/03_tatiyaanagatabhayasutta.md	supplement	sources/reference-pali-supplement.md	an5.79:1.1..an5.79:7.4	diff	
-books/07b_anagatabhaya_suttas/texts/04_catutthaanagatabhayasutta.md	supplement	sources/reference-pali-supplement.md	an5.80:1.1..an5.80:8.4	diff	
-books/07b_anagatabhaya_suttas/texts/05_saddhammappatirupakasutta.md	supplement	sources/reference-pali-supplement.md	sn16.13:1.1..sn16.13:6.7	diff	
-books/07b_anagatabhaya_suttas/texts/06_kimilasutta.md	supplement	sources/reference-pali-supplement.md	an7.59:1.1..an7.59:3.4	diff	
-books/07c_bhikkhuaparihaniyadhamma/texts/01_satta_aparihaniya_dhamma.md	supplement	sources/reference-pali-supplement.md	dn16:1.6.1..dn16:1.6.18	diff	
-books/07c_bhikkhuaparihaniyadhamma/texts/02_aparepi_satta_aparihaniya_dhamma.md	supplement	sources/reference-pali-supplement.md	dn16:1.7.1..dn16:1.8.1	diff	
-books/07c_bhikkhuaparihaniyadhamma/texts/03_aparepi_satta_aparihaniya_dhamma.md	supplement	sources/reference-pali-supplement.md	dn16:1.8.2..dn16:1.8.10	diff	
-books/07c_bhikkhuaparihaniyadhamma/texts/04_aparepi_satta_aparihaniya_dhamma.md	supplement	sources/reference-pali-supplement.md	dn16:1.8.11..dn16:1.10.1	diff	
-books/07c_bhikkhuaparihaniyadhamma/texts/05_aparepi_satta_aparihaniya_dhamma.md	supplement	sources/reference-pali-supplement.md	dn16:1.10.2..dn16:1.10.12	diff	
-books/07c_bhikkhuaparihaniyadhamma/texts/06_cha_aparihaniya_dhamma.md	supplement	sources/reference-pali-supplement.md	dn16:1.11.1..dn16:1.11.10	diff	
-books/07c_bhikkhuaparihaniyadhamma/texts/07_etadeva_bahulam_bhikkhunam_dhammim_katham_karoti.md	supplement	sources/reference-pali-supplement.md	dn16:1.12.1..dn16:1.12.6	diff	
+books/07a_suttas/texts/11_nakulapitusutta.md	sc	sn22.1/pli/ms	sn22.1:1.1..sn22.1:19.3	diff	
+books/07a_suttas/texts/12_itivuttaka_49_ditthigatasutta.md	sc	iti49/pli/ms	iti49:1.1..iti49:10.7	diff	
+books/07b_anagatabhaya_suttas/texts/01_pathamaanagatabhayasutta.md	sc	an5.77/pli/ms	an5.77:1.1..an5.77:7.2	diff	
+books/07b_anagatabhaya_suttas/texts/02_dutiyaanagatabhayasutta.md	sc	an5.78/pli/ms	an5.78:1.1..an5.78:6.2	diff	
+books/07b_anagatabhaya_suttas/texts/03_tatiyaanagatabhayasutta.md	sc	an5.79/pli/ms	an5.79:1.1..an5.79:7.4	diff	
+books/07b_anagatabhaya_suttas/texts/04_catutthaanagatabhayasutta.md	sc	an5.80/pli/ms	an5.80:1.1..an5.80:8.4	diff	
+books/07b_anagatabhaya_suttas/texts/05_saddhammappatirupakasutta.md	sc	sn16.13/pli/ms	sn16.13:1.1..sn16.13:6.7	diff	
+books/07b_anagatabhaya_suttas/texts/06_kimilasutta.md	sc	an7.59/pli/ms	an7.59:1.1..an7.59:3.4	diff	
+books/07c_bhikkhuaparihaniyadhamma/texts/01_satta_aparihaniya_dhamma.md	sc	dn16/pli/ms	dn16:1.6.1..dn16:1.6.18	diff	
+books/07c_bhikkhuaparihaniyadhamma/texts/02_aparepi_satta_aparihaniya_dhamma.md	sc	dn16/pli/ms	dn16:1.7.1..dn16:1.8.1	diff	
+books/07c_bhikkhuaparihaniyadhamma/texts/03_aparepi_satta_aparihaniya_dhamma.md	sc	dn16/pli/ms	dn16:1.8.2..dn16:1.8.10	diff	
+books/07c_bhikkhuaparihaniyadhamma/texts/04_aparepi_satta_aparihaniya_dhamma.md	sc	dn16/pli/ms	dn16:1.8.11..dn16:1.10.1	diff	
+books/07c_bhikkhuaparihaniyadhamma/texts/05_aparepi_satta_aparihaniya_dhamma.md	sc	dn16/pli/ms	dn16:1.10.2..dn16:1.10.12	diff	
+books/07c_bhikkhuaparihaniyadhamma/texts/06_cha_aparihaniya_dhamma.md	sc	dn16/pli/ms	dn16:1.11.1..dn16:1.11.10	diff	
+books/07c_bhikkhuaparihaniyadhamma/texts/07_etadeva_bahulam_bhikkhunam_dhammim_katham_karoti.md	sc	dn16/pli/ms	dn16:1.12.1..dn16:1.12.6	diff	
 books/08_patimokkha_chants/texts/01_ovada_patimokkha_gatha.md	bm	sources/upstream/bhikkhu-manual/manuscript/markdown/chants/patimokkha-chants.md	ovada	diff	
 books/08_patimokkha_chants/texts/02_sacca_kiriya_gatha.md	bm	sources/upstream/bhikkhu-manual/manuscript/markdown/chants/patimokkha-chants.md	sacca	diff	
 books/08_patimokkha_chants/texts/03_sil_uddesa_patha.md	bm	sources/upstream/bhikkhu-manual/manuscript/markdown/chants/patimokkha-chants.md	sil-uddesa	diff	
@@ -189,22 +189,22 @@ books/09_vinaya_formulae/05_vinaya_notes_uposatha/05_sick_parisuddhi.md	original
 books/09_vinaya_formulae/05_vinaya_notes_uposatha/06_sick_chanda.md	original	sources/originals/09e_vinaya_notes_uposatha/00_original_uposatha.md	chanda	contain	
 books/09_vinaya_formulae/05_vinaya_notes_uposatha/07_sick_parisuddhi_and_chanda.md	original	sources/originals/09e_vinaya_notes_uposatha/00_original_uposatha.md	parisuddhi-chandha	contain	
 books/09_vinaya_formulae/05_vinaya_notes_uposatha/08_patimokkha_in_brief.md	original	sources/originals/09e_vinaya_notes_uposatha/00_original_uposatha.md	brief	contain	
-books/10_mahasatipatthanasutta/texts/01_uddesa.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:1.1..dn22:1.13	diff	
-books/10_mahasatipatthanasutta/texts/02_anapanapabba.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:2.1..dn22:2.15	diff	
-books/10_mahasatipatthanasutta/texts/03_iriyapathapabba.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:3.1..dn22:3.7	diff	
-books/10_mahasatipatthanasutta/texts/04_sampajanapabba.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:4.1..dn22:4.4	diff	
-books/10_mahasatipatthanasutta/texts/05_patikulamanasikarapabba.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:5.1..dn22:5.8	diff	
-books/10_mahasatipatthanasutta/texts/06_dhatumanasikarapabba.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:6.1..dn22:6.8	diff	
-books/10_mahasatipatthanasutta/texts/07_navasivathikapabba.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:7.1..dn22:10.11	diff	
-books/10_mahasatipatthanasutta/texts/08_vedananupassana.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:11.1..dn22:11.15	diff	
-books/10_mahasatipatthanasutta/texts/09_cittanupassana.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:12.1..dn22:12.22	diff	
-books/10_mahasatipatthanasutta/texts/10_nivaranapabba.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:13.1..dn22:13.13	diff	
-books/10_mahasatipatthanasutta/texts/11_khandhapabba.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:14.1..dn22:14.13	diff	
-books/10_mahasatipatthanasutta/texts/12_ayatanapabba.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:15.1..dn22:15.13	diff	
-books/10_mahasatipatthanasutta/texts/13_bojjhangapabba.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:16.1..dn22:16.14	diff	
-books/10_mahasatipatthanasutta/texts/14_saccapabba.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:17.1..dn22:17.4	diff	
-books/10_mahasatipatthanasutta/texts/15_dukkhasaccaniddesa.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:18.1..dn22:18.51	diff	
-books/10_mahasatipatthanasutta/texts/16_samudayasaccaniddesa.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:19.1..dn22:19.67	diff	
-books/10_mahasatipatthanasutta/texts/17_nirodhasaccaniddesa.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:20.1..dn22:20.66	diff	
-books/10_mahasatipatthanasutta/texts/18_maggasaccaniddesa.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:21.1..dn22:21.43	diff	
-books/10_mahasatipatthanasutta/texts/19_nigamana.md	sc	sources/suttacentral/dn22_root-pli-ms.json	dn22:22.1..dn22:22.28	diff	
+books/10_mahasatipatthanasutta/texts/01_uddesa.md	sc	dn22/pli/ms	dn22:1.1..dn22:1.13	diff	
+books/10_mahasatipatthanasutta/texts/02_anapanapabba.md	sc	dn22/pli/ms	dn22:2.1..dn22:2.15	diff	
+books/10_mahasatipatthanasutta/texts/03_iriyapathapabba.md	sc	dn22/pli/ms	dn22:3.1..dn22:3.7	diff	
+books/10_mahasatipatthanasutta/texts/04_sampajanapabba.md	sc	dn22/pli/ms	dn22:4.1..dn22:4.4	diff	
+books/10_mahasatipatthanasutta/texts/05_patikulamanasikarapabba.md	sc	dn22/pli/ms	dn22:5.1..dn22:5.8	diff	
+books/10_mahasatipatthanasutta/texts/06_dhatumanasikarapabba.md	sc	dn22/pli/ms	dn22:6.1..dn22:6.8	diff	
+books/10_mahasatipatthanasutta/texts/07_navasivathikapabba.md	sc	dn22/pli/ms	dn22:7.1..dn22:10.11	diff	
+books/10_mahasatipatthanasutta/texts/08_vedananupassana.md	sc	dn22/pli/ms	dn22:11.1..dn22:11.15	diff	
+books/10_mahasatipatthanasutta/texts/09_cittanupassana.md	sc	dn22/pli/ms	dn22:12.1..dn22:12.22	diff	
+books/10_mahasatipatthanasutta/texts/10_nivaranapabba.md	sc	dn22/pli/ms	dn22:13.1..dn22:13.13	diff	
+books/10_mahasatipatthanasutta/texts/11_khandhapabba.md	sc	dn22/pli/ms	dn22:14.1..dn22:14.13	diff	
+books/10_mahasatipatthanasutta/texts/12_ayatanapabba.md	sc	dn22/pli/ms	dn22:15.1..dn22:15.13	diff	
+books/10_mahasatipatthanasutta/texts/13_bojjhangapabba.md	sc	dn22/pli/ms	dn22:16.1..dn22:16.14	diff	
+books/10_mahasatipatthanasutta/texts/14_saccapabba.md	sc	dn22/pli/ms	dn22:17.1..dn22:17.4	diff	
+books/10_mahasatipatthanasutta/texts/15_dukkhasaccaniddesa.md	sc	dn22/pli/ms	dn22:18.1..dn22:18.51	diff	
+books/10_mahasatipatthanasutta/texts/16_samudayasaccaniddesa.md	sc	dn22/pli/ms	dn22:19.1..dn22:19.67	diff	
+books/10_mahasatipatthanasutta/texts/17_nirodhasaccaniddesa.md	sc	dn22/pli/ms	dn22:20.1..dn22:20.66	diff	
+books/10_mahasatipatthanasutta/texts/18_maggasaccaniddesa.md	sc	dn22/pli/ms	dn22:21.1..dn22:21.43	diff	
+books/10_mahasatipatthanasutta/texts/19_nigamana.md	sc	dn22/pli/ms	dn22:22.1..dn22:22.28	diff	

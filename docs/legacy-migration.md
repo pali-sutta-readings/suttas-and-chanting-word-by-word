@@ -50,6 +50,8 @@ The changelogs and docs cite texts by the legacy short ID (07a/04, 09c/06); this
 
 Later edits are not in the manifest either: `templates/epub.css` and `templates/typst/style.typ` have been adapted since, so their hashes no longer match.
 
+Three of the copied references were removed on 2026-10-26: `sources/reference-pali-supplement.md`, `sources/suttacentral/dn22_root-pli-ms.json` and `dn22_variant-pli-ms.json`. The Simsapa app now serves SuttaCentral's texts and their variant readings (`GET /sutta.json`, `/sutta_bilara.json`), so `compare` reads them from the app and the map's `sc` entries name a Simsapa uid. The manifest still lists the three files, and git history keeps them. When they were removed, all three were the same as Simsapa's text, segment for segment (the 450 segments of the supplement; the DN 22 text and its variant readings).
+
 Two licence files were added by hand, because neither source folder has them:
 
 - `fonts/Crimson/OFL.txt` is `LICENSE.txt` from the Crimson repository, <https://github.com/skosch/Crimson>, commit `685b5a2478a7213a806e9bbf1e36f6a9e7f5c7ef`.
@@ -260,6 +262,10 @@ The first full run of `make compare` (2026-10-23), over `sources/ref-map.tsv` at
 | 04a/27 | BM's footnote text (*If chanting for oneself, change tumhe to amhe …*) and its footnote mark |
 | 03/18 | the Chanting Guide conversion splits *Tesaṁ sampanna-sīlānaṁ* across an underline (*Tesaṁ <u>sīlānaṁ sampanna-</u>*) |
 | BM, anumodanā, paritta and pāṭimokkha chants | the 10 *See a word-by-word analysis* link lines of BM commit `0872fa5`, and one more in `c50e80e` (parittas); dropped by the extractor, so not reported |
+
+### SuttaCentral from Simsapa (2026-10-26)
+
+`compare` was run again after the `sc` and `supplement` entries were switched to Simsapa (1.1.0-alpha.3), with the same BM and CCB pins. The report is the same as before, apart from one change: in 07a/12, 07b/04 and 07b/05 the end-of-range artefact (the vagga summary) no longer contains *Tassuddānaṁ*. That word is a heading segment (`iti49:9.0`, `an5.80:8.0`, `sn16.13:6.0`), and `sc` entries skip headings, which the supplement reader did not. Each text still has one difference.
 
 ### Unexplained (for the maintainer)
 

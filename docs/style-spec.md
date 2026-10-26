@@ -44,7 +44,7 @@ A *unit* is one Pāli line with its Literal and Faithful lines and its word tabl
 
 | Rule | Detail |
 | :--- | :--- |
-| Source | The *Bhikkhu Manual* text, with BM's spelling, sandhi and hyphenation. If the chant is not in BM, use the *Community Chanting Book* (Amaravati); if it is not there either, Ṭhānissaro Bhikkhu's *Chanting Guide* (2026-10-23). If it is in none of these, use `sources/reference-pali-supplement.md` (SuttaCentral). Book 10 uses SuttaCentral only (§12.2); the Vinaya formulae use BM only (§12.1). Sources and their locations: `sources/UPSTREAM.txt`. |
+| Source | The *Bhikkhu Manual* text, with BM's spelling, sandhi and hyphenation. If the chant is not in BM, use the *Community Chanting Book* (Amaravati); if it is not there either, Ṭhānissaro Bhikkhu's *Chanting Guide* (2026-10-23). If it is in none of these, use SuttaCentral's Mahāsaṅgīti text, from the Simsapa app (`GET /sutta.json?uid=<code>/pli/ms`; 2026-10-26, replacing `sources/reference-pali-supplement.md`). Book 10 uses SuttaCentral only (§12.2); the Vinaya formulae use BM only (§12.1). Sources and their locations: `sources/UPSTREAM.txt`. |
 | Niggahīta | Always **ṁ** (U+1E41). Never ṃ, ŋ or m with a combining dot. |
 | Apostrophe | ASCII `'` for elision (*sabb'ītiyo*). The build turns it into a typographic apostrophe. |
 | Leader brackets | Removed. BM's *[Yo so] bhagavā* becomes *Yo so bhagavā*. The words stay; only the brackets go. |
@@ -453,7 +453,7 @@ A study text, read rather than chanted, for novices: every compound keeps its me
 - The `#` title is the section's Pāli name, without a number, as in the split files; *Nigamana* for the conclusion (D4).
 - **Headings** (`heading-numbers`, `heading-gloss`; D2). Each SuttaCentral heading in the section becomes `### <SC number without its final dot> <SC heading, verbatim>` (`### 1.1 Kāyānupassanāānāpānapabba`), with an `*English gloss*` line beneath (lint warns if it is missing). Glosses follow the pattern "*Contemplation of the body: the section on …*" (D8); sub-heading glosses in the definitions are plain: *Exposition of the truth of …*. Digits and glosses in headings are allowed in book 10 only.
 
-**Source and Pāli line.** SuttaCentral's Mahāsaṅgīti text only (no BM, no Ṭhānissaro): `sources/originals/10_Mahasatipatthanasutta/00_original_Mahāsatipaṭṭhānasutta.txt`, which equals SC's bilara root JSON `sources/suttacentral/dn22_root-pli-ms.json` word for word once its 12 *Variant:* notes and first line are dropped.
+**Source and Pāli line.** SuttaCentral's Mahāsaṅgīti text only (no BM, no Ṭhānissaro): `sources/originals/10_Mahasatipatthanasutta/00_original_Mahāsatipaṭṭhānasutta.txt`, which equals SC's root text (`dn22/pli/ms`, read from the Simsapa app with `GET /sutta.json`) word for word once its 12 *Variant:* notes and first line are dropped. Its variant readings come from `GET /sutta_bilara.json`.
 
 - The line keeps SC's spelling, sandhi, word-joining, capitals, commas, full stops, question marks, colons and dashes.
 - Quotation marks ‘ “ ” are dropped; ’ marking an elided *iti* becomes ASCII `'` (*assasāmī'ti*, *bhikkhavo'ti*), as in 01–09 (D3).
@@ -492,8 +492,8 @@ Other settled renderings: the hindrances are sensual desire, ill will, dullness 
 **Checking variant lists.** `compare` checks only the Pāli lines, not the words inside variant cues, so each list is checked by rebuilding it:
 
 1. Start from the base unit's Pāli line. For each variant in order, apply its `*old* → *new*` pairs to the current line (a variant may build on the one before), giving the full Pāli of that item.
-2. Expand the elisions (“…”, *…pe…*) in SC's root JSON from the discourse's own wording, in the same way as the files do.
-3. Normalise both sides (`text.norm_line`: NFC, ṁ, Pāli letters only) and compare the rebuilt items, in order, with the JSON segments for that list. Every item must match word for word.
+2. Expand the elisions (“…”, *…pe…*) in SC's root text (`GET /sutta.json?uid=dn22/pli/ms`) from the discourse's own wording, in the same way as the files do.
+3. Normalise both sides (`text.norm_line`: NFC, ṁ, Pāli letters only) and compare the rebuilt items, in order, with the segments for that list. Every item must match word for word.
 
 The legacy project did this with one-off scripts for files 16, 17 and 19; all matched.
 

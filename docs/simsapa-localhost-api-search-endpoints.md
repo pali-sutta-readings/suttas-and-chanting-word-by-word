@@ -1,7 +1,5 @@
 # Simsapa Localhost API search endpoints
 
-*This document comes from the Simsapa repository (<https://github.com/simsapa/simsapa>, `docs/`). Its links to other `docs/*.md` files and to `CLAUDE.md` point there. On 2026-10-26, `dpd-construction-summary.md` was not yet on Simsapa's `main` branch.*
-
 The app runs a local HTTP server (Rocket, `bridges/src/api.rs`, bound to
 `127.0.0.1:<api_port>`) used by the browser extension and other local clients.
 The default port is 4848.
@@ -29,7 +27,9 @@ and the **sutta/dictionary retrieval** routes are documented in detail (request 
 response JSON, parameter structs, curl examples) in §1–§13; **every other route**
 is catalogued with its purpose in the complete route reference (§14), with the
 remaining request/response structs in §15. A sutta's text as **SuttaCentral
-(Bilara) JSON**, segment id → text, is `GET /sutta.json?uid=` (§13.4). The **gloss pipeline** routes
+(Bilara) JSON**, segment id → text, is `GET /sutta.json?uid=` (§13.4); the same
+text with its **variant readings, comments, glosses and HTML template** is
+`GET /sutta_bilara.json?uid=` (§13.5). The **gloss pipeline** routes
 (`POST /gloss_text` and the `GET /word_selection_ws` WebSocket) — for external
 clients building a two-step "Glossing… → Word Selection…" table UI — are in §16.
 **Reference conversion** (`POST /reference_search`: a PTS volume and page to its
@@ -52,7 +52,7 @@ All search routes reuse the in-app search path
 returned results carry exactly the same producer-owned, **non-nested**
 `<span class='match'>` highlighting, `is_snippet` markers, per-occurrence
 snippet expansion, and snippet-exclusion behaviour as the in-app results. See
-[search-snippet-highlight-pipeline.md](https://github.com/simsapa/simsapa/blob/main/docs/search-snippet-highlight-pipeline.md)
+[search-snippet-highlight-pipeline.md](./search-snippet-highlight-pipeline.md)
 for how the snippet/highlight stages work; this doc only covers the API plumbing.
 
 ---
@@ -78,6 +78,8 @@ curl -s -X POST "localhost:$PORT/suttas_fulltext_search" \
 curl -s "localhost:$PORT/get_sutta_html_by_uid/web/sn56.11/pli/ms"
 # 2b. …or the segmented text as SuttaCentral (Bilara) JSON, segment id → text (§13.4):
 curl -s -G "localhost:$PORT/sutta.json" --data-urlencode "uid=sn56.11/pli/ms" | jq .
+# 2c. …or that text together with its variant readings, comments and glosses (§13.5):
+curl -s -G "localhost:$PORT/sutta_bilara.json" --data-urlencode "uid=sn56.11/pli/ms" | jq '.variants'
 
 # --- Dictionary ---------------------------------------------------------------
 # 1. Search DPD. Copy a .results[].uid (e.g. "dhamma-1-01/dpd" or numeric "34626/dpd").
@@ -381,7 +383,8 @@ readers.
   behind the JSON and HTML word routes (§13.3); `normalize_human_word_uid`
   (backend `helpers`) is its pure display-form → canonical-uid normalizer.
 - `get_sutta_content_json` / `resolve_sutta_strict` (backend `sutta_json`) — the
-  Qt-free body of `/sutta.json` (§13.4); `convert_verse_ref_to_sutta_uid`
+  Qt-free body of `/sutta.json` (§13.4); `get_sutta_bilara_json` is the body of
+  `/sutta_bilara.json` (§13.5); `convert_verse_ref_to_sutta_uid`
   (backend `helpers`) is shared with the sutta routes of §14.4.
 - `word_json_response` / `word_html_response` / `sutta_html_response` — shared
   bodies for the word/sutta retrieval routes (resolver + 404-on-miss + the
@@ -504,7 +507,7 @@ fulltext searcher has been initialized (§8):
   `message` is plain language and safe to display;
   it deliberately carries no `flock`/`Tantivy`/errno text (that stays in the log
   and in Run Storage Diagnostics). See
-  [fulltext-index-storage-and-file-locking.md](https://github.com/simsapa/simsapa/blob/main/docs/fulltext-index-storage-and-file-locking.md).
+  [fulltext-index-storage-and-file-locking.md](./fulltext-index-storage-and-file-locking.md).
 
 - **`counts`** are per-DB row counts. Each is resilient: a real `0` means the DB
   is loaded but empty / not installed (consistent with
@@ -683,6 +686,7 @@ endpoints. These return rendered HTML; strip the tags to get plain text.
 | `GET /word_html?window_id=<id>&uid=<uid>` | **Query-param twin** of `get_word_html_by_uid`. Same HTML, but the uid is a query parameter so its `/` may be `%2F`-encoded (or raw — encoding-agnostic). Both params required (missing either → HTTP 422). Use when a client must percent-encode the uid. |
 | `GET /sutta_html?window_id=<id>&uid=<uid>&[anchor=<id>]` | **Query-param twin** of `get_sutta_html_by_uid`. Same sutta HTML, uid as an encoding-agnostic query parameter (`%2F` or raw `/`). `window_id` + `uid` required, `anchor` optional. Also applies verse-ref / `/pli/ms` / range normalization (§14.4). |
 | `GET /sutta.json?uid=<uid>` | The sutta's text as **SuttaCentral (Bilara) JSON**, segment id → text, not HTML. Only for segmented texts; see §13.4. |
+| `GET /sutta_bilara.json?uid=<uid>` | The same text **plus its variant readings, comments, glosses and HTML template**, each a segment id → text object; see §13.5. |
 
 Both sutta-HTML routes also accept the optional `layout` / `columns` display
 parameters (multi-column side-by-side view) — see §14.5.
@@ -837,7 +841,7 @@ A DPD headword record (the numeric `<id>/dpd` lane only) also carries
 (`49236/dpd` *bhaṇāmase*: `"√bhaṇ + a + mase"`, where `construction` is
 `bhaṇa + mase`); `""` when the entry shows none, `null` when the installed
 `dpd.sqlite3` predates the column (see §19.1 and
-[dpd-construction-summary.md](https://github.com/simsapa/simsapa/blob/main/docs/dpd-construction-summary.md)). The
+[dpd-construction-summary.md](./dpd-construction-summary.md)). The
 `dict_words` lane and roots do not have it. Keys are alphabetical, so the
 added key moves no other.
 
@@ -946,9 +950,81 @@ curl -s -G "localhost:$PORT/sutta.json" --data-urlencode "uid=dn1/pli/cst" | jq 
 # "no_content_json"
 ```
 
-Only the root text is served. The variant readings, the notes and the HTML
-template that SuttaCentral publishes beside it (`content_json_tmpl`, and the
-`sutta_variants` / `sutta_comments` tables) are not part of this route.
+This route serves the text only. The variant readings, comments, glosses and
+HTML template SuttaCentral publishes beside it are served by
+`/sutta_bilara.json` (§13.5).
+
+### 13.5 A sutta with its variant readings, comments and glosses: `GET /sutta_bilara.json`
+
+SuttaCentral publishes a segmented text as several files keyed by the same
+segment ids: the text (`root` or `translation`), the variant readings
+(`variant`), the translator's notes (`comment`), the HTML markup (`html`) and,
+for some texts, word glosses. `GET /sutta_bilara.json?uid=<uid>` returns all of
+them for one sutta in a single object:
+
+```sh
+curl -s -G "localhost:$PORT/sutta_bilara.json" --data-urlencode "uid=mn1/en/sujato" \
+  | jq '{uid, language, source_uid,
+         text: .content["mn1:3.2"], html: .html_template["mn1:3.2"],
+         variant: {uid: .variants.uid, reading: .variants.content["mn1:3.2"]},
+         comment: (.comments.content["mn1:3.2"] | .[:60]),
+         glosses}'
+```
+
+```json
+{
+  "uid": "mn1/en/sujato",
+  "language": "en",
+  "source_uid": "sujato",
+  "text": "They perceive earth as earth. ",
+  "html": "{}",
+  "variant": { "uid": "mn1/pli/ms", "reading": "pathaviṁ → paṭhaviṁ (bj, sya-all, km, pts1ed) " },
+  "comment": "Although their perception (<i lang='pi' translate='no'>saññā",
+  "glosses": null
+}
+```
+
+The response object:
+
+| Key | Value | Source |
+|---|---|---|
+| `uid`, `language`, `source_uid` | The sutta that answered (also in `X-Simsapa-Sutta-Uid`), its language and author / edition code | `suttas` |
+| `content` | The text, segment id → text: exactly the `/sutta.json` body (§13.4) | `suttas.content_json` |
+| `html_template` | Segment id → HTML markup, with `{}` where the segment's text goes; `null` when none is stored | `suttas.content_json_tmpl` |
+| `variants` | Variant readings, `null` when none (see below) | `sutta_variants` |
+| `comments` | The translator's notes (HTML), `null` when none | `sutta_comments` |
+| `glosses` | Word glosses, `null` when none | `sutta_glosses` |
+
+`variants`, `comments` and `glosses` are each `null` or a record
+`{"uid", "language", "source_uid", "content"}`, where `uid` names the text the
+record belongs to and `content` is its segment id → text object. A record covers
+only the segments that have an entry, so look it up by the segment ids of
+`content`, never iterate it as if it were the text.
+
+- **Variant readings belong to the Pāli.** SuttaCentral publishes them for the
+  root text (`<ref>/pli/ms`), as `reading → alternative (editions)`. For a
+  translation the route returns the variant readings of the Pāli text with the
+  same reference, and `variants.uid` names it (`mn1/pli/ms` for
+  `mn1/en/sujato`). The segment ids are the same, so they apply to the
+  translation's segments all the same.
+- **Comments belong to the translation.** They are the translator's notes
+  (Bhante Sujato's, Bhante Brahmali's), so a Pāli text has `comments: null`.
+- **Glosses**: the `sutta_glosses` table is in the schema and the reader
+  displays it, but no gloss records are in the shipped database today, so
+  `glosses` is `null`.
+- **Order.** Every segment object is the stored column **verbatim**, embedded
+  unparsed (as a `serde_json` `RawValue`), so the segment order is the file's,
+  as with `/sutta.json`. The rules of §13.4 for reading it apply to each one.
+- **uid resolution, header and errors are those of `/sutta.json`** (§13.4):
+  strict resolution, never a fallback from a translation to the Pāli, the
+  resolved uid in `X-Simsapa-Sutta-Uid`, and the same two `404` bodies
+  (`reason`: `not_found`, `no_content_json`). A text stored as HTML has none of
+  these records.
+- A stored record that is not valid JSON is a data defect: it is logged and
+  that key is `null`; the rest of the response is served.
+
+To show the readings and notes inline the way the reader does, see
+`bilara_text_to_segments()` in `backend/src/helpers.rs`.
 
 ## 14. Complete route reference
 
@@ -973,6 +1049,7 @@ views, not for headless data retrieval.
 | `GET /get_sutta_html_by_uid/<window_id>/<uid..>?<anchor>&<layout>&<columns>` | Full rendered sutta HTML (text retrieval); 404 on miss; optional display params | §13, §14.5 |
 | `GET /sutta_html?window_id=<id>&uid=<uid>&[anchor=<id>]&[layout=…]&[columns=…]` | Query-param twin of `get_sutta_html_by_uid`; uid encoding-agnostic (`%2F` ok); 404 on miss; optional display params | §13, §14.5 |
 | `GET /sutta.json?uid=<uid>` | The sutta's text as SuttaCentral (Bilara) JSON, segment id → text, the stored `content_json` verbatim; the resolved uid is in `X-Simsapa-Sutta-Uid`; strict uid resolution; 404 + JSON `reason` (`not_found` / `no_content_json`) | §13.4 |
+| `GET /sutta_bilara.json?uid=<uid>` | The `/sutta.json` text with its companion Bilara records in one object: `content`, `html_template`, `variants` (for a translation, the Pāli root's), `comments`, `glosses`; each segment object verbatim. Same uid resolution, header and 404 bodies as `/sutta.json` | §13.5 |
 | `GET /sutta_content_block?uid=<uid>&[layout=…]&[columns=…]&[show_references=…]` | Just the sutta content-block HTML (no page chrome) for in-page layout/column re-renders; 400 bad layout, 404 unknown uid/column; 200 carries the resolved column list in the `X-SSP-Columns` header | §14.5 |
 | `GET /translations_for_sutta?uid=<uid>` | JSON array of the other texts sharing the sutta's reference (column-bar dropdowns): `item_uid`, `sutta_title`, `sutta_ref`, `language`, `author`, `has_content_json` | §14.5 |
 | `POST /save_sutta_display_settings` | Persist the `sutta_display` defaults (cogwheel menu "Save as default"). Body: `SuttaDisplayDefaults` JSON; 200 on success, 400/422 on malformed body | §14.5 |
@@ -987,7 +1064,7 @@ views, not for headless data retrieval.
 | `GET /ai_provider_key?provider=Gemini` | Read a provider's saved API key + enabled state (localhost demo prefill). Returns the key value | §16.4 |
 | `GET /get_book_spine_item_html_by_uid/<window_id>/<spine_item_uid..>` | Full rendered Library-book chapter HTML, by spine-item uid | — |
 | `GET /book_pages/<book_uid>/<resource_path..>` | Rendered Library-book page HTML, by in-book resource path | — |
-| `GET /navigation_timeline?[window_id=<id>]` | The Timeline page of the Sutta Navigation window: every node with a context note on one time axis, as a full HTML page with the find bar. With no navigation tree in the database, the controls and "No timeline data" | [sutta-navigation-tree.md §2h](https://github.com/simsapa/simsapa/blob/main/docs/sutta-navigation-tree.md) |
+| `GET /navigation_timeline?[window_id=<id>]` | The Timeline page of the Sutta Navigation window: every node with a context note on one time axis, as a full HTML page with the find bar. With no navigation tree in the database, the controls and "No timeline data" | [sutta-navigation-tree.md §2h](./sutta-navigation-tree.md) |
 | `GET /sutta_titles_flat_completion_list` | Autocomplete list of sutta titles. **Placeholder — returns `[]`** (the extension uses a bundled list) | — |
 | `GET /dict_words_flat_completion_list` | Autocomplete list of dictionary words. **Placeholder — returns `[]`** | — |
 
@@ -1004,7 +1081,7 @@ views, not for headless data retrieval.
 | `GET /prev_chapter/<window_id>/<current_spine_item_uid..>` | Navigate `window_id` to the previous Library-book chapter. |
 | `GET /next_chapter/<window_id>/<current_spine_item_uid..>` | Navigate `window_id` to the next Library-book chapter. |
 | `GET /show_toc_tab/<window_id>/<spine_item_uid..>` | Show the sidebar's **TOC** tab in `window_id` with the entry for `spine_item_uid` revealed (ancestors expanded, entry selected and scrolled into view). Called by the in-page TOC button on book chapter pages. Always `200` — it hands off to the GUI and does not read the DB. |
-| `GET /open_sutta_navigation?node_uid=<uid>` | Open or raise the **Sutta Navigation** window with the node's level entered (the button on a Timeline entry). 404 when the tree has no such node. See [sutta-navigation-tree.md §2h](https://github.com/simsapa/simsapa/blob/main/docs/sutta-navigation-tree.md). |
+| `GET /open_sutta_navigation?node_uid=<uid>` | Open or raise the **Sutta Navigation** window with the node's level entered (the button on a Timeline entry). 404 when the tree has no such node. See [sutta-navigation-tree.md §2h](./sutta-navigation-tree.md). |
 | `GET /lookup_window_query/<text>` | Open the word-lookup window and run a query (text in the path). |
 | `POST /lookup_window_query` | Open the word-lookup window. If `query_text` is a word **uid** (contains `/`) it opens that entry directly (dict_words → DPD headword fallback); otherwise it runs a lookup search. Body: `LookupWindowRequest` (§15). |
 | `GET /summary_query/<window_id>/<text>` | Run a summary query in `window_id`. |
@@ -1042,7 +1119,8 @@ share two helpers, so they accept more than a literal stored uid:
   isn't found it retries the `…/pli/ms` edition, then looks for a stored **range**
   sutta containing the reference (e.g. `sn45.92/pli/ms` → `sn45.92-95/pli/ms`).
 
-`GET /sutta.json` (§13.4) uses the verse-reference conversion but **not**
+`GET /sutta.json` (§13.4) and `GET /sutta_bilara.json` (§13.5) use the
+verse-reference conversion but **not**
 `lookup_sutta_with_fallback`: it never falls back from a translation to the
 Pāli, and it keeps a range hit only when the `/lang/author` matches.
 `convert_verse_ref_to_sutta_uid` lives in backend `helpers.rs`, so the CLI can
@@ -1183,7 +1261,7 @@ result — picking each ambiguous word's sense and each compound's break-down �
 while streaming progress. Both live in `bridges/src/api.rs`; the glossing core
 is `helpers::process_all_paragraphs()` (shared with the in-app GlossTab), the
 engine is the shared fallback walk in `bridges/src/ai_engine.rs`. See
-[gloss-ai-word-selection.md](https://github.com/simsapa/simsapa/blob/main/docs/gloss-ai-word-selection.md) for the resolution
+[gloss-ai-word-selection.md](./gloss-ai-word-selection.md) for the resolution
 chain, the item-id scheme (`p<pi>w<wi>` / `d` / `c<k>`) and cache semantics.
 
 ### 16.1 `POST /gloss_text`
@@ -2029,9 +2107,9 @@ write the join in three ways:
 
 A final `n` before `ti` stands for `ṁ`, and a vowel before `ti` is often
 lengthened (`dhārayāmī` for `dhārayāmi`). The rules that take these apart are
-in [pali-sandhi-and-quote-marks.md](https://github.com/simsapa/simsapa/blob/main/docs/pali-sandhi-and-quote-marks.md); the DPD
+in [pali-sandhi-and-quote-marks.md](./pali-sandhi-and-quote-marks.md); the DPD
 lookup rule is
-[search-snippet-highlight-pipeline.md §9d](https://github.com/simsapa/simsapa/blob/main/docs/search-snippet-highlight-pipeline.md).
+[search-snippet-highlight-pipeline.md §9d](./search-snippet-highlight-pipeline.md).
 
 **Rule for agents: send the whole form, `ti` included.** Any of the three
 spellings works, and a spaced form is sent as one form (`"vuttan ti"`). The
@@ -2057,7 +2135,7 @@ The query is normalised the DPD way (lowercased, `ṃ` → `ṁ`, quotes handled
   plural), with no split, which is what that spelling means.
 - A word ending in a vowel and **`n`** that has no exact match is looked up as
   its `ṁ` spelling before any guess: `vuttan` is `vuttaṁ`, `kin` is `kiṁ`. See
-  [search-snippet-highlight-pipeline.md §9f](https://github.com/simsapa/simsapa/blob/main/docs/search-snippet-highlight-pipeline.md).
+  [search-snippet-highlight-pipeline.md §9f](./search-snippet-highlight-pipeline.md).
 
 Measured on the dist DB (`dpd_release_version = v0.4.20260501`). `results`
 shows the first few uids; `iti` (`13466/dpd`) is appended to the results of an
@@ -2319,7 +2397,7 @@ them, most for exact `/gloss_text` on long texts.
 **`construction_summary`** is the construction as DPD's entry displays it,
 root base replaced by root + sign: *carati 1.1* (`construction` `cara + ti`)
 has `"√car + a + ti"`. It is the bracketed text of DPD's rendered summary
-line, taken at bootstrap; see Simsapa's [dpd-construction-summary.md](https://github.com/simsapa/simsapa/blob/main/docs/dpd-construction-summary.md).
+line, taken at bootstrap; see [dpd-construction-summary.md](./dpd-construction-summary.md).
 `""` means DPD's entry shows no bracket (no `construction`, no `meaning_1`,
 or neither). `null` means the installed `dpd.sqlite3` predates the column;
 everything else in the result is unaffected.
@@ -2328,7 +2406,7 @@ everything else in the result is unaffected.
 `<id>/dpd` form, which `/word.json` resolves to the structured `dpd_headwords`
 record. The rendered HTML entry is a `dict_words` row with a different,
 hyphenated uid (`dhamma-1-01/dpd`); see "DPD records correlate to dict_words"
-in Simsapa's [`CLAUDE.md`](https://github.com/simsapa/simsapa/blob/main/CLAUDE.md), and §13.3. `/word_html?uid=49139/dpd` also
+in the repository's `CLAUDE.md`, and §13.3. `/word_html?uid=49139/dpd` also
 resolves the numeric form.
 
 ```sh

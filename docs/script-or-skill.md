@@ -41,9 +41,11 @@ To choose the map syntax, two wider throwaway surveys were also run: every 01–
 | `bm`, `ccb`, `original` | `anchor` | from the heading that carries `<a id="anchor">` up to the next heading that carries any anchor |
 | `bm`, `ccb`, `original` | `anchor..end` | from `anchor` up to (not including) the heading with anchor `end`; `..END` runs to the end of the file |
 | `sc` | `dn22:3.1..dn22:3.7` | the segments from the first to the last id, inclusive; title (`:0.n`) and heading (`.0`) segments skipped |
-| `supplement` | `id..id` | the `[id] text` lines from the first to the last id, inclusive |
+| `supplement` | `id..id` | the `[id] text` lines from the first to the last id, inclusive (removed 2026-10-26, see below) |
 | `chanting-guide` | as `bm`, if a local copy exists | skipped with a report line otherwise |
 | `none` | empty | no reference; the `note` column says why |
+
+Since 2026-10-26 the `sc` entries name a Simsapa uid (`dn22/pli/ms`) and read its segments from `GET /sutta.json`; the supplement's texts are `sc` entries too, and the copies of SC's JSON in `sources/` are gone (`docs/legacy-migration.md`).
 
 Line spans and sub-heading names are not used. An anchor that disappears gives a map error, but a line span that shifts after an upstream edit gives a wrong passage with no error. Every BM sub-heading that a text starts or ends at carries an anchor, so line spans were never needed.
 
