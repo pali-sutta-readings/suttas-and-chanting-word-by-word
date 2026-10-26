@@ -1,5 +1,19 @@
 # Changelog: 04a_parittas
 
+## 2026-10-26 — DPD check corrections (11, 20)
+
+Rows corrected after the first full `make dpd-check` review (docs/legacy-migration.md, "DPD check review"). Only the etymology changed; the Pāli, renderings and tags are unchanged. Lint: 0 ERROR, 0 STRAY, 0 WARN in the changed files, as before; `simsapa.py check`: the corrected rows match DPD; `index.py`: no conflicts.
+
+### 11_khandha_paritta.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 192 | *passantu* [√dis] | [√dis > passa + ntu] | the construction, not the root alone, in the shape of the settled *passati* [√dis > passa + ti] | DPD passati 1; spec §6 |
+
+### 20_bojjhanga_paritta.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 189 | *desayi* [√dis + e + aya + i] | [√dis + aya + i] | DPD has the single causative sign *aya*; *e* removed | DPD desayi (√dis + *aya > desaya + i) |
+
 ## 2026-10-11 — session S22 (final: whole-tree index alignment)
 
 Whole-tree `index` (01–08): etymologies aligned to DPD constructions (*bhagavant*, future stems, *appamāda*, *bahiddhā*, *cetas*), and Triple Gem quality adjectives tagged `adj` as DPD classes them. Draft sources in `_tools/drafts/` changed to match.

@@ -303,7 +303,7 @@ What the verdicts mean, by kind:
 
 ### Errors
 
-Rows to correct. The first two the check found as stated; the last three were decided by the agent (maintainer's direction, 2026-10-26: questions about the analysis are the agent's to decide, `pali-word-analysis` skill §7).
+Corrected on 2026-10-26, with entries in the 03, 04a and 07a changelogs; their ledger rows were removed, since the check no longer reports them (639 items remain). The first two the check found as stated; the last three were decided by the agent (maintainer's direction, 2026-10-26: questions about the analysis are the agent's to decide, `pali-word-analysis` skill §7).
 
 | Text | Row | Correction |
 | :--- | :--- | :--- |

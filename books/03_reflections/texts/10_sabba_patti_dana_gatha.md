@@ -208,7 +208,7 @@
 | :--- | :--- |
 | **`devā`** | `(masc nom pl)` devas; **[√div > dev + a]** |
 | **`tesaṁ`** | `(dem pron masc dat pl)` to them; **[ta]** |
-| **`nivedayuṁ`** | `(3rd pl aor act indic)` [aorist form, used here as a wish] may they inform, may they make known; **[ni + √vid + e + aya + uṁ]** |
+| **`nivedayuṁ`** | `(3rd pl aor act indic)` [aorist form, used here as a wish] may they inform, may they make known; **[ni + √vid + aya + uṁ]** |
 
 **Mayā dinnāna-puññānaṁ anumodana-hetunā**
 

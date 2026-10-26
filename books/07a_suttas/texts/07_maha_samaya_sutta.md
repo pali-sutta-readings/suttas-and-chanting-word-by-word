@@ -2099,7 +2099,7 @@
 | **`candaṁ`** | `(masc acc sg)` moon; **[√cand + a]** |
 | **`va`** | `(ind)` like, as; **[iva]** |
 | **`asitātitaṁ`** | `(adj masc acc sg comp)` [reading of the *Chanting Guide*; SuttaCentral and DPD *asitātiga*] passed beyond the dark; **[asita + atīta]** |
-| ↳ **`asita`** | `(adj comp)` dark, black; **[asita, form not in DPD]** |
+| ↳ **`asita`** | `(adj comp)` dark, black; **[na > a + √sit + a]** |
 | ↳ **`ātitaṁ`** | `(pp masc acc sg)` [*-a* + *a-* > *-ā-*; short *-i-* as printed] gone beyond; **[ati + √i + ta]** |
 
 **Subrahmā Paramatto ca Puttā iddhimato saha**

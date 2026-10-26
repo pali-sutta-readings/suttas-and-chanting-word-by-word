@@ -189,7 +189,7 @@
 | :--- | :--- |
 | **`sabbe`** | `(pron masc nom pl)` all; **[sabba]** |
 | **`bhadrāni`** | `(adj nt acc pl)` good things, good fortune; **[√bhad + ra]** |
-| **`passantu`** | `(3rd pl pres act imperat)` may they see; **[√dis]** |
+| **`passantu`** | `(3rd pl pres act imperat)` may they see; **[√dis > passa + ntu]** |
 
 **mā kiñci pāpam-āgamā**
 

@@ -1,5 +1,14 @@
 # Changelog: 07a_suttas
 
+## 2026-10-26 — DPD check corrections (07)
+
+Rows corrected after the first full `make dpd-check` review (docs/legacy-migration.md, "DPD check review"). Only the etymology changed; the Pāli, renderings and tags are unchanged. Lint: 0 ERROR, 0 STRAY, 0 WARN in the changed files, as before; `simsapa.py check`: the corrected rows match DPD; `index.py`: no conflicts.
+
+### 07_maha_samaya_sutta.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 2102 | ↳ *asita* [asita, form not in DPD] | [na > a + √sit + a] | DPD has *asita* (adj, black; dark-coloured) | DPD asita 3.1 |
+
 ## 2026-10-23 — layout fixes (no change to the wording)
 
 Blank lines and final newlines added where the layout differed from the style spec, so that `scripts/draft.py extract` gives each file back; found by the round-trip check (docs/legacy-migration.md, "Layout findings"). Maintainer's decision, 2026-10-23. Lint and compare results unchanged.

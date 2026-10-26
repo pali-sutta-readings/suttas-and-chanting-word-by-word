@@ -186,7 +186,7 @@
 | ↳ **`bojjh`** | `(fem comp)` [*bodhi* before a vowel] awakening; **[√budh > bodh + i]** |
 | ↳ **`aṅge`** | `(masc acc pl)` factors, limbs, components; **[√añj > aṅg + a]** |
 | **`satta`** | `(card masc acc pl)` seven; **[satta]** |
-| **`desayi`** | `(3rd sg aor act indic)` taught, explained; **[√dis + e + aya + i]** |
+| **`desayi`** | `(3rd sg aor act indic)` taught, explained; **[√dis + aya + i]** |
 
 **Te ca taṁ abhinanditvā**
 

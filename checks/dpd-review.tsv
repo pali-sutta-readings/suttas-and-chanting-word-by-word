@@ -29,7 +29,6 @@ ety:araññavanapatthāni#19a1a4ea4e	notation	DPD's ending āni after the member
 ety:ariya-saccāna-dassanaṁ#0a5a3abcc9	notation	stem sacca where DPD's split keeps saccānaṁ	2026-10-26
 ety:asacchikatassa#df0a7ef389	notation	we analyse DPD's member kata further (√kar + ta)	2026-10-26
 ety:asaṅgaho#cd05d28fcc	notation	our analysis of asaṅgaha; DPD only splits (na + saṅgaho)	2026-10-26
-ety:asita#92d1d88975	error	row says "asita, form not in DPD"; DPD asita 3.1 (adj, black; dark-coloured) is na > a + √sit + a	2026-10-26
 ety:asitātitaṁ#b3817afb33	dpd-gap	Chanting Guide reading (row note); DPD has no headword row, and its splits (asita + iti + taṁ) are not the word	2026-10-26
 ety:assasissāmī'ti#806d8a10e7	notation	shortened chain without DPD's sign a (ā + √sas + a > sasa), future sign and iti added; query D17	2026-10-26
 ety:asukhāya#1bf5d31493	notation	the row gives two analyses separated by ';' (na > a + sukha; √sukh + a); DPD na > a + √sukh + a matches the second	2026-10-26
@@ -62,7 +61,6 @@ ety:dammi#df50362971	notation	shortened chain without DPD's sign a (√dā + a +
 ety:damāpayanto#52a27cd674	dpd-gap	DPD has no headword row for damāpayanto (prp of the causative of dameti); its splits (dama + apayanto) are not the word	2026-10-26
 ety:dassī#24e0e75ab5	notation	shortened chain without DPD's sign a (√dis + a > disa > dassa + ī); query D17	2026-10-26
 ety:daṭṭhabbaṁ#2061b64c08	notation	shortened chain without DPD's sign a (√dis + a > disa > dassa + tabba); query D17	2026-10-26
-ety:desayi#a7d02fc3f5	error	decided: follow DPD's single causative sign (√dis + *aya > desaya + i); the row should read √dis + aya + i, without e	2026-10-26
 ety:desissāmi#d804ebbd31	notation	future sign written issā (before mi) where DPD's lemma has no tense sign; DPD √dis + *e > dese	2026-10-26
 ety:dhamma-pahaṁsāna-pāṭhaṁ#f04e349b99	notation	member pahaṁsana is DPD's headword (pa + √haṁs + ana); the text spells pahaṁsāna, which DPD lacks	2026-10-26
 ety:dhammacakkappavattana-suttaṁ#710515a724	notation	members finer than DPD's split dhammacakkappavattana + sutta	2026-10-26
@@ -144,7 +142,6 @@ ety:niddārāmatamanuyuttā#e6b0e581b9	notation	member niddārāmataṁ where DP
 ety:nimmānaratino#f090ea3652	notation	ending written ī where DPD writes ino (nimmāna + rati + ino)	2026-10-26
 ety:nissajjāmi#10c9713219	notation	DPD's summary is only nī + √sajj (entry without meaning_1); the row is fuller	2026-10-26
 ety:nivattissāmi#9cafea1fae	notation	future sign written issā (before mi); DPD's lemma ni + √vatt + a + ti has none	2026-10-26
-ety:nivedayuṁ#f0ef42ff7c	error	decided: follow DPD's single causative sign (ni + √vid + *aya > vedaya); the row should read ni + √vid + aya + uṁ, without e	2026-10-26
 ety:niyyāti#83502f8fbf	notation	shortened chain without DPD's sign a (nī + √yā + a + ti); query D17	2026-10-26
 ety:nāccuṇhāya#063ad68b53	notation	member uṇha where DPD writes uṇhā + a	2026-10-26
 ety:nāmanvayena#62d463594c	notation	DPD's ending ena after the members	2026-10-26
@@ -159,7 +156,6 @@ ety:parinibbāniko#35c8340866	notation	shortened chain without DPD's sign a (par
 ety:pariyodapeyya#3de5f5c74d	notation	causative sign written pe where DPD writes āpe > dāpe > dape	2026-10-26
 ety:passa#0c54b35cfa	notation	chain written √dis > pass + a where DPD writes √dis + a > disa > passa + a	2026-10-26
 ety:passa#294c0b0525	notation	DPD √dis + a > disa > passa + a; our row puts the stem (passa) in parentheses	2026-10-26
-ety:passantu#5327c4f1f9	error	decided: give the construction, in the shape of the settled passa- rows (passati [√dis > passa + ti]): √dis > passa + ntu	2026-10-26
 ety:passasissāmī'ti#8f82a3cfa0	notation	shortened chain without DPD's sign a (pa + √sas + a > sasa), future sign and iti added; query D17	2026-10-26
 ety:pasutaṁ#e22d1f6435	homonym	metrical short form of pasūta (pa + √su), as the note says; DPD's pasutaṁ row lists pasuta (√si, √sar)	2026-10-26
 ety:pattiyā#66e88cd645	dpd-gap	DPD's lookup row for pattiyā lacks patti 2.1, foot-soldier (√pad + ti), which the row means	2026-10-26
@@ -415,7 +411,6 @@ grammar:ākāraṁ#4e96a43b21	expected	noun as the last member of an adjectival 
 grammar:āratī#51c6735b50	expected	ārati with -ī lengthened for the metre (row note)	2026-10-26
 grammar:āyu#431d819ce6	expected	last member of an adjectival compound (row note)	2026-10-26
 grammar:āyū#640db191c4	expected	-u lengthened for the metre (row note)	2026-10-26
-noroot:patī#913f452923	error	row says pati has no root in DPD; DPD pati 2.1 (lord, master) is √pat 2, construction √pat + i	2026-10-26
 notfound:'ndriyaṁ#8485192529	expected	indriyaṁ with its initial i elided (row note)	2026-10-26
 notfound:'ṭṭhabbidho#5144d0fabe	expected	aṭṭhavidho with a- elided and bb for v in the metre (row note)	2026-10-26
 notfound:abhigītiṁ#b84384e2d7	dpd-gap	abhigīti not in DPD	2026-10-26

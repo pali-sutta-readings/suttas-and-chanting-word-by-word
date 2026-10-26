@@ -1,5 +1,19 @@
 # Changelog: 03_reflections
 
+## 2026-10-26 — DPD check corrections (10, 13)
+
+Rows corrected after the first full `make dpd-check` review (docs/legacy-migration.md, "DPD check review"). Only the etymology changed; the Pāli, renderings and tags are unchanged. Lint: 0 ERROR, 0 STRAY, 0 WARN in the changed files, as before; `simsapa.py check`: the corrected rows match DPD; `index.py`: no conflicts.
+
+### 10_sabba_patti_dana_gatha.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 211 | *nivedayuṁ* [ni + √vid + e + aya + uṁ] | [ni + √vid + aya + uṁ] | DPD has the single causative sign *aya*; *e* removed | DPD nivedayi (ni + √vid + *aya > vedaya + i) |
+
+### 13_dedication_of_merit_to_the_devas_and_others.md
+| Line | Was | Now | Why | Reference |
+| :--- | :--- | :--- | :--- | :--- |
+| 102 | ↳ *patī* [pati, no root in DPD] | [√pat + i] | DPD gives *pati* (lord, master) the root √pat | DPD pati 2.1 |
+
 ## 2026-10-23 — 19: *ariya-sāvako*
 
 The compound *ariya-sāvako* had been written as two words. The Community Chanting Book and SuttaCentral (SN 45.8) both have *ariyasāvako*; found by `make compare` against the CCB. Lint unchanged; compare: the item is gone.

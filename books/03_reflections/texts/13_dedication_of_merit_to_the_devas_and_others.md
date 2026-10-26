@@ -99,7 +99,7 @@
 | ↳ **`ārāmikā`** | `(adj masc nom pl)` [last member of a possessive compound] monastery attendants; **[ā + √ram > rām + a + ika]** |
 | **`dāna-patī`** | `(masc nom pl comp)` donors, lords of giving; **[dāna + pati]** |
 | ↳ **`dāna`** | `(nt comp)` giving, gift; **[√dā + ana]** |
-| ↳ **`patī`** | `(masc nom pl)` master, lord; **[pati, no root in DPD]** |
+| ↳ **`patī`** | `(masc nom pl)` master, lord; **[√pat + i]** |
 | **`upāsakā`** | `(masc nom pl)` lay followers, lay devotees; **[upa + √ās + aka]** |
 
 **Gāmā ca desā nigamā ca issarā**
