@@ -42,12 +42,14 @@
 // The head of a unit stays on the same page as the start of its table.
 // Inside it, the gap between the Pāli line and the renderings is a little
 // wider than the leading, so that a wrapped line is not read as the next one.
+// The wider gap at the end sets the renderings apart from the word table.
 #let unit-head(body) = {
   set par(leading: document-style.leading.unit-head)
-  block(sticky: true, breakable: false, below: 0.5em, body)
+  block(sticky: true, breakable: false,
+    below: document-style.spacing.after-unit-head, body)
 }
 
-#let pali(body) = block(below: 0.6em,
+#let pali(body) = block(below: document-style.spacing.after-pali,
   text(lang: "pi", weight: "bold", size: sizes.pali, body))
 
 #let rendering(body) = {

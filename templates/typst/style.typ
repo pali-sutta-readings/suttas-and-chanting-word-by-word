@@ -42,6 +42,8 @@
     before-heading2: 1.4em,
     after-heading2: 0.6em,
     before-unit: 1.6em,
+    after-pali: 1.2em,            // Between the Pāli line and its renderings
+    after-unit-head: 1.4em,     // Between the renderings and the word table
   ),
 
   // Colors
