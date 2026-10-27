@@ -14,7 +14,14 @@ The contents of the text files in `books/`, everything in `sources/` (upstream c
 
 ## DPD via Simsapa is the authority
 
-Roots, constructions and grammar are checked against the Digital Pāḷi Dictionary, served by the Simsapa app's localhost API (1.1.0-alpha.2 or later). Check that it is running with `curl -s localhost:4848/health` or `make check-tools`; the port is in `$SIMSAPA_DIR/api-port.txt` when it is not 4848. The API is described in `docs/simsapa-localhost-api-search-endpoints.md`. If Simsapa is not running, say so and ask the maintainer to start it; don't fall back to guessing from memory.
+Roots, constructions and grammar are checked against the Digital Pāḷi Dictionary, served by the Simsapa localhost API (1.1.0-alpha.2 or later). The API comes from the Simsapa app while it runs, or from the `simsapa` CLI (npm `@simsapa/cli`) with `simsapa serve`. The CLI and the API are described in `docs/simsapa-cli-and-localhost-api.md` (Part A the CLI, Part B the API); regenerate it with `simsapa docs --output docs/simsapa-cli-and-localhost-api.md` after a Simsapa update.
+
+- `simsapa health` reports the Simsapa version and the DPD and SuttaCentral data versions; quote them when a check's result depends on the data. Check the API with `make check-tools`; the scripts read the port from `api-port.txt` in the data folder (`simsapa paths`), or `$SIMSAPA_DIR/api-port.txt`, else 4848.
+- If it is not running, start it yourself: `simsapa serve` as a background command (it prints `Simsapa API listening on …` when ready). It exits with code 3 when the app or another `simsapa serve` already holds the data folder; then that server is the one to use. Stop the server you started when the work is done (`curl -s localhost:<port>/shutdown`, or stop the background command).
+- If the `simsapa` CLI is missing (`npm install -g @simsapa/cli`) or its databases are not set up (exit code 2, `simsapa setup`), say so and ask the maintainer; don't fall back to guessing from memory.
+- For a single question the CLI needs no server: `simsapa lookup FORM…`, `simsapa gloss "…"`, `simsapa word UID`, `simsapa sutta UID`, with `--json` for every field.
+
+The repo's scripts use the API:
 
 - `python3 scripts/simsapa.py lookup WORD…`: DPD's headwords, constructions, parses and splits for a form.
 - `python3 scripts/simsapa.py gloss --text "…" --text-output`: the same for each word of a line, with the rows other texts already use.
@@ -55,7 +62,7 @@ Every content change in `books/` gets an entry in that folder's `CHANGELOG.md` (
 
 ## Tools
 
-Required: `pandoc` ≥ 3.1.2, `typst` ≥ 0.13, `python3` ≥ 3.11, `make`, `curl`, `git`, `epubcheck` (needs Java). Optional: `jq`. Simsapa only for `dpd-check`, `lookup`, `gloss` and the SuttaCentral texts of `compare`; the builds don't need it. `make check-tools` (`scripts/check-tools.sh`) checks them and prints install hints.
+Required: `pandoc` ≥ 3.1.2, `typst` ≥ 0.13, `python3` ≥ 3.11, `make`, `curl`, `git`, `epubcheck` (needs Java). Optional: `jq`, and the `simsapa` CLI (`npm install -g @simsapa/cli`, then `simsapa setup`). Simsapa only for `dpd-check`, `lookup`, `gloss` and the SuttaCentral texts of `compare`; the builds don't need it. `make check-tools` (`scripts/check-tools.sh`) checks them and prints install hints.
 
 | | Arch Linux | macOS | Debian / Ubuntu |
 | :--- | :--- | :--- | :--- |
@@ -65,6 +72,7 @@ Required: `pandoc` ≥ 3.1.2, `typst` ≥ 0.13, `python3` ≥ 3.11, `make`, `cur
 | make, curl, git | `sudo pacman -S make curl git` | `brew install make curl git` | `sudo apt install make curl git` |
 | epubcheck | `yay -S epubcheck` (AUR), or the jar from <https://github.com/w3c/epubcheck/releases> | `brew install epubcheck` | `sudo apt install epubcheck` |
 | jq | `sudo pacman -S jq` | `brew install jq` | `sudo apt install jq` |
-| Simsapa | <https://github.com/simsapa/simsapa/releases/> | same | same |
+| simsapa CLI | `npm install -g @simsapa/cli`, then `simsapa setup` | same | same |
+| Simsapa app (optional) | <https://github.com/simsapa/simsapa/releases/> | same | same |
 
 The Python tools use the standard library only. Keep this list, `README.md` and `scripts/check-tools.sh` in sync.

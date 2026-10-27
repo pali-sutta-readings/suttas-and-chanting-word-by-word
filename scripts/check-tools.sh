@@ -3,7 +3,8 @@
 #
 # Prints OK, TOO OLD or MISSING for each tool, with an install hint for this
 # system. Exits non-zero only if a required tool is missing or too old.
-# Optional tools and the Simsapa API are reported but never fail the check.
+# Optional tools, the simsapa CLI and the Simsapa API are reported but never
+# fail the check.
 
 set -euo pipefail
 
@@ -11,6 +12,7 @@ set -euo pipefail
 MIN_PANDOC=3.1.2   # first release with the typst writer
 MIN_TYPST=0.13
 MIN_PYTHON=3.11
+MIN_SIMSAPA=1.1.0  # 1.1.0-alpha.2 or later: /lookup_forms, exact /gloss_text
 
 failed=0
 
@@ -76,6 +78,8 @@ hint_for() {
         curl) hint curl "sudo pacman -S curl" "brew install curl" "sudo apt install curl" ;;
         git) hint git "sudo pacman -S git" "brew install git" "sudo apt install git" ;;
         jq) hint jq "sudo pacman -S jq" "brew install jq" "sudo apt install jq" ;;
+        simsapa) hint simsapa "npm install -g @simsapa/cli" "npm install -g @simsapa/cli" "npm install -g @simsapa/cli"
+            echo "    then: simsapa setup   (reuses the Simsapa app's data folder if the app is set up)" ;;
         epubcheck) hint epubcheck "yay -S epubcheck (AUR; needs Java), or the jar from https://github.com/w3c/epubcheck/releases" \
             "brew install epubcheck" "sudo apt install epubcheck" ;;
     esac
@@ -130,16 +134,26 @@ echo "Optional tools:"
 check jq no "" jq --version
 
 echo
-echo "Simsapa API (needed only for dpd-check, lookup, gloss and the SuttaCentral texts of compare):"
+echo "Simsapa (needed only for dpd-check, lookup, gloss and the SuttaCentral texts of compare):"
+check simsapa no "$MIN_SIMSAPA" simsapa --version
+# The data the CLI reads, whether or not a server runs.
+if command -v simsapa >/dev/null 2>&1 && health_txt=$(simsapa health 2>/dev/null); then
+    grep -E '^(Simsapa|DPD release|SuttaCentral) ' <<<"$health_txt" | sed 's/^/    /' || true
+fi
+# The live port: $SIMSAPA_DIR/api-port.txt, else the one the CLI reports for
+# the data folder (written by the app or by simsapa serve), else 4848.
 port=4848
 if [[ -n ${SIMSAPA_DIR:-} && -r "$SIMSAPA_DIR/api-port.txt" ]]; then
     port=$(tr -d '[:space:]' <"$SIMSAPA_DIR/api-port.txt")
+elif command -v simsapa >/dev/null 2>&1; then
+    p=$(simsapa paths --json 2>/dev/null | grep -oE '"port" *: *[0-9]+' | grep -oE '[0-9]+$' || true)
+    port=${p:-4848}
 fi
 if command -v curl >/dev/null 2>&1 &&
     health=$(curl -s --max-time 2 "http://localhost:$port/health") && [[ -n $health ]]; then
     app_version=$(grep -oE '"app_version" *: *"[^"]*"' <<<"$health" | sed -E 's/.*"([^"]*)"$/\1/' || true)
     dpd_version=$(grep -oE '"dpd_version" *: *"[^"]*"' <<<"$health" | sed -E 's/.*"([^"]*)"$/\1/' || true)
-    printf '%-10s available on port %s%s%s\n' simsapa "$port" "${app_version:+ (app $app_version)}" "${dpd_version:+, DPD $dpd_version}"
+    printf '%-10s API on port %s%s%s\n' simsapa "$port" "${app_version:+ (app $app_version)}" "${dpd_version:+, DPD $dpd_version}"
     # The app version did not change when these fields were added, so probe
     # /lookup_forms for them: form_grammar_raw (DPD's parses of a form) and
     # construction_summary (null when dpd.sqlite3 predates the column).
@@ -153,8 +167,12 @@ if command -v curl >/dev/null 2>&1 &&
         echo "    construction_summary is null: the installed dpd.sqlite3 predates it; update the DPD database"
     fi
 else
-    printf '%-10s not running on port %s\n' simsapa "$port"
-    echo "    start the Simsapa app and enable its localhost API; see docs/simsapa-localhost-api-search-endpoints.md"
+    printf '%-10s API not running on port %s\n' simsapa "$port"
+    if command -v simsapa >/dev/null 2>&1; then
+        echo "    start it with: simsapa serve   (or start the Simsapa app); see docs/simsapa-cli-and-localhost-api.md"
+    else
+        echo "    install the simsapa CLI (above) and run: simsapa serve   (or start the Simsapa app)"
+    fi
 fi
 
 echo

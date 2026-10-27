@@ -92,9 +92,9 @@
 
   <!-- Simsapa -->
   <rect x="1090" y="400" width="380" height="352" rx="10" class="api"/>
-  <text x="1108" y="430" class="h">Simsapa app: localhost API</text>
+  <text x="1108" y="430" class="h">Simsapa API: app or simsapa serve</text>
   <text x="1108" y="452" class="s c">127.0.0.1:4848</text>
-  <text x="1108" y="472" class="s">(or <tspan class="c">$SIMSAPA_DIR/api-port.txt</tspan>)</text>
+  <text x="1108" y="472" class="s">(or the port in <tspan class="c">api-port.txt</tspan>)</text>
 
   <rect x="1105" y="490" width="350" height="96" rx="6" class="route"/>
   <text x="1118" y="514" class="h c" style="font-size:14px">POST /gloss_text</text>

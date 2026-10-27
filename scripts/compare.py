@@ -19,8 +19,8 @@ docs/quality-process.md §2:
     none            no reference; the note says why
 
 An `sc` entry names a SuttaCentral text by its Simsapa uid (`dn22/pli/ms`)
-in the file column; its segments come from the Simsapa app, GET /sutta.json
-(docs/simsapa-localhost-api-search-endpoints.md §13.4). When Simsapa is not
+in the file column; its segments come from the Simsapa API, GET /sutta.json
+(docs/simsapa-cli-and-localhost-api.md §13.4). When Simsapa is not
 running, those entries are skipped and listed; SIMSAPA_FIXTURES answers them
 from recorded responses, as for simsapa.py.
 

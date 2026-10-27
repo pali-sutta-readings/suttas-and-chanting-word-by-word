@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """Format Simsapa localhost-API responses for the agent.
 
-This is a *formatter only*: it reads a response on stdin (piped from `curl`)
-and prints a compact, grep-friendly summary. The request is done by `curl`,
-so both `curl` and this script can be allow-listed to avoid permission
-prompts (see docs/simsapa-localhost-api-search-endpoints.md for the API itself).
+This is a *formatter only*: it reads a response on stdin (piped from
+`simsapa … --json` or from `curl`) and prints a compact, grep-friendly
+summary. A `simsapa` command's `--json` output is the body of the matching
+API route, so both sources give the same shapes. The request is done by
+`simsapa` or `curl`, so they and this script can be allow-listed to avoid
+permission prompts (see docs/simsapa-cli-and-localhost-api.md, Part A for
+the CLI, Part B for the API).
 
 It auto-detects the response shapes the API returns:
 
@@ -31,9 +34,16 @@ It auto-detects the response shapes the API returns:
                         (find bar, selection menu, modal dialogs) is removed and
                         the remaining tags are stripped to plain text.
 
-Typical use (PORT from <SIMSAPA_DIR>/api-port.txt, default 4848):
+One-shot questions through the CLI (no server needed):
 
-  PORT=$(cat ~/.local/share/simsapa-ng/api-port.txt)
+  simsapa lookup --json bhagavantaṁ atthaññe | python3 scripts/simsapa_fmt.py
+  simsapa search dict kaññā --json | python3 scripts/simsapa_fmt.py
+  simsapa health --json | python3 scripts/simsapa_fmt.py
+
+Many queries: start the API once (`simsapa serve`, or the Simsapa app) and use
+curl. PORT is in <SIMSAPA_DIR>/api-port.txt (`simsapa paths`), default 4848:
+
+  PORT=$(cat ~/.local/share/simsapa/api-port.txt)
 
   # Probe the environment first (version, counts, installed dictionaries)
   curl -s "localhost:$PORT/health" | python3 scripts/simsapa_fmt.py

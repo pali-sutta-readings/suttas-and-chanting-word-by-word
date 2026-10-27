@@ -135,7 +135,7 @@ build/pdf/%.pdf: build/tmp/%.typ build/covers/%.json $(TYPST_TEMPLATES) $(COVER_
 
 # Pāli check against sources/ref-map.tsv: a report, failing only on a broken
 # map entry (docs/quality-process.md §2). SuttaCentral entries are read from
-# the Simsapa app, and skipped when it is not running.
+# the Simsapa API (the app or `simsapa serve`), and skipped when it is not running.
 compare:
 	@test -d sources/upstream/bhikkhu-manual || \
 		{ echo "sources/upstream/ is missing: run make fetch-sources first" >&2; exit 1; }

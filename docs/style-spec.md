@@ -188,7 +188,7 @@ Canonical order and examples:
 - A DPD `construction` may give several analyses (one per line); the row follows one of them. Some rows use a shortened form of DPD's chain (*pajānāti* `[pa + √ñā > jānā + ti]`, DPD's asterisks dropped); whether to keep these or always give DPD's full chain was left open (query D17).
 - Indeclinables, pronouns, cardinals and prefixes, for which DPD gives no root, may give the bare lemma (`**[ca]**`, `**[ta]**`, `**[ima]**`). Lint does not warn about these when the tags mark them as `ind`, `adv`, `interj`, `pron`, `dem`, `rel`, `interr`, `card`, `prefix` or a personal pronoun.
 - A noun or adjective that DPD gives without a root is written `**[karuṇā, no root in DPD]**`. Other nouns and adjectives need a root or construction.
-- **DPD is the authority**, consulted through the Simsapa app's localhost API (`scripts/simsapa.py`; `docs/simsapa-localhost-api-search-endpoints.md`). When a root or construction differs from DPD, DPD wins and the change is logged with "DPD" as the reference.
+- **DPD is the authority**, consulted through the Simsapa localhost API and the `simsapa` CLI (`scripts/simsapa.py`; `docs/simsapa-cli-and-localhost-api.md`). When a root or construction differs from DPD, DPD wins and the change is logged with "DPD" as the reference.
 - A traditional (commentarial or folk) explanation that is not a historical derivation is marked `(trad.)`, after DPD's analysis if there is one: `**[su + kha (trad.)]**`; 04a *omāty-*: DPD *omāti*, with *oṁ + iti* marked `(trad.)` (query 25).
 
 ## 7. Citations

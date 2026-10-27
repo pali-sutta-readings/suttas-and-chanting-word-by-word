@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-"""DPD lookups through the Simsapa app's localhost API, and DPD checks of
-the word tables.
+"""DPD lookups through the Simsapa localhost API, and DPD checks of the word
+tables. The API is served by the Simsapa app while it runs, or by the
+`simsapa` CLI's `simsapa serve`.
 
 Usage:
     simsapa.py lookup WORD... [--json] [--inflections] [--widen]
     simsapa.py check FILE... [--strict] [--json] [--ledger TSV]
     simsapa.py gloss FILE... | --text TEXT [--text-output]
 
-Only the exact routes answer the checks (docs/simsapa-localhost-api-search-
-endpoints.md §19): POST /lookup_forms and /gloss_text with "exact": true.
+Only the exact routes answer the checks (docs/simsapa-cli-and-localhost-
+api.md §19): POST /lookup_forms and /gloss_text with "exact": true.
 /word.json is used only by `lookup --inflections`, and /dict_combined_search
 only by `lookup --widen`, whose results are printed as guesses.
 
@@ -23,7 +24,8 @@ The scripts never assign grammar labels, split compounds or compose rows.
 dpd-review skill; `gloss` presents DPD's data for the pali-word-analysis
 skill. See docs/script-or-skill.md (spike 2 and its follow-up).
 
-The port is read from $SIMSAPA_DIR/api-port.txt, else 4848. With
+The port is read from $SIMSAPA_DIR/api-port.txt, else from the data folder
+that `simsapa paths --json` reports, else 4848. With
 SIMSAPA_FIXTURES set to a folder of recorded responses (tests/fixtures/
 simsapa/), no request is made.
 """
@@ -33,6 +35,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 import urllib.error
 import urllib.parse
@@ -50,7 +53,7 @@ import simsapa_fmt
 
 ROOT = Path(__file__).resolve().parents[1]
 LEDGER = ROOT / "checks" / "dpd-review.tsv"
-API_DOC = "docs/simsapa-localhost-api-search-endpoints.md"
+API_DOC = "docs/simsapa-cli-and-localhost-api.md"
 BATCH = 5000   # the most forms /lookup_forms takes in one call
 
 VOWELS = "aāiīuūeo"
@@ -82,7 +85,13 @@ def api_port():
             return int((Path(d) / "api-port.txt").read_text().strip())
         except (OSError, ValueError):
             pass
-    return 4848
+        return 4848
+    try:
+        out = subprocess.run(["simsapa", "paths", "--json"], capture_output=True,
+                             text=True, timeout=10).stdout
+        return int(json.loads(out)["api_port_file"]["port"])
+    except (OSError, subprocess.SubprocessError, ValueError, KeyError, TypeError):
+        return 4848
 
 
 class Client:
@@ -103,8 +112,8 @@ class Client:
             return e.code, e.read()
         except (urllib.error.URLError, ConnectionError, TimeoutError) as e:
             raise SimsapaError(
-                f"Simsapa is not running on port {self.port} ({e}); start the app "
-                f"and enable its localhost API (see {API_DOC})") from None
+                f"Simsapa is not running on port {self.port} ({e}); start it with "
+                f"`simsapa serve` or start the Simsapa app (see {API_DOC})") from None
 
     def get(self, path, **params):
         url = self.base + path + ("?" + urllib.parse.urlencode(params) if params else "")

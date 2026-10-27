@@ -26,14 +26,14 @@ python3 scripts/compare.py extract --ref TEXT        # the mapped passage, norma
 python3 scripts/compare.py extract --ref TEXT --plain  # the same, as text
 ```
 
-SuttaCentral texts come from the Simsapa app, not from files in `sources/` (`docs/simsapa-localhost-api-search-endpoints.md` §13.4–§13.5). `compare.py` reads an `sc` entry's segments from `GET /sutta.json`, so Simsapa must be running; without it, those entries are reported as skipped. To read a text or its variant readings yourself:
+SuttaCentral texts come from Simsapa, not from files in `sources/` (`docs/simsapa-cli-and-localhost-api.md` §13.4–§13.5). `compare.py` reads an `sc` entry's segments from the API's `GET /sutta.json`, so the API must be running (the Simsapa app, or `simsapa serve` started as a background command; CLAUDE.md); without it, those entries are reported as skipped. To read a text or its variant readings yourself, the CLI needs no server:
 
 ```sh
-curl -s -G localhost:4848/sutta.json --data-urlencode uid=dn22/pli/ms | jq .            # segment id → text, in order
-curl -s -G localhost:4848/sutta_bilara.json --data-urlencode uid=dn22/pli/ms | jq .variants.content   # reading → alternative (editions)
+simsapa sutta dn22/pli/ms --content-json | jq .          # segment id → text, in order
+simsapa sutta dn22/pli/ms --bilara | jq .variants.content   # reading → alternative (editions)
 ```
 
-Never re-sort the segments: their order is the text's (`jq` without `-S`). To find a text, use the search routes; fulltext search ignores diacritics, so check a hit by fetching the text. Simsapa's SuttaCentral data changes only with a Simsapa update; run `make compare` again after one.
+Never re-sort the segments: their order is the text's (`jq` without `-S`). To find a text, use the search routes; fulltext search ignores diacritics, so check a hit by fetching the text. Simsapa's SuttaCentral data changes only with a Simsapa update (`simsapa health` names its date and commit); run `make compare` again after one.
 
 ## 1. Write or fix a map entry
 

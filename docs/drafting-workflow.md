@@ -4,9 +4,9 @@ How a new sutta or chant is added to a book. The rules a text must follow are in
 
 ## The steps
 
-1. **Get the Pāli** from the source the style spec names (§2): the *Bhikkhu Manual* (`sources/upstream/bhikkhu-manual/`), the Community Chanting Book, the *Chanting Guide*, or SuttaCentral through the Simsapa app. Add the text's entry to `sources/ref-map.tsv` with the `source-compare` skill.
+1. **Get the Pāli** from the source the style spec names (§2): the *Bhikkhu Manual* (`sources/upstream/bhikkhu-manual/`), the Community Chanting Book, the *Chanting Guide*, or SuttaCentral through Simsapa (`simsapa sutta UID`). Add the text's entry to `sources/ref-map.tsv` with the `source-compare` skill.
 2. **Reuse settled lines.** Build a draft holding only the `T|` and `P|` lines into a scratch file (`draft.py build`), then `python3 scripts/index.py overlaps SCRATCH.md` lists its Pāli lines that already have a table in another text. Those units are copied with `I|`, not analysed again.
-3. **Get DPD's data** for the other lines: `python3 scripts/simsapa.py gloss --text "…" --text-output` (Simsapa must be running). For every word it gives DPD's headwords, constructions, parses of the form and splits, and the rows other texts already use for that word.
+3. **Get DPD's data** for the other lines: `python3 scripts/simsapa.py gloss --text "…" --text-output` (the Simsapa API must be running: the app, or `simsapa serve`). For every word it gives DPD's headwords, constructions, parses of the form and splits, and the rows other texts already use for that word.
 4. **Write the rows and grammar labels** with the `pali-word-analysis` skill. No script assigns labels: DPD lists the possible readings, and the line decides.
 5. **Write the Literal and Faithful lines** (style spec §3).
 6. **Build the file** from the draft: `python3 scripts/draft.py build DRAFT books/<book>/texts/NN_name.md`.

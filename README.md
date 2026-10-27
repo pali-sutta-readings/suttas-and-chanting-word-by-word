@@ -52,7 +52,7 @@ checks/
 scripts/             Python tools (standard library only) and shell scripts
 templates/           EPUB stylesheet, pandoc template and Lua filter, typst templates
 fonts/               Crimson, Noto Sans, Noto Sans Math, Abhaya Libre X (SIL OFL)
-docs/                style spec, decisions, workflows, build and Simsapa API notes
+docs/                style spec, decisions, workflows, build and the Simsapa CLI and API reference
 tests/               unit tests and their fixtures
 .claude/skills/      skills for agents: word analysis, source compare, DPD review, drafting
 tasks/               PRDs and task lists
@@ -69,6 +69,7 @@ build/               output (not committed)
 | `make`, `curl`, `git` | any | build, Simsapa checks, `fetch-sources` |
 | `epubcheck` | any (needs Java) | validating every EPUB |
 | `jq` | any | optional, for ad-hoc API queries |
+| `simsapa` (npm `@simsapa/cli`) | ≥ 1.1.0-alpha.2 | optional: DPD checks and lookups, SuttaCentral texts (see below) |
 
 Check them all, with install hints for your system:
 
@@ -94,18 +95,26 @@ On Debian and Ubuntu the packaged pandoc is often too old (Debian 12 has 2.17): 
 
 ### Simsapa (for the DPD checks)
 
-The word-table checks and lookups use the DPD data in the [Simsapa](https://github.com/simsapa/simsapa) app, through its localhost API. The books build without it; it is needed for `make dpd-check`, `scripts/simsapa.py lookup` and `gloss`, and the SuttaCentral texts of `make compare`. Version 1.1.0-alpha.2 or later is required.
+The word-table checks and lookups use the DPD and SuttaCentral data of [Simsapa](https://github.com/simsapa/simsapa), through its localhost API. The books build without it; it is needed for `make dpd-check`, `scripts/simsapa.py lookup` and `gloss`, and the SuttaCentral texts of `make compare`. Version 1.1.0-alpha.2 or later is required.
 
-1. Download Simsapa from <https://github.com/simsapa/simsapa/releases/> and start it. On the first run it downloads its database; after that it works offline.
-2. The API starts with the app, on `127.0.0.1` port 4848 (or the next free port, written to `api-port.txt` in the app's data folder, e.g. `~/.local/share/simsapa/`). If it is not 4848, set `SIMSAPA_DIR` to that folder so the scripts find the port.
-3. Confirm it answers:
+The API is served either by the Simsapa app while it runs, or by the `simsapa` command-line program ([`@simsapa/cli`](https://www.npmjs.com/package/@simsapa/cli), Node.js 18 or later), which needs no GUI:
 
-   ```sh
-   curl -s localhost:4848/health      # app_version, dpd_version, …
-   make check-tools                   # also reports Simsapa and whether it is new enough
-   ```
+```sh
+npm install -g @simsapa/cli
+simsapa setup          # downloads the databases (about 4.8 GB); reuses the app's data folder if the app is set up
+simsapa serve          # the localhost API, on 127.0.0.1 port 4848, until Ctrl-C
+```
 
-The API is described in `docs/simsapa-localhost-api-search-endpoints.md`.
+`simsapa serve` refuses to start while the app is running (exit code 3): the app's own server is then the one to use. Either server writes its port to `api-port.txt` in the data folder (`simsapa paths` shows it, e.g. `~/.local/share/simsapa/`); the scripts read it there, or from `$SIMSAPA_DIR/api-port.txt` when `SIMSAPA_DIR` is set.
+
+Confirm it answers:
+
+```sh
+simsapa health                     # Simsapa, DPD and SuttaCentral data versions, counts
+make check-tools                   # also reports the CLI, the API and whether they are new enough
+```
+
+The CLI also answers one-shot questions without a server: `simsapa lookup FORM…` (exact DPD lookup), `simsapa gloss "TEXT"` (every word with its dictionary options and compound break-down), `simsapa word UID`, `simsapa sutta UID`, `simsapa search suttas|dict QUERY`; `--json` prints the matching API route's response. Both are described in `docs/simsapa-cli-and-localhost-api.md`, which is `simsapa docs --output docs/simsapa-cli-and-localhost-api.md` from the installed version.
 
 ## Usage
 

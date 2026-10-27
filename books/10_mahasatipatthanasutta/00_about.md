@@ -24,7 +24,7 @@ The renderings were made from the Pāli and checked against the Digital Pāḷi 
 Each section was checked line by line before this book was built:
 
 - the Pāli was compared with SuttaCentral's text, so that nothing is missing, added or changed apart from the abbreviations written out;
-- every word's grammar, root and meaning was reviewed, with the Digital Pāḷi Dictionary (DPD, dpdict.net) as the reference for roots and analysis;
+- every word's grammar, root and meaning was reviewed, with the Digital Pāḷi Dictionary (DPD integrated into the [Simsapa CLI](https://www.npmjs.com/package/@simsapa/cli) gloss tooling) as the reference for roots and analysis;
 - the analyses were compared with those in the other books of this series, so that a word is analysed the same way wherever its grammar and meaning are the same;
 - the files were checked for stray text, formatting errors and character-encoding problems.
 

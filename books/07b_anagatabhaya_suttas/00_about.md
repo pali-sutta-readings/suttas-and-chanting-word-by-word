@@ -25,7 +25,7 @@ The English renderings were made from the Pāli. They are not taken from the tra
 Each chant was checked line by line before this book was built:
 
 - the Pāli was compared with the source text, so that nothing is missing, added or changed;
-- every word's grammar, root and meaning was reviewed, with the Digital Pāḷi Dictionary (DPD, dpdict.net) as the reference for roots and analysis; traditional explanations that are not historical derivations are marked “(trad.)”;
+- every word's grammar, root and meaning was reviewed, with the Digital Pāḷi Dictionary (DPD integrated into the [Simsapa CLI](https://www.npmjs.com/package/@simsapa/cli) gloss tooling) as the reference for roots and analysis; traditional explanations that are not historical derivations are marked “(trad.)”;
 - the analyses were compared across all the books in this series, and a word is analysed the same way wherever its grammar and meaning are the same (a few differences of notation remain);
 - the files were checked for stray text, formatting errors and character-encoding problems.
 
