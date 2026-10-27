@@ -127,7 +127,7 @@ Plain `make` prints the list of targets.
 
 | Command | Does |
 | :--- | :--- |
-| `make all` | builds every book: `build/epub/<book>.epub` and `build/pdf/<book>.pdf` |
+| `make all` | builds every book: `build/epub/<book>.epub` and `build/pdf/<book>.pdf`, and zips the two folders into `build/suttas-and-chanting-word-by-word.zip` |
 | `make epub` / `make pdf` | all books in one format |
 | `make book BOOK=01_morning_chanting` | one book, both formats |
 | `make covers` | renders the generated covers (`build/covers/`) |

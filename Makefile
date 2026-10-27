@@ -23,6 +23,8 @@ TYPST_TEMPLATES := $(wildcard templates/typst/*.typ)
 # The cover's background image (the Dhamma wheel).
 COVER_ASSETS := $(wildcard templates/typst/assets/*)
 PDF_TEMPLATES := templates/pandoc/book.typst templates/pandoc/chant.lua
+# All the books in both formats, in one archive (made by make all).
+ZIP := build/suttas-and-chanting-word-by-word.zip
 
 .PHONY: help check-tools test clean all epub pdf book covers \
 	lint lint-fix compare index dpd-check fetch-sources epubcheck
@@ -31,7 +33,7 @@ help:
 	@echo "Targets:"
 	@echo "  check-tools    check required tools and the Simsapa API"
 	@echo "  test           run the unit tests"
-	@echo "  all            epub + pdf for all books"
+	@echo "  all            epub + pdf for all books, and $(ZIP)"
 	@echo "  epub / pdf     all books in one format"
 	@echo "  book BOOK=id   one book, both formats"
 	@echo "  covers         render all covers"
@@ -65,7 +67,13 @@ clean:
 # docs/book-build.md describes the pipeline: books/<book>/metadata.txt and
 # the book's texts → scripts/assemble.py → build/tmp/<book>.md → pandoc.
 
-all: epub pdf
+all: epub pdf $(ZIP)
+
+# build/epub/ and build/pdf/ zipped, made afresh so a removed book is not
+# left in it. Python's zipfile, so no zip tool is needed.
+$(ZIP): $(BOOKS:%=build/epub/%.epub) $(BOOKS:%=build/pdf/%.pdf)
+	rm -f $@
+	cd build && $(PYTHON) -m zipfile -c $(notdir $@) epub pdf
 
 epub: $(BOOKS:%=build/epub/%.epub)
 
