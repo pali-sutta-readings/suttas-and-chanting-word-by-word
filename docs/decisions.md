@@ -51,6 +51,13 @@ The maintainer's dated decisions, collected from the legacy project's specs, PRD
 | 2026-10-23 | — | 03/19:425 *ariyo sāvako* is the compound *ariya-sāvako*. | `books/03_reflections/texts/CHANGELOG.md` |
 | 2026-10-23 | — | Blank lines and final newlines missing in 03/02–11, 07a/02 and 07a/03 are added, so that every text gives itself back through `draft.py extract`. | `books/03_reflections/texts/CHANGELOG.md`, `books/07a_suttas/texts/CHANGELOG.md` |
 
+## Prose guide (11)
+
+| Date | ID | Decision | Source |
+| :--- | :--- | :--- | :--- |
+| 2026-10-27 | — | Book 11 is built as a prose book (`format: prose`): the author's guide as Markdown under `content/`, its 13 screenshots as figures with alt text, and a Resources appendix with full addresses. The wording is copy-edited only; the "14 cards" count, queried in the first draft, was corrected to 12 by the author (six words, a card in each direction). | `books/11_learning_the_word_by_word_meaning/content/CHANGELOG.md` |
+| 2026-10-27 | — | The figures are redrawn, not upscaled: the DOCX holds 96-dpi screenshots (154–186 ppi printed). `images/make_figures.py` redraws the same cards and text in Noto Sans at 3× (460–760 ppi printed); the author approved equivalent fresh images. | author, 2026-10-27 |
+
 ## Vinaya formulae (09a–09e)
 
 Founding decisions, all 2026-10-12, from legacy: `_tools/vinaya/prd-vinaya.md` (Decisions):

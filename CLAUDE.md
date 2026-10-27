@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This repo holds Pāli chants and suttas, each line with a literal and a faithful English rendering and a word-by-word analysis table, built into 13 books (EPUB and A5 PDF). The readers are novice bhikkhus and others learning to chant with understanding, so the tables must be correct and consistent from text to text. `README.md` has the overview, the folder layout and the build.
+This repo holds Pāli chants and suttas, each line with a literal and a faithful English rendering and a word-by-word analysis table, built into 14 books (EPUB and A5 PDF); book 11 is a prose guide to learning the vocabulary, with no word tables of its own. The readers are novice bhikkhus and others learning to chant with understanding, so the tables must be correct and consistent from text to text. `README.md` has the overview, the folder layout and the build.
 
 ## Before you edit
 

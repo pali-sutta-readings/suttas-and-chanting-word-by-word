@@ -25,7 +25,7 @@ $endif$
 $if(region)$
   region: "$region$",
 $endif$
-  chant-level: $toc-depth$,
+  chant-level: $if(title-level)$$title-level$$else$$toc-depth$$endif$,
 )
 
 // Cover and blank verso; page numbers count from the About page.

@@ -7,7 +7,16 @@ A book's folder holds its metadata, its About page and its texts:
     books/<book>/texts/NN_*.md, CHANGELOG.md          a book in one part
     books/<book>/NN_<part>/NN_*.md, CHANGELOG.md      a book in parts
 
-The `texts` key lists the text folders, relative to the book's folder.
+A prose book (format: prose) has no chant files; its `content` key lists the
+Markdown files, relative to the book's folder:
+
+    books/<book>/metadata.txt
+    books/<book>/00_about.md
+    books/<book>/content/guide.md, CHANGELOG.md
+    books/<book>/images/*.png
+
+The `texts` key lists the text folders, relative to the book's folder; a prose
+book lists `content` instead and must not have `texts`.
 
 metadata.txt is YAML-compatible, so that pandoc can read it with
 --metadata-file. This module reads the small subset it uses: `key: value`
@@ -17,16 +26,18 @@ nested mapping (`options:` with indented `key: value` lines).
 """
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
 ROOT = Path(__file__).resolve().parents[2]
 BOOKS_DIR = ROOT / "books"
 
-# Keys every metadata.txt must have (docs/book-build.md).
-REQUIRED = ("title", "subtitle", "lang", "pali-title-first", "texts",
+# Keys every metadata.txt must have (docs/book-build.md). `texts` (chant) or
+# `content` (prose) is required in addition, depending on `format`.
+REQUIRED = ("title", "subtitle", "lang", "pali-title-first",
             "sources", "rights", "cover-image", "about", "author", "publisher")
+FORMATS = ("chant", "prose")
 
 # Book options (docs/style-spec.md §12.2) and their values when not set.
 DEFAULT_OPTIONS = {
@@ -120,7 +131,15 @@ class Book:
     id: str
     dir: Path
     meta: dict
-    parts: list                 # Part, in book order
+    parts: list                 # Part, in book order (empty for a prose book)
+    content: list = field(default_factory=list)  # prose files, relative paths
+
+    @property
+    def format(self):
+        return self.meta.get("format", "chant")
+
+    def is_prose(self):
+        return self.format == "prose"
 
     @property
     def options(self):
@@ -134,7 +153,12 @@ def load_book(book, books_dir=BOOKS_DIR):
     d = Path(books_dir) / book
     meta = load_metadata(book, books_dir)
     where = d / "metadata.txt"
-    missing = [k for k in REQUIRED if k not in meta]
+    fmt = meta.get("format", "chant")
+    if fmt not in FORMATS:
+        raise MetadataError(
+            f"{where}: 'format' must be one of: {', '.join(FORMATS)}")
+    required = REQUIRED + (("content",) if fmt == "prose" else ("texts",))
+    missing = [k for k in required if k not in meta]
     if missing:
         raise MetadataError(f"{where}: missing keys: {', '.join(missing)}")
     for k in ("title", "lang", "rights", "about"):
@@ -144,6 +168,23 @@ def load_book(book, books_dir=BOOKS_DIR):
         raise MetadataError(f"{where}: 'pali-title-first' must be true or false")
     if not isinstance(meta["sources"], list) or not meta["sources"]:
         raise MetadataError(f"{where}: 'sources' must be a list")
+    if fmt == "prose" and "texts" in meta:
+        raise MetadataError(f"{where}: a prose book lists 'content', not 'texts'")
+    if fmt == "prose":
+        if not isinstance(meta["content"], list) or not meta["content"]:
+            raise MetadataError(f"{where}: 'content' must be a list")
+        content = []
+        for c in meta["content"]:
+            if not isinstance(c, str):
+                raise MetadataError(f"{where}: 'content' entries must be strings")
+            p = Path(c)
+            if p.is_absolute() or ".." in p.parts:
+                raise MetadataError(
+                    f"{where}: content file '{c}' must be inside the book folder")
+            if not (d / p).is_file():
+                raise MetadataError(f"{where}: no content file '{c}' in {d}")
+            content.append(p)
+        return Book(book, d, meta, [], content)
     if not isinstance(meta["texts"], list) or not meta["texts"]:
         raise MetadataError(f"{where}: 'texts' must be a list")
     parts = []

@@ -32,6 +32,9 @@ local FUNC = {
   variant = "variant",
   gloss = "gloss",
   subtitle = "en-title",
+  figure = "figure-block",
+  keep = "keep-block",
+  resources = "resources",
 }
 
 -- Pass 1: inlines.
@@ -43,6 +46,16 @@ local inlines = {
       return { rawi("#tags["), pandoc.Str(el.text), rawi("]") }
     end
     return pandoc.Str(el.text)
+  end,
+
+  -- Typst resolves image paths against its --root (the repo root); a leading
+  -- "/" makes them absolute there. The assembled Markdown keeps them
+  -- relative to the repo root for the EPUB build.
+  Image = function(el)
+    local src = el.src
+    if src:match("^/") or src:match("^%a[%w+.-]*:") then return el end
+    el.src = "/" .. src
+    return el
   end,
 
   -- The English title in a chant title: shown in the contents only.

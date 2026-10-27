@@ -62,6 +62,34 @@ class AssembleTest(unittest.TestCase):
         (d / "metadata.txt").write_text(meta)
         (d / "00_about.md").write_text("# About This Book {.unnumbered}\n\n*Built {today}.*\n")
 
+    def make_prose_book(self, name="prose"):
+        d = self.books / name
+        (d / "content").mkdir(parents=True)
+        (d / "images").mkdir()
+        (d / "content" / "guide.md").write_text(
+            "# A Prose Guide\n\n"
+            "Some prose.\n\n"
+            "::: {.figure}\n"
+            "![A described figure](images/one.png){width=60%}\n"
+            ":::\n")
+        (d / "images" / "one.png").write_bytes(b"")
+        (d / "00_about.md").write_text("# About This Book {.unnumbered}\n\n*Built {today}.*\n")
+        (d / "metadata.txt").write_text("""title: "A Prose Guide"
+subtitle: ""
+lang: en-GB
+pali-title-first: false
+format: prose
+content:
+  - content/guide.md
+sources:
+  - "A source"
+rights: "Free distribution only."
+cover-image: ""
+about: 00_about.md
+author: ""
+publisher: ""
+""")
+
     def run_assemble(self, name):
         md = assemble.assemble(name, self.out, self.books, self.covers,
                                today="2026-01-02")
@@ -203,13 +231,58 @@ class AssembleTest(unittest.TestCase):
         self.assertTrue(books.options_for_text(f, self.books)["heading-gloss"])
         self.assertIsNone(books.book_for_text(self.tmp / "x.md", self.books))
 
+    def test_prose_book(self):
+        self.make_prose_book()
+        md, meta, defaults = self.run_assemble("prose")
+        self.assertTrue(md.startswith("# About This Book {.unnumbered}"))
+        self.assertIn("# A Prose Guide\n", md)
+        self.assertIn("Some prose.", md)
+        self.assertIn("books/prose/images/one.png", md)
+        self.assertNotIn("(images/one.png)", md)
+        self.assertEqual(defaults["from"], "markdown+fenced_divs-implicit_figures")
+        self.assertEqual(defaults["toc-depth"], 3)
+        self.assertEqual(defaults["split-level"], 1)
+        self.assertEqual(meta["title-level"], 1)
+
+    def test_prose_book_requires_content(self):
+        self.make_prose_book()
+        meta = self.books / "prose" / "metadata.txt"
+        meta.write_text(re.sub(r"^content:\n(  - .*\n)+", "", meta.read_text(), flags=re.M))
+        with self.assertRaisesRegex(MetadataError, "missing keys: content"):
+            books.load_book("prose", self.books)
+
+    def test_prose_book_rejects_texts(self):
+        self.make_prose_book()
+        meta = self.books / "prose" / "metadata.txt"
+        meta.write_text(meta.read_text() + "texts:\n  - texts\n")
+        with self.assertRaisesRegex(MetadataError, "lists 'content', not 'texts'"):
+            books.load_book("prose", self.books)
+
+    def test_prose_book_has_no_text_files(self):
+        self.make_prose_book()
+        book = books.load_book("prose", self.books)
+        self.assertTrue(book.is_prose())
+        self.assertEqual(books.book_files(book), [])
+
+    def test_unknown_format_is_an_error(self):
+        self.make_book("one", "  - texts")
+        meta = self.books / "one" / "metadata.txt"
+        meta.write_text(meta.read_text() + "format: poetry\n")
+        with self.assertRaisesRegex(MetadataError, "'format' must be one of"):
+            books.load_book("one", self.books)
+
     def test_real_books_load(self):
         ids = books.list_books()
-        self.assertEqual(len(ids), 13)
+        self.assertEqual(len(ids), 14)
         for b in ids:
             book = books.load_book(b)
-            for _, files in books.book_files(book):
-                self.assertTrue(files, f"{b}: no text files")
+            if book.is_prose():
+                self.assertTrue(book.content, f"{b}: no content files")
+                for c in book.content:
+                    self.assertTrue((book.dir / c).is_file(), f"{b}: missing {c}")
+            else:
+                for _, files in books.book_files(book):
+                    self.assertTrue(files, f"{b}: no text files")
 
 
 if __name__ == "__main__":

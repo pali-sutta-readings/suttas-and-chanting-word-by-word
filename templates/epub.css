@@ -47,6 +47,13 @@ nav .toc-en { display: inline; }
 .instruction p { font-style: italic; margin: 0.8em 0 0.5em; padding-left: 0.8em; border-left: 2px solid #bbb; }
 .variant p { margin: 0.9em 0 0; font-size: 0.95em; }
 
+/* Book figures (prose books): centred screenshots, never wider than the page. */
+img { max-width: 100%; height: auto; }
+.figure { margin: 1em 0; break-inside: avoid; page-break-inside: avoid; }
+.figure p { margin: 0; text-align: center; }
+/* A short unit and its table kept together (prose books). */
+.keep { break-inside: avoid; page-break-inside: avoid; }
+
 /* The word table has no cell borders: the shaded header row alone separates it. */
 table {
   width: 100%;

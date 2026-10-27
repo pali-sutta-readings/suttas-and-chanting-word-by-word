@@ -4,6 +4,8 @@ This is the rulebook for every text in `books/` (the `NN_name.md` files in each 
 
 Sections 1–11 apply to every book. Section 12 gives the rules that differ for the Vinaya formulae (09a–09e) and for the *Mahāsatipaṭṭhānasutta* (10).
 
+Book 11 (`11_learning_the_word_by_word_meaning`) is a guide in prose, not a book of chant files, and the rules below for text files, Pāli lines and word tables do not apply to its `content/guide.md`. It follows the house style where it can: the same characters (§10), typographic quotes and dashes, and the same changelog (§11). Its word table is the checked table of book 05, quoted as an example.
+
 **Machine-readable blocks.** `scripts/lint.py` (through `scripts/chantlib/spec.py`) reads four fenced blocks from this file: `tags` (§5), `repeat-note` (§8), `rubrics` and `english-stopwords` (§9). Edit those lists only here, so that the rules and the checks never drift apart. Keep each block's info string as it is, one entry per line. Per-book switches (the DN 22 behaviour in §12.2) are not in this file: they are the `options` in each book's `books/<book>/metadata.txt`.
 
 ## 1. File layout
@@ -318,7 +320,7 @@ all
 
 ## 11. The changelog
 
-One `CHANGELOG.md` per text folder (`books/<book>/texts/`, or each part folder of a book in parts). It is never built into a book. Every change to a text gets an entry. Newest entry at the top:
+One `CHANGELOG.md` per text folder (`books/<book>/texts/`, or each part folder of a book in parts); a prose book keeps it in `content/`, next to its Markdown. It is never built into a book. Every change to a text gets an entry. Newest entry at the top:
 
 ```text
 ## 2026-10-02 — session 3 (05_anumodanas)

@@ -11,6 +11,11 @@ Writes three files to the output folder (default build/tmp/):
     <book>.pandoc.json  pandoc defaults: input, metadata file, TOC depth and
                         split level (2 for a book in parts, else 1)
 
+A prose book (metadata `format: prose`) has no chant files: its `content`
+Markdown is copied as written, with image paths made relative to the repo
+root, and no lint or parse pass. Its defaults are TOC depth 3, split level 1,
+and `-implicit_figures` so the figure alt text is not printed as a caption.
+
 With --cover-data it prints instead the JSON that templates/typst/cover.typ
 reads (build/covers/<book>.json): title, subtitle, pali-title-first,
 series-line, accent, site-url.
@@ -23,6 +28,7 @@ warning, not a failure.
 import argparse
 import json
 import os
+import re
 import sys
 from datetime import date
 from pathlib import Path
@@ -113,6 +119,21 @@ def about_text(book, today):
     return text.rstrip("\n") + "\n"
 
 
+# A Markdown image, with the alt text possibly wrapped over several lines.
+# The source is rewritten to the repo-root path so pandoc finds it from the
+# build folder; templates/pandoc/chant.lua adds the leading "/" for typst.
+IMAGE_RE = re.compile(r"(!\[[^\]]*\]\()([^)\s]+)(\))")
+
+
+def rewrite_images(text, book):
+    def repl(m):
+        src = m.group(2)
+        if re.match(r"^[A-Za-z][A-Za-z0-9+.-]*:", src) or src.startswith(("/", "books/")):
+            return m.group(0)
+        return f"{m.group(1)}books/{book.id}/{src}{m.group(3)}"
+    return IMAGE_RE.sub(repl, text)
+
+
 def cover_path(book, covers_dir=COVERS_DIR):
     """The cover image: the metadata override, else the generated PNG if built."""
     if book.meta.get("cover-image"):
@@ -124,7 +145,7 @@ def cover_path(book, covers_dir=COVERS_DIR):
 def cover_data(book):
     """The cover's text, for templates/typst/cover.typ."""
     m = book.meta
-    return {
+    data = {
         "title": m["title"],
         "subtitle": m.get("subtitle") or "",
         "pali-title-first": bool(m.get("pali-title-first")),
@@ -132,6 +153,13 @@ def cover_data(book):
         "accent": m.get("accent") or "",
         "site-url": SITE_URL,
     }
+    if m.get("title-size"):
+        try:
+            data["title-size"] = int(m["title-size"])
+        except (TypeError, ValueError):
+            raise MetadataError(
+                f"{book.dir / 'metadata.txt'}: 'title-size' must be a number")
+    return data
 
 
 def pandoc_metadata(book, cover=None):
@@ -159,6 +187,11 @@ def pandoc_metadata(book, cover=None):
         "cover-pdf": (os.path.relpath(book.dir / m["cover-image"], ROOT)
                       if m.get("cover-image") else None),
     }
+    if book.is_prose():
+        # The title heading starts a page; section headings do not (the
+        # template otherwise treats every heading down to toc-depth as a
+        # chant title).
+        meta["title-level"] = 1
     return {k: v for k, v in meta.items() if v}
 
 
@@ -166,27 +199,40 @@ def assemble(book_id, out_dir, books_dir=books.BOOKS_DIR,
              covers_dir=COVERS_DIR, today=None):
     """Write the three output files; returns the path of <book>.md."""
     book = books.load_book(book_id, books_dir)
-    spec = load_spec()
-    options = book.options
-    parts = books.book_files(book)
-    empty = [part.folder for part, fs in parts if not fs]
-    if empty:
-        raise MetadataError(f"{book_id}: no text files in {', '.join(empty)}")
+    today = today or date.today().isoformat()
+    chunks = [about_text(book, today)]
 
-    bad = []
-    chunks = [about_text(book, today or date.today().isoformat())]
-    in_parts = book.parts[0].heading is not None
-    for part, fs in parts:
-        if in_parts:
-            chunks.append(f"# {part.heading}\n")
-        for f in fs:
-            text = f.read_text(encoding="utf-8")
-            if any(sev in ("ERROR", "STRAY") for sev, _, _ in lint.lint_text(text, spec, options, f)):
-                bad.append(f)
-            chunks.append(render_text(parse_text(text, spec, options), 1 if in_parts else 0))
-    if bad:
-        print(f"WARNING: {book_id}: building with unresolved lint errors in: "
-              + ", ".join(str(f) for f in bad), file=sys.stderr)
+    if book.is_prose():
+        for p in book.content:
+            text = (book.dir / p).read_text(encoding="utf-8")
+            chunks.append(rewrite_images(text, book).rstrip("\n") + "\n")
+        pandoc_from = "markdown+fenced_divs-implicit_figures"
+        depth = 3              # title, sections, subsections
+        split_level = 1
+    else:
+        spec = load_spec()
+        options = book.options
+        parts = books.book_files(book)
+        empty = [part.folder for part, fs in parts if not fs]
+        if empty:
+            raise MetadataError(f"{book_id}: no text files in {', '.join(empty)}")
+
+        bad = []
+        in_parts = book.parts[0].heading is not None
+        for part, fs in parts:
+            if in_parts:
+                chunks.append(f"# {part.heading}\n")
+            for f in fs:
+                text = f.read_text(encoding="utf-8")
+                if any(sev in ("ERROR", "STRAY") for sev, _, _ in lint.lint_text(text, spec, options, f)):
+                    bad.append(f)
+                chunks.append(render_text(parse_text(text, spec, options), 1 if in_parts else 0))
+        if bad:
+            print(f"WARNING: {book_id}: building with unresolved lint errors in: "
+                  + ", ".join(str(f) for f in bad), file=sys.stderr)
+        pandoc_from = "markdown+fenced_divs"
+        depth = 2 if in_parts else 1
+        split_level = depth
 
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -198,14 +244,13 @@ def assemble(book_id, out_dir, books_dir=books.BOOKS_DIR,
     # quoting rules of its own.
     dump = lambda d: json.dumps(d, ensure_ascii=False, indent=2) + "\n"
     meta.write_text(dump(pandoc_metadata(book, cover_path(book, covers_dir))), encoding="utf-8")
-    depth = 2 if in_parts else 1
     defaults.write_text(dump({
-        "from": "markdown+fenced_divs",
+        "from": pandoc_from,
         "input-files": [str(md)],
         "metadata-files": [str(meta)],
         "table-of-contents": True,
         "toc-depth": depth,
-        "split-level": depth,
+        "split-level": split_level,
     }), encoding="utf-8")
     return md
 
@@ -221,9 +266,17 @@ def make_deps(book_id, books_dir=books.BOOKS_DIR):
     rel = lambda p: os.path.relpath(p, ROOT)
     deps_file = f"build/deps/{book_id}.mk"
     folders, files = [], []
-    for part, fs in books.book_files(book):
-        folders.append(rel(book.dir / part.folder))
-        files += [rel(f) for f in fs]
+    if book.is_prose():
+        files = [rel(book.dir / p) for p in book.content]
+        folders = [rel(book.dir / "content")]
+        images = book.dir / "images"
+        if images.is_dir():
+            folders.append(rel(images))
+            files += [rel(p) for p in sorted(images.iterdir()) if p.is_file()]
+    else:
+        for part, fs in books.book_files(book):
+            folders.append(rel(book.dir / part.folder))
+            files += [rel(f) for f in fs]
     targets = f"build/tmp/{book_id}.md build/epub/{book_id}.epub build/pdf/{book_id}.pdf"
     rule = lambda target, deps: f"{target}: \\\n  " + " \\\n  ".join(deps) + "\n"
     return (rule(targets, [deps_file] + files)

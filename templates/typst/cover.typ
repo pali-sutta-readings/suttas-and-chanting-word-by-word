@@ -30,6 +30,7 @@
   let accent = rgb(if data.at("accent", default: "") != "" { data.accent } else { default-accent })
   let pali-first = data.at("pali-title-first", default: false)
   let title-font = ("Abhaya Libre X", ..document-style.fonts.body)
+  let title-size = data.at("title-size", default: 30) * 1pt
   let sans = document-style.fonts.sans
 
   // The wheel and the band are both centred on the page, so the title sits
@@ -46,7 +47,7 @@
       block(width: 100%, inset: (x: 12mm, y: 11mm),
             fill: accent.transparentize(10%),
             stroke: (y: 0.5pt + luma(35%)))[
-        #block(text(font: title-font, size: 30pt, weight: "bold",
+        #block(text(font: title-font, size: title-size, weight: "bold",
           lang: if pali-first { "pi" } else { "en" }, data.title))
 
         #if data.at("subtitle", default: "") != "" {

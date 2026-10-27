@@ -1,0 +1,18 @@
+title: "Learning the Word-by-Word Meaning of the Chanting"
+subtitle: ""
+lang: en-GB
+pali-title-first: false
+series-line: "Pāli with word-by-word English"
+title-size: 26
+format: prose
+content:
+  - content/guide.md
+sources:
+  - "Learning the Word-by-Word Meaning of the Chanting (author's original guide)"
+  - "Bhikkhu Manual, Reference Edition (Amaravati Publications, 2020), CC BY-NC-ND 4.0"
+  - "Digital Pāḷi Dictionary (dpdict.net), as reference for roots and analysis"
+rights: "English text CC BY-NC 4.0; free distribution only."
+cover-image: ""
+about: 00_about.md
+author: ""
+publisher: ""

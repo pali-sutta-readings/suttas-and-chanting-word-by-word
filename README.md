@@ -2,7 +2,7 @@
 
 Pāli chants and suttas for novice bhikkhus and anyone learning to chant with understanding. Each Pāli line is followed by a literal and a faithful English rendering, and by a table that analyses every word: its grammar, meaning and construction from its root. The Pāli comes from the *Bhikkhu Manual*, the *Chanting Guide* and SuttaCentral; roots and grammar are checked against the [Digital Pāḷi Dictionary](https://dpdict.net) (DPD).
 
-The texts are built into 13 books, each as an EPUB and an A5 PDF:
+The texts are built into 14 books, each as an EPUB and an A5 PDF:
 
 | Book | Title | Texts |
 | :--- | :--- | ---: |
@@ -19,6 +19,9 @@ The texts are built into 13 books, each as an EPUB and an A5 PDF:
 | `08_patimokkha_chants` | Pāṭimokkha Chants (*Pāṭimokkha-pāṭha*) | 5 |
 | `09_vinaya_formulae` | Vinaya Formulae (*Vinaya-pāṭha*), in five parts | 60 |
 | `10_mahasatipatthanasutta` | The Great Discourse on the Establishments of Mindfulness (*Mahāsatipaṭṭhānasutta*, DN 22) | 19 |
+| `11_learning_the_word_by_word_meaning` | Learning the Word-by-Word Meaning of the Chanting | prose |
+
+Book 11 is a guide in prose, not a book of chant files: it has `content/` and `images/` instead of `texts/` (see `docs/book-build.md`).
 
 The texts were made in an earlier project and migrated here; `docs/legacy-migration.md` tells that story.
 
@@ -41,6 +44,7 @@ books/<book>/        one folder per book
   metadata.txt       title, subtitle, language, sources, rights, text folders
   00_about.md        the book's "About This Book" page
   texts/             the chant files (NN_name.md) and the folder's CHANGELOG.md
+  content/, images/  a prose book's Markdown, figures and CHANGELOG.md
 books/09_vinaya_formulae/01_…–05_…/   the Vinaya book's five parts, instead of texts/
 sources/             reference material for the checks, never built into a book
   UPSTREAM.txt       upstream sources and their pinned commits
@@ -70,6 +74,7 @@ build/               output (not committed)
 | `epubcheck` | any (needs Java) | validating every EPUB |
 | `jq` | any | optional, for ad-hoc API queries |
 | `simsapa` (npm `@simsapa/cli`) | ≥ 1.1.0-alpha.2 | optional: DPD checks and lookups, SuttaCentral texts (see below) |
+| Pillow | any | optional, to redraw book 11's figures (`images/make_figures.py`) |
 
 Check them all, with install hints for your system:
 

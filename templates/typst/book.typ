@@ -67,6 +67,26 @@
 #let citation(body) = block(above: 0.6em, below: 0.4em,
   align(right, text(size: sizes.small, body)))
 
+// A book figure (a prose book's screenshot): centred, with room above and
+// below. The image itself carries its width as a percentage of the text.
+#let figure-block(body) = {
+  set align(center)
+  block(above: 1em, below: 1em, body)
+}
+
+// Keep a short unit and its table on one page (prose books).
+#let keep-block(body) = block(breakable: false, body)
+
+// A list of links: ragged right, so long addresses do not stretch the line.
+#let resources(body) = {
+  set par(justify: false)
+  // Tight items, in a slightly smaller size: the entries wrap, so at body
+  // size the list runs onto a page of its own.
+  set list(spacing: 0.45em)
+  set text(size: 0.9em)
+  body
+}
+
 #let rubric(body) = block(above: 0.8em, below: 0.6em, body)
 
 // The English title under a chant title (pandoc's subtitle div).
