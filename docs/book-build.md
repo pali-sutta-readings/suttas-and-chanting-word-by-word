@@ -142,7 +142,7 @@ Layout (`templates/typst/style.typ`, `book.typ`):
 
 - A5, body Crimson 10.5 pt; tables 9 pt, tag groups and the table header in Noto Sans. Every font list ends with Noto Sans Math, which is used only for glyphs the main font lacks: `↳`.
 - Each chant starts a new page. In a book in parts (09), each part has a title page of its own.
-- Within a unit, the Pāli line, its renderings and the word table are separated by wider gaps than the leading, so each reads as its own block.
+- Within a unit, the Pāli line, its renderings and the word table are separated by wider gaps than the leading, so each reads as its own block. The Literal and Faithful renderings are indented 2em, wrapped lines too, and set a little smaller than the body text (`sizes.rendering`, `spacing.rendering-indent` in `templates/typst/style.typ`).
 - The word table has an auto-sized Word column and a wrapping Analysis column, and no cell borders: only the shaded header row separates it. Its header row repeats when it breaks across pages; member rows are indented.
 - Running header: the book title on even pages, the current chant title on odd pages, none on a page where a chant starts. Page number at the foot.
 - The contents list the Pāli and English titles (level 1, or parts and chants for 09).

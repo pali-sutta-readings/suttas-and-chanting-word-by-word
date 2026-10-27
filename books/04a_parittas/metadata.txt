@@ -1,5 +1,5 @@
-title: "Paritta"
-subtitle: "Protective Chants"
+title: "Paritta Chants"
+subtitle: ""
 lang: en-GB
 pali-title-first: true
 series-line: "Pāli with word-by-word English"

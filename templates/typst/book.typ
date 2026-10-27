@@ -54,10 +54,13 @@
 
 // The literal and faithful renderings. The wider space above sets them apart
 // from each other; the gap from the Pāli line is after-pali (1.2em), which is
-// wider still, so that gap does not change.
+// wider still, so that gap does not change. They are indented under the
+// Pāli line, wrapped lines too, and a little smaller than the body text.
 #let rendering(body) = {
   set par(justify: false, spacing: 0.6em)
-  block(above: 0.9em, below: 0.6em, body)
+  set text(size: sizes.rendering)
+  block(above: 0.9em, below: 0.6em,
+    inset: (left: document-style.spacing.rendering-indent), body)
 }
 #let literal(body) = rendering(body)
 #let faithful(body) = rendering(body)

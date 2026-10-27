@@ -19,6 +19,7 @@
   sizes: (
     body: 10.5pt,
     pali: 11.5pt,        // The bold Pāli line of a unit
+    rendering: 9.75pt,   // The literal and faithful renderings of a unit
     heading1: 17pt,      // Chant titles (and part titles in a book in parts)
     heading2: 14pt,      // Chant titles in a book in parts; About sub-headings
     heading3: 11.5pt,    // Pāli headings inside a chant
@@ -43,6 +44,7 @@
     after-heading2: 0.6em,
     before-unit: 1.6em,
     after-pali: 1.2em,            // Between the Pāli line and its renderings
+    rendering-indent: 2em,        // Left indent of the renderings, wrapped lines too
     after-unit-head: 1.4em,     // Between the renderings and the word table
   ),
 
