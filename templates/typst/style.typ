@@ -38,7 +38,7 @@
   spacing: (
     after-paragraph: 0.8em,
     before-heading1: 0pt,       // Chant titles start a new page
-    after-heading1: 0.5em,
+    after-heading1: 1em,
     before-heading2: 1.4em,
     after-heading2: 0.6em,
     before-unit: 1.6em,
@@ -168,11 +168,11 @@
       pagebreak()
     } else if is-chant-title(it, chant-level) {
       pagebreak(weak: true)
-      set text(size: document-style.sizes.heading1, weight: "regular")
+      set text(size: document-style.sizes.heading1, weight: "semibold")
       block(
         above: document-style.spacing.before-heading1,
         below: document-style.spacing.after-heading1,
-        it.body
+        underline(offset: 0.4em, it.body)
       )
     } else if it.level <= 2 {
       set text(size: document-style.sizes.heading2, weight: "regular")
