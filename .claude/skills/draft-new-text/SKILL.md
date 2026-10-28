@@ -23,12 +23,23 @@ make check-tools        # Simsapa must answer, with DPD's parses (form_grammar_r
 make fetch-sources      # if the source is the Bhikkhu Manual or the Community Chanting Book
 ```
 
+If `make check-tools` says the API is not running, start `simsapa serve` as a background command (CLAUDE.md), and stop it when the work is done (`curl -s localhost:<port>/shutdown`).
+
 Agree with the maintainer which book the text goes into, its file name (`NN_name.md`, the next free number in the folder; legacy names never change) and its source. Work in a draft file outside `books/` (the scratchpad) until step 6.
+
+**A new book.** If the text starts a book of its own, take the next free number (`books/NN_name/`, ASCII name) and propose its title and Pāli subtitle to the maintainer. Add:
+
+- `metadata.txt` and `00_about.md`, adapted from a book with the same sources (07b/07c for SuttaCentral texts): the sources list, the "Where the Pāli comes from" section and the changes made to the source must describe this book;
+- `texts/CHANGELOG.md` (style spec §11);
+- a row in the `README.md` table, and its count of books (CLAUDE.md and `scripts/check-tools.sh` only if the tool list changes).
+
+`make` finds the book by its folder, so no Makefile change is needed.
 
 ## 1. The Pāli and its source
 
 - Take the Pāli from the source the style spec names (§2: BM, then the Community Chanting Book, then the *Chanting Guide*, then SuttaCentral; DN 22 is SuttaCentral only; Vinaya is BM only). For SuttaCentral use Simsapa: `GET /sutta.json?uid=<uid>/pli/ms` gives the segments in order (`docs/simsapa-localhost-api-search-endpoints.md` §13.4), and `GET /sutta_bilara.json` the same text with its variant readings (§13.5). Nothing is downloaded from SuttaCentral or saved in `sources/`.
 - Write it in our form: ṁ, ASCII `'`, leader brackets removed, `(×3)`, elisions written out (§2). Note every change from the source for the changelog.
+- SuttaCentral conversions (precedent: 07a/12, Iti 49): drop the quotation marks ‘ “ ” ’; write a closing `”ti` as `'ti`; leave out a closing number-word (*Pañcamaṁ.*), which belongs to the collection and not to the discourse; join the pādas of a verse, which SuttaCentral gives one per segment, into half-verses. Log each in the changelog.
 - Where the editions differ on a word of the line (`.variants.content` of that segment), keep SuttaCentral's reading and put the doubt to the maintainer if the variant looks better.
 - Add the `sources/ref-map.tsv` entry with the `source-compare` skill (for SuttaCentral: source `sc`, the uid, the segment range), and run `python3 scripts/compare.py extract --ref FILE` once the file exists.
 
@@ -42,6 +53,8 @@ python3 scripts/index.py overlaps SCRATCH/p-only.md   # lines already analysed e
 ```
 
 Copy each overlapping unit with `I|<text path>|<Pāli line>`. Only lines with no overlap are analysed.
+
+Repeats within the draft are found by the same normalisation (punctuation ignored). A verse line that repeats an earlier prose line (*Pāpakena ca sīlena, pāpikāya ca diṭṭhiyā;* after the same words ending in a full stop) gets the repeat note from `draft.py build`: write only its `P|`, `L|` and `F|` lines, no rows. If the grammar differs in the second place, force a full table with `P!|` (style spec §8).
 
 ## 3. DPD data for each new line
 
@@ -92,7 +105,7 @@ python3 scripts/simsapa.py check FILE         # review each item with the dpd-re
 python3 scripts/index.py index                # the new rows against the settled ones
 ```
 
-Then ask for the independent spot check (quality process §5): a separate agent, given only the file paths, the style spec and the `pali-word-analysis` skill. Fix what it confirms and run the checks again.
+Then ask for the independent spot check (quality process §5): a separate agent, given only the file paths, the style spec and the `pali-word-analysis` skill. Fix what it confirms and run the checks again. Spawn that agent only if the maintainer has asked for it; otherwise say in the report and the changelog that the spot check is still to do ("not yet run"), and offer to start it.
 
 ## 8. Changelog and build
 
