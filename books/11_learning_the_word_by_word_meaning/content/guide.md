@@ -3,7 +3,7 @@
 ## How to use word-by-word translations {.unnumbered}
 
 These resources can be used in a number of ways to enhance the English
-speaker's understanding of the Pāli chanting that is regularly chanted
+speaker's understanding of the Pāli chanting as it is chanted
 by the monastic and lay communities in Western Ajahn Chah monasteries.
 
 However, it should be clearly stated that these translations are created
