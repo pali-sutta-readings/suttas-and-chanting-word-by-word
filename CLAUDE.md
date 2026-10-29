@@ -34,6 +34,15 @@ The repo's scripts use the API:
 - `source-compare`: for `compare.py` reports and `sources/ref-map.tsv` entries.
 - `draft-new-text`: for adding a text or a line.
 
+### Maintaining the skills
+
+The skills overlap, so a change to one is not finished until the others are checked.
+
+- When you add or change a rule in a skill, check the other three for the same rule (the table in `docs/drafting-workflow.md`, "Rules shared between skills") and update each one that needs it. Say in the report which you checked.
+- A rule about the text itself (the Pāli line, rows, tags, citations) belongs in `docs/style-spec.md` or `docs/decisions.md`; the skills cite it and don't hold the only copy. Propose the change to the maintainer, since it changes a rule.
+- A rule about the tools (the Simsapa server, make targets) belongs in this file; the skills point here.
+- A new skill is added to the list above, to the table in `docs/drafting-workflow.md` and to the `README.md` folder listing.
+
 ## Who decides what
 
 - Questions about the analysis (which sign, how full an etymology, a tag that fits the line against DPD's parses) are yours to decide. Decide them by `pali-word-analysis` §7 and record the reason in the row's note or the changelog. Don't leave them for the maintainer.

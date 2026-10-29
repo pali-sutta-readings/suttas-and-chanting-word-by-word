@@ -56,6 +56,7 @@ A *unit* is one Pāli line with its Literal and Faithful lines and its word tabl
 | Line division | Follow BM's line and verse division. Long prose may be divided at natural phrase boundaries, without dropping or reordering any words. |
 | `…pe…` elisions | Where a source abbreviates with *pe*, the file gives the passage in full, as it is chanted. |
 | Misprints | A plain misprint in the source is corrected, with the source's reading logged in the changelog (e.g. BM *Pathamaṁ*, *appativattiyaṁ* → *Paṭhamaṁ*, *appaṭivattiyaṁ*, 07a/01, query 48). A doubtful case keeps the source's reading and is put to the maintainer. A word the source omitted by mistake may be restored on the maintainer's decision (07a *upāyupādānā*, query 51). |
+| SuttaCentral conversions | A text taken from SuttaCentral is written in our form (precedent: 07a/12, Iti 49; 2026-10-29): the quotation marks ‘ “ ” ’ are dropped; a closing `”ti` is written `'ti`; a closing number-word (*Pañcamaṁ.*) is left out, because it belongs to the collection and not to the discourse; the pādas of a verse, which SuttaCentral gives one per segment, are joined into half-verses. Each is logged in the changelog. Book 10 keeps its own rules (§12.2). |
 | Nothing else | No English, digits, square brackets or other parentheses in the Pāli line. |
 
 ## 3. Literal and Faithful lines

@@ -67,3 +67,16 @@ R|karomase|1st pl pres mid imperat|let us make, let us do|√kar + o + mase
 | `pali-word-analysis` | rows, grammar labels, etymologies and member rows |
 | `source-compare` | the ref-map entry and the Pāli check against the source |
 | `dpd-review` | the DPD check's flags and candidates, and consistency across files |
+
+### Rules shared between skills
+
+When a rule below changes in one skill, check the others in its row (`CLAUDE.md`, "Maintaining the skills").
+
+| Rule | Where it lives | Skills that state it |
+| :--- | :--- | :--- |
+| Start `simsapa serve` if it is not running; stop it when done | `CLAUDE.md`, "DPD via Simsapa" | `draft-new-text` §0, `pali-word-analysis` §1, `dpd-review` §1, `source-compare` (Tools) |
+| SuttaCentral conversions (quotation marks, `”ti` as `'ti`, closing number-word, pādas joined) | style spec §2 | `draft-new-text`, `source-compare` (expected differences) |
+| Repeated lines: reuse `I|`; verse repeat of a prose line has no rows; `P!|` forces a table | style spec §8, `draft-new-text` §2 | `pali-word-analysis` §1, `dpd-review` §2 |
+| Analysis questions are decided by the agent; only Pāli-text doubts are queries | `CLAUDE.md`, `pali-word-analysis` §7 | `dpd-review` §2, `draft-new-text` |
+| Spot check by a separate agent only if the maintainer asks; otherwise log "not yet run" | `draft-new-text` §7, `docs/quality-process.md` §5 | `draft-new-text` |
+| A text error found by a check is fixed only with approval and a changelog entry | `CLAUDE.md` | `source-compare` §5, `dpd-review` §5 |

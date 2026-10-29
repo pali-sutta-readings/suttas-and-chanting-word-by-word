@@ -26,7 +26,7 @@ python3 scripts/compare.py extract --ref TEXT        # the mapped passage, norma
 python3 scripts/compare.py extract --ref TEXT --plain  # the same, as text
 ```
 
-SuttaCentral texts come from Simsapa, not from files in `sources/` (`docs/simsapa-cli-and-localhost-api.md` §13.4–§13.5). `compare.py` reads an `sc` entry's segments from the API's `GET /sutta.json`, so the API must be running (the Simsapa app, or `simsapa serve` started as a background command; CLAUDE.md); without it, those entries are reported as skipped. To read a text or its variant readings yourself, the CLI needs no server:
+SuttaCentral texts come from Simsapa, not from files in `sources/` (`docs/simsapa-cli-and-localhost-api.md` §13.4–§13.5). `compare.py` reads an `sc` entry's segments from the API's `GET /sutta.json`, so the API must be running (the Simsapa app, or `simsapa serve` started as a background command and stopped when the work is done with `curl -s localhost:<port>/shutdown`; CLAUDE.md); without it, those entries are reported as skipped. To read a text or its variant readings yourself, the CLI needs no server:
 
 ```sh
 simsapa sutta dn22/pli/ms --content-json | jq .          # segment id → text, in order
@@ -64,7 +64,7 @@ Classify every reported item as one of:
 
 | Class | Examples | Where it is explained |
 | :--- | :--- | :--- |
-| **expected** | an elision written out (*…pe…*, BM "For the second time…"); a leader line we include (*Handa mayaṁ …*) that the source lacks; a logged misprint fix (BM *Pathamaṁ* → *Paṭhamaṁ*); BM's final *m* written *ṁ* (*seyyathīdam*); a slash alternative split into base and variant (09, V6); a unit copied from another file and logged; a colophon the source has and the text leaves out, if logged | the CHANGELOG row, a decision, or a style-spec rule; cite it |
+| **expected** | an elision written out (*…pe…*, BM "For the second time…"); a leader line we include (*Handa mayaṁ …*) that the source lacks; a logged misprint fix (BM *Pathamaṁ* → *Paṭhamaṁ*); BM's final *m* written *ṁ* (*seyyathīdam*); a slash alternative split into base and variant (09, V6); a unit copied from another file and logged; a SuttaCentral conversion of style spec §2 (quotation marks dropped, `”ti` written `'ti`, closing number-word left out, verse pādas joined into half-verses); a colophon the source has and the text leaves out, if logged | the CHANGELOG row, a decision, or a style-spec rule; cite it |
 | **reference artefact** | an upstream addition after the text was made (BM commit `0872fa5` link lines are already dropped by the extractor); English or a heading the structural rules let through; a misprint in the source that our text already corrects but nobody logged as a misprint *of this source* | write what it is |
 | **unexplained** | any other difference: a missing or extra word, a spelling not logged, a line in the wrong place | never fix it; list it for the maintainer |
 
